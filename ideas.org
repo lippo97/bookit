@@ -1,0 +1,54 @@
+* ASW
+** home
+*** funzioni
+- login
+- scorciatoie luoghi preferiti
+- novità
+** ricerca luogo di interesse
+*** funzioni
+- elenco biblioteche / aule studio
+  - ricerca per posizione
+  - ricerca per nome
+  - ricerca per funzioni (stampante, prese elettriche)
+** pagina biblioteca / aula studio
+*** informazioni
+- foto
+- stato di affluenza corrente
+- stati di affluenza futuri
+- servizi disponibili
+- recensioni
+*** funzioni
+- visualizzazione stato corrente
+- visualizzazione previsioni di affluenza
+- aggiungi ai preferiti
+- aggiungi recensione
+- visualizza posti correnti
+- visualizza posti giorno X
+** elenco posti (forse modal)
+*** informazioni
+- elenco posti
+- caratteristiche di ogni posto
+- prenotazione di un tavolo (se tutto libero)
+*** funzioni
+- prenota
+
+** elenco prenotazioni
+*** informazioni
+- elenco prenotazioni correnti
+- storico prenotazioni
+
+** pagina prenotazione
+*** informazioni
+- informazioni posto
+- informazioni biblioteca / aula studio
+- codice prenotazione
+*** funzioni
+- genera QR
+- cancella prenotazione
+- modifica prenotazione
+
+** impostazioni
+*** informazioni
+*** funzioni
+- logout
+- modifica password
