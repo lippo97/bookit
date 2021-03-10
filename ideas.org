@@ -10,24 +10,32 @@
   - ricerca per posizione
   - ricerca per nome
   - ricerca per funzioni (stampante, prese elettriche)
+  - ricerca per disponibilità corrente o in data X
+
+** prenotazione veloce
+Prenotazione in un posto libero, per oggi, in un luogo vicino o recente
+
+Pulsante raggiungibile dalla home
 ** pagina biblioteca / aula studio
 *** informazioni
 - foto
+- orari
 - stato di affluenza corrente
 - stati di affluenza futuri
 - servizi disponibili
 - recensioni
 *** funzioni
-- visualizzazione stato corrente
-- visualizzazione previsioni di affluenza
 - aggiungi ai preferiti
-- aggiungi recensione
+- aggiungi(modifica/rimuovi) recensione
 - visualizza posti correnti
 - visualizza posti giorno X
 ** elenco posti (forse modal)
 *** informazioni
 - elenco posti
 - caratteristiche di ogni posto
+  + stampante
+  + pc
+  + alimentazione
 - prenotazione di un tavolo (se tutto libero)
 *** funzioni
 - prenota
@@ -46,9 +54,11 @@
 - genera QR
 - cancella prenotazione
 - modifica prenotazione
+- segnalazione
 
 ** impostazioni
 *** informazioni
 *** funzioni
 - logout
 - modifica password
+- modifica immagine (opt)
