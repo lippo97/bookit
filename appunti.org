@@ -1,0 +1,9 @@
+#+TITLE: Appunti
+
+* API Gateway
+https://dev.to/behalf/authentication-authorization-in-microservices-architecture-part-i-2cn0
+** Stateless o stateful?
+*** stateful
+piu facile
+*** stateless
+meglio
