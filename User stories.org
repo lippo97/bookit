@@ -1,22 +1,20 @@
-User stories - Utente
+* User stories - Utente
+** Come utente vorrei effettuare una prenotazione di un servizio in una determinata aula studio
+** Come utente vorrei poter ricercare aule studio intorno a me
+** Come utente vorrei poter aggiungere una determinata aula studio tra le mie preferite
+** Come utente vorrei poter navigare le mie aule studio preferite
+** Come utente vorrei poter filtrare le aule studio in base ai servizi offerti
+** Come utente vorrei visualizzare informazioni sull' aula studio
+*** orari di apertura
+*** capienza
+*** posti occupati
+** Come utente, quando effettuo una prenotazione, vorrei ricevere una conferma ed un codice di accesso per identificarmi
+** Come utente, vorrei visualizzare le mie prenotazioni
 
-* Come utente vorrei effettuare una prenotazione di un servizio in una determinata aula studio
-* Come utente vorrei poter ricercare aule studio intorno a me
-* Come utente vorrei poter aggiungere una determinata aula studio tra le mie preferite
-* Come utente vorrei poter navigare le mie aule studio preferite
-* Come utente vorrei poter filtrare le aule studio in base ai servizi offerti
-* Come utente vorrei visualizzare informazioni sull' aula studio
-** orari di apertura
-** capienza
-** posti occupati
-* Come utente, quando effettuo una prenotazione, vorrei ricevere una conferma ed un codice di accesso per identificarmi
-* Come utente, vorrei visualizzare le mie prenotazioni
-
-User stories - Admin (gestore aula studio)
-
-* Come gestore, vorrei aggiungere la mia aula studio tra quelle disponibili
-* Come gestore, vorrei gestire gli orari ed i giorni apertura, potendo specificare anche chiusure straordinarie
-* Come gestore, vorrei aggiungere delle stanze alla mia aula studio
-* Come gestore, vorrei poter descrivere come è strutturata la stanza
-* Come gestore, quando si presenta una persona con prenotazione vorrei poter fare check-in
-* Come gestore, quando si presenta una persona senza prenotazione vorrei poterla inserire manualmente nella stanza, se possibile
+* User stories - Admin (gestore aula studio)
+** Come gestore, vorrei aggiungere la mia aula studio tra quelle disponibili
+** Come gestore, vorrei gestire gli orari ed i giorni apertura, potendo specificare anche chiusure straordinarie
+** Come gestore, vorrei aggiungere delle stanze alla mia aula studio
+** Come gestore, vorrei poter descrivere come è strutturata la stanza
+** Come gestore, quando si presenta una persona con prenotazione vorrei poter fare check-in
+** Come gestore, quando si presenta una persona senza prenotazione vorrei poterla inserire manualmente nella stanza, se possibile
