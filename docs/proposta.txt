@@ -1,0 +1,27 @@
+Salve,
+
+siamo Filippo Nardini e Jacopo Corina del corso di Applicazioni e Servizi Web
+2019-2020. Vorremmo sottoporre alla sua attenzione la nostra proposta di
+progetto. La nostra intenzione è quella di realizzare un sistema di prenotazione
+per i posti all'interno di una biblioteca o aula studio. Il sistema che abbiamo
+in mente permette ad un utente di ricercare aule studio nella propria città,
+visualizzarne in tempo reale lo stato di affluenza, mostrarne la piantina ed
+effettuare una prenotazione di una specifica postazione.
+
+Dal punto di vista del gestore dell'aula studio è possibile gestire le stanze
+disponibili, modificare la disposizione delle postazioni all'interno di una
+stanza e gestire il check-in delle persone che vogliono accedere all'aula. Il
+sistema fornirà al gestore un editor 2d per la gestione delle postazioni di una
+stanza, in modo da poter disegnare approssimativamente una piantina. Inoltre
+tramite questo editor sarà possibile impostare le caratteristiche di ciascun
+posto, come ad esempio la presenza di connettività, rete elettrica, postazioni
+con computer, ecc.
+
+Lo stack tecnonologico intendiamo utilizzare è lo stack MERN con uso di
+Typescript sia lato front-end che lato back-end. Inoltre abbiamo pensato di
+containerizzare l'applicazione utilizzando Docker e docker-compose.
+
+Restiamo in attesa di un suo riscontro,
+grazie per l'attenzione,
+
+Filippo Nardini e Jacopo Corina
