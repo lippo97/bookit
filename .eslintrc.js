@@ -1,9 +1,11 @@
 module.exports = {
+  env: {
+    "es2021": true,
+  },
   root: true,
   ignorePatterns: [
     'dist/**/*.d.ts',
-    '**/.eslintrc.js',
-    '**/.prettierrc.js',
+    '*.js',
   ],
   extends: [
     'airbnb-typescript/base',
