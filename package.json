@@ -1,0 +1,16 @@
+{
+  "name": "asw-project",
+  "repository": "git@github.com:lippo97/asw-project.git",
+  "authors": [
+    "Lippo <filippo.nardini@studio.unibo.it>",
+    "Corinz <jacopo.corina@studio.unibo.it>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
