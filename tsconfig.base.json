@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    // "allowJs": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "incremental": true,
+    "baseUrl": "./packages",
+    "paths": {
+      "@asw-project/shared/*": ["shared/src/*"],
+    }
+  },
+  "exclude": [
+    ".eslintrc.js",
+    ".prettierrc.js",
+  ]
+
+}
