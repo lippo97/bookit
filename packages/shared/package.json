@@ -1,10 +1,9 @@
 {
   "name": "@asw-project/shared",
   "version": "1.0.0",
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./dto/*": "./dist/dto/*"
   },
   "scripts": {
     "build": "tsc --build tsconfig.prod.json",

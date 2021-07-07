@@ -5,8 +5,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["./src/**/*"],
-  "references": [{ "path": "../shared" }]
+  "include": ["./src/**/*.ts"],
+  "references": [{ "path": "../shared/tsconfig.prod.json", "prepend": false }]
 }

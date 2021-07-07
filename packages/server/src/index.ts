@@ -1,4 +1,3 @@
-import generator from '@asw-project/shared';
 import { LoginRequest } from '@asw-project/shared/dto/authentication/login';
 import { plainToClass } from 'class-transformer';
 import express, { Request, Response } from 'express';
@@ -7,12 +6,6 @@ import validate from './middleware/validate';
 import { login } from './controllers/authentication';
 
 const app = express();
-
-app.use((_, res) => {
-  res.json({
-    random: generator(),
-  });
-});
 
 app.post('/login', validate(LoginRequest), login);
 
