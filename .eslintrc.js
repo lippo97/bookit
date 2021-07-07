@@ -9,9 +9,14 @@ module.exports = {
   ],
   extends: [
     'airbnb-typescript/base',
+    'prettier'
   ],
   parser: '@typescript-eslint/parser',
   plugins: [
     '@typescript-eslint',
   ],
+  rules: {
+    "@typescript-eslint/indent": "off",
+    "implicit-arrow-linebreak": "off"
+  }
 };

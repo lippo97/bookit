@@ -13,10 +13,12 @@
   "devDependencies": {
     "@types/express": "^4.17.12",
     "@types/jest": "^26.0.23",
+    "@types/mongoose": "^5.11.97",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "jest": "^27.0.4",
     "prettier": "^2.3.1",
@@ -26,6 +28,11 @@
   },
   "dependencies": {
     "@asw-project/shared": "^1.0.0",
-    "express": "^4.17.1"
+    "@typegoose/typegoose": "^7.6.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "express": "^4.17.1",
+    "http-status-codes": "^2.1.4",
+    "mongoose": "^5.13.2"
   }
 }
