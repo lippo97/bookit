@@ -4,16 +4,17 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { Either } from 'purify-ts';
 import * as authenticationService from '../services/authentication';
+import * as authenticationService2 from '../services/authentication.fp';
 
 export async function login(req: Request<any, any, LoginRequest>, res: Response): Promise<void> {
   const { email, password } = req.body;
-  const result = await authenticationService.login(email, password);
-  if (isLoginSuccess(result)) {
+  console.log('dentro login');
+  const result = await authenticationService2.logon(email, password).run();
+  result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    const { email } = result;
-    res.json({ email });
-  }
-  res.send(StatusCodes.UNAUTHORIZED);
+    Right: ({ email }) => res.json({ email }),
+    Left: ({ error }) => res.status(StatusCodes.UNAUTHORIZED).json({ error }),
+  });
 }
 
 export async function signup(

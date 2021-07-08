@@ -3,15 +3,26 @@ import { plainToClass } from 'class-transformer';
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { SignupRequest } from '@asw-project/shared/dto/authentication/signup';
+import mongoose from 'mongoose';
 import validate from './middleware/validate';
-import { login } from './controllers/handler2.exp';
+import { login } from './controllers/authentication';
 
-const app = express();
+mongoose
+  .connect('mongodb://localhost:27017/', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: 'test',
+  })
+  .then(() => {
+    const app = express();
 
-app.post('/login', validate(LoginRequest), login);
-// app.post('/signup', validate(SignupRequest), signup);
+    app.use(express.json());
 
-app.listen(3000, () => {
-  // eslint-disable-next-line no-console
-  console.log('running...');
-});
+    app.post('/login', validate(LoginRequest), login);
+    // app.post('/signup', validate(SignupRequest), signup);
+
+    app.listen(3000, () => {
+      // eslint-disable-next-line no-console
+      console.log('running...');
+    });
+  });

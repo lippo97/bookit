@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "exports": {
     ".": "./dist/index.js",
-    "./dto/*": "./dist/dto/*"
+    "./dto/authentication/*": "./dist/dto/authentication/*.js"
   },
   "scripts": {
     "build": "tsc --build tsconfig.prod.json",

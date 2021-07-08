@@ -7,13 +7,16 @@ type Class<A> = { new (...params: any[]): A };
 
 const validate =
   <T extends object>(dtoClass: Class<T>) =>
-  async (req: Request<any, T>, res: Response, next: NextFunction) => {
+  async (req: Request<any, any, T>, res: Response, next: NextFunction) => {
     const obj = plainToClass(dtoClass, req.body);
+    if (obj === undefined) {
+      return res.sendStatus(StatusCodes.BAD_REQUEST);
+    }
     const errors = await classValidator(obj);
     if (errors.length > 0) {
-      res.send(StatusCodes.BAD_REQUEST);
+      return res.status(StatusCodes.BAD_REQUEST).json(errors);
     }
-    next();
+    return next();
   };
 
 export default validate;
