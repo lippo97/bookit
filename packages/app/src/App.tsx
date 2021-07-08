@@ -1,9 +1,9 @@
-import generator from '@asw-project/shared';
+import generator from '@asw-project/shared/dto/authentication/error';
 
 function App() {
   return (
     <div>
-      <p>Generated {generator()}</p>
+      <p>Generated {'ciao'}</p>
       <p>Hello, from the App!</p>
     </div>
   );

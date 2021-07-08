@@ -15,9 +15,11 @@ type Kind = 'BlockedUser' | 'WrongEmailPassword';
 
 export interface LoginSuccess {
   readonly email: Email;
+  readonly error?: never;
 }
 
 export interface LoginFail {
+  readonly email?: never;
   readonly error: Error<Kind>;
 }
 

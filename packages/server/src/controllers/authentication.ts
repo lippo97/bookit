@@ -2,6 +2,7 @@ import { isLoginSuccess, LoginRequest } from '@asw-project/shared/dto/authentica
 import { isSignupSuccess, SignupRequest } from '@asw-project/shared/dto/authentication/signup';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { Either } from 'purify-ts';
 import * as authenticationService from '../services/authentication';
 
 export async function login(req: Request<any, any, LoginRequest>, res: Response): Promise<void> {
@@ -15,10 +16,14 @@ export async function login(req: Request<any, any, LoginRequest>, res: Response)
   res.send(StatusCodes.UNAUTHORIZED);
 }
 
-export async function signin(
+export async function signup(
   req: Request<any, any, SignupRequest>,
   res: Response,
 ): Promise<Response | void> {
+  Either.of('ciao').caseOf({
+    Left: () => 0,
+    Right: (_) => 30,
+  });
   const { email, password, passwordConfirmation } = req.body;
   const result = await authenticationService.signup(email, password, passwordConfirmation);
   if (isSignupSuccess(result)) {
