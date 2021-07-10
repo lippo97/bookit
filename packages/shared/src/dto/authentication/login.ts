@@ -1,6 +1,6 @@
 import { IsDefined, IsEmail } from 'class-validator';
 import { Email, Password } from '../../types/authentication';
-import Error from './error';
+import { Error } from './error';
 
 export class LoginRequest {
   @IsEmail()
@@ -32,3 +32,10 @@ export function isLoginSuccess(dto: LoginResponse): dto is LoginSuccess {
 export function isLoginFail(dto: LoginResponse): dto is LoginFail {
   return !isLoginSuccess(dto);
 }
+
+export const wrongEmailPassword: LoginFail = {
+  error: {
+    kind: 'WrongEmailPassword',
+    body: 'Wrong email or password',
+  },
+} as const;

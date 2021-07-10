@@ -1,6 +1,6 @@
 import { IsDefined, IsEmail, MinLength } from 'class-validator';
 import { Email } from '../../types/authentication';
-import Error from './error';
+import { Error } from './error';
 
 export class SignupRequest {
   @IsDefined()
@@ -35,3 +35,15 @@ export function isSignupSuccess(dto: SignupResponse): dto is SignupSuccess {
 export function isSignupFail(dto: SignupResponse): dto is SignupFail {
   return !isSignupSuccess(dto);
 }
+
+export const passwordsDoNotMatch = {
+  error: {
+    kind: 'PasswordsDoNotMatch',
+  },
+} as const;
+
+export const duplicateEmail = {
+  error: {
+    kind: 'DuplicateEmail',
+  },
+} as const;

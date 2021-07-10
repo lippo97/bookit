@@ -1,11 +1,12 @@
 import { LoginRequest } from '@asw-project/shared/dto/authentication/login';
 import { plainToClass } from 'class-transformer';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { SignupRequest } from '@asw-project/shared/dto/authentication/signup';
 import mongoose from 'mongoose';
 import validate from './middleware/validate';
-import { login } from './controllers/authentication';
+import { handleResponse, logError } from './middleware/errors';
+import { login, signup } from './controllers/authentication';
 
 mongoose
   .connect('mongodb://localhost:27017/', {
@@ -19,7 +20,10 @@ mongoose
     app.use(express.json());
 
     app.post('/login', validate(LoginRequest), login);
-    // app.post('/signup', validate(SignupRequest), signup);
+    app.post('/signup', validate(SignupRequest), signup);
+
+    app.use(logError);
+    app.use(handleResponse);
 
     app.listen(3000, () => {
       // eslint-disable-next-line no-console

@@ -1,25 +1,47 @@
 import {
   LoginFail,
-  LoginResponse,
   LoginSuccess,
+  wrongEmailPassword,
 } from '@asw-project/shared/dto/authentication/login';
+import {
+  duplicateEmail,
+  passwordsDoNotMatch,
+  SignupFail,
+  SignupSuccess,
+} from '@asw-project/shared/dto/authentication/signup';
 import { Email, Password } from '@asw-project/shared/types/authentication';
-import { Either, EitherAsync, Maybe, Right } from 'purify-ts';
+import { always, EitherAsync, Maybe } from 'purify-ts';
+import { InternalError } from '@asw-project/shared/dto/authentication/error';
+import { isTrue } from '@asw-project/shared/util/boolean';
+import { pick } from '@asw-project/shared/util/objects';
 import User from '../models/User';
 
-const wrongEmailPassword: LoginFail = {
-  error: {
-    kind: 'WrongEmailPassword',
-    description: 'Wrong email or password',
-  },
-};
+export function login(email: Email, password: Password): EitherAsync<LoginFail, LoginSuccess> {
+  return User.findByEmailAndComparePassword(email, password) //
+    .map(pick('email'))
+    .toEitherAsync(wrongEmailPassword);
+}
 
-export function logon(email: Email, password: Password): EitherAsync<LoginFail, LoginSuccess> {
-  return EitherAsync<LoginFail, any>(() => User.findOne({ email }).exec()).chain((user) => {
-    const either: Either<LoginFail, LoginSuccess> = Maybe.fromNullable(user)
-      .toEither(wrongEmailPassword)
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      .map(({ email }) => ({ email }));
-    return Promise.resolve(either);
-  });
+export function signup(
+  email: Email,
+  password: Password,
+  passwordConfirmation: Password,
+): EitherAsync<SignupFail, SignupSuccess> {
+  /* eslint-disable @typescript-eslint/no-shadow */
+  const createUser = (email: Email, password: Password): EitherAsync<SignupFail, SignupSuccess> =>
+    EitherAsync(() => User.create({ email, password }))
+      .map(pick('email'))
+      .mapLeft((err: any) => {
+        if (err.name === 'MongoError' && err.code === 11000) {
+          return duplicateEmail;
+        }
+        // eslint-disable-next-line no-console
+        return InternalError(err);
+      });
+
+  return EitherAsync.liftEither(
+    Maybe.of(password === passwordConfirmation)
+      .filter(isTrue)
+      .toEither(passwordsDoNotMatch),
+  ).chain(always(createUser(email, password)));
 }
