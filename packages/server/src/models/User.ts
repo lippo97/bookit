@@ -6,9 +6,11 @@ import { always, EitherAsync, Maybe, MaybeAsync } from 'purify-ts';
 const SALT_ROUNDS = 10;
 
 @pre<User>('save', async function preSave() {
-  const salt = await bcrypt.genSalt(SALT_ROUNDS);
-  const hashed = await bcrypt.hash(this.password, salt);
-  this.password = hashed;
+  if (this.modifiedPaths().includes('password')) {
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    const hashed = await bcrypt.hash(this.password, salt);
+    this.password = hashed;
+  }
 })
 class User {
   @prop({ required: true, unique: true })
