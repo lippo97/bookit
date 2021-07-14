@@ -9,7 +9,10 @@ export async function login(req: Request<any, any, LoginRequest>, res: Response)
   const result = await authenticationService2.login(email, password);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: (success) => res.json(success),
+    Right: (success) => {
+      req.session.userId = success.email;
+      return res.json(success);
+    },
     Left: (fail) => res.status(StatusCodes.UNAUTHORIZED).json(fail),
   });
 }
@@ -26,7 +29,6 @@ export async function signup(
     Left: (fail) => {
       switch (fail.error.kind) {
         case 'InternalError':
-          res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
           return next(fail.error.object);
         default:
           return res.status(StatusCodes.CONFLICT).json(fail);

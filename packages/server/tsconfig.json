@@ -6,7 +6,7 @@
     "rootDir": "./src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "typeRoots": ["./src/types"]
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   },
   "include": ["./src/**/*.ts"],
   "references": [{ "path": "../shared/tsconfig.prod.json", "prepend": false }]

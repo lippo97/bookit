@@ -1,7 +1,8 @@
 import bcrypt, { compare } from 'bcrypt';
 import { Email, Password } from '@asw-project/shared/types/authentication';
 import { getModelForClass, pre, prop, ReturnModelType } from '@typegoose/typegoose';
-import { always, EitherAsync, Maybe, MaybeAsync } from 'purify-ts';
+import { always, MaybeAsync } from 'purify-ts';
+import { isTrue } from '@asw-project/shared/util/boolean';
 
 const SALT_ROUNDS = 10;
 
@@ -28,8 +29,6 @@ class User {
     const comparePasswords = (password: Password, hash: string) =>
       MaybeAsync(() => compare(password, hash));
 
-    const isTrue = (b: boolean) => b;
-
     // return MaybeAsync(async () => this.findOne({ email }).exec())
     //   .filter((u) => u !== null)
     //   .chain((user) =>
@@ -38,7 +37,7 @@ class User {
     //   )
     //   .filter(([, match]) => match)
     //   .map(([user]) => user);
-    return MaybeAsync(async () => this.findOne({ email }).exec())
+    return MaybeAsync(() => this.findOne({ email }).exec())
       .filter((u) => u !== null)
       .map((u) => u!) // I think this is safe
       .chain((user) =>

@@ -3,6 +3,6 @@ import { SessionData } from 'express-session';
 
 declare module 'express-session' {
   interface SessionData {
-    readonly userId: string;
+    userId: string;
   }
 }

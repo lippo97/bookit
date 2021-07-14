@@ -10,4 +10,8 @@ services:
     image: mongo-express
     ports:
       - 8081:8081
-    restart: unless-stopped
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - 6379:6379

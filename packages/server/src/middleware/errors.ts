@@ -7,7 +7,6 @@ export function logError(err: any, req: Request, res: Response, next: NextFuncti
   next(err);
 }
 
-export function handleResponse(err: any, req: Request, res: Response, next: NextFunction) {
-  res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-  next(err);
+export function handleResponse(err: any, req: Request, res: Response) {
+  res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
 }
