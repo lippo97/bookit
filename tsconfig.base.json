@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es5",
-    // "allowJs": true,
     "module": "commonjs",
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -15,12 +14,11 @@
     "incremental": true,
     "baseUrl": "./packages",
     "paths": {
-      "@asw-project/shared/*": ["shared/src/*"],
+      "@asw-project/shared/*": ["shared/src/*"]
     }
   },
   "exclude": [
     ".eslintrc.js",
-    ".prettierrc.js",
+    ".prettierrc.js"
   ]
-
 }

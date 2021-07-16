@@ -2,7 +2,7 @@ import { LoginRequest } from '@asw-project/shared/authentication/dto/login';
 import { SignupRequest } from '@asw-project/shared/authentication/dto/signup';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import * as authenticationService2 from '../services/authentication';
+import * as authenticationService from '../services/authentication';
 
 export async function login(
   req: Request<any, any, LoginRequest>,
@@ -10,7 +10,7 @@ export async function login(
   next: NextFunction,
 ): Promise<void> {
   const { email, password } = req.body;
-  const result = await authenticationService2.login(email, password);
+  const result = await authenticationService.login(email, password);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
     Right: (success) => {
@@ -28,7 +28,7 @@ export async function logout(req: Request, res: Response, next: NextFunction) {
       if (err) {
         return next(err);
       }
-      res.sendStatus(StatusCodes.RESET_CONTENT);
+      return res.sendStatus(StatusCodes.RESET_CONTENT);
     });
   }
   return res.sendStatus(StatusCodes.NOT_FOUND);
@@ -40,7 +40,7 @@ export async function signup(
   next: NextFunction,
 ): Promise<void> {
   const { email, password, passwordConfirmation } = req.body;
-  const result = await authenticationService2.signup(email, password, passwordConfirmation);
+  const result = await authenticationService.signup(email, password, passwordConfirmation);
   result.caseOf({
     Right: (success) => res.status(StatusCodes.CREATED).json(success),
     Left: next,
