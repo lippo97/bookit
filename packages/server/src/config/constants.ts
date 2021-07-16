@@ -4,6 +4,8 @@ const production = 'production';
 
 const localhost = '127.0.0.1';
 
+const mongodbPort = 27017;
+
 const redisPort = 6379;
 
 export const ENVIRONMENT = process.env.NODE_ENV || development;
@@ -43,7 +45,7 @@ export const COOKIE_SECRET = str('COOKIE_SECRET', 's3kr37');
 
 export const MONGODB_HOST = str('MONGODB_HOST', 'localhost');
 
-export const MONGODB_PORT = num('MONGODB_PORT', 27017);
+export const MONGODB_PORT = num('MONGODB_PORT', mongodbPort);
 
 export const REDIS_HOST = str('REDIS_HOST', localhost);
 
