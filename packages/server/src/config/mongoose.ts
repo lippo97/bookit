@@ -6,6 +6,7 @@ const url = `mongodb://${MONGODB_HOST}:${MONGODB_PORT}`;
 const options: mongoose.ConnectionOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
   dbName: 'test',
 };
 

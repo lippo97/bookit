@@ -1,6 +1,6 @@
 import { IsDefined, IsEmail } from 'class-validator';
-import { Email, Password } from '../../types/authentication';
-import { Error } from './error';
+import { ErrorMap, ExpectedError } from '../../errors';
+import { Email, Password } from '../types';
 
 export class LoginRequest {
   @IsEmail()
@@ -11,17 +11,18 @@ export class LoginRequest {
   public readonly password!: Password;
 }
 
-type Kind = 'BlockedUser' | 'WrongEmailPassword';
+export type LoginErrorKind = 'WrongEmailPassword';
+
+export const LoginErrors: ErrorMap<LoginErrorKind> = {
+  WrongEmailPassword: 'WrongEmailPassword',
+};
 
 export interface LoginSuccess {
   readonly email: Email;
   readonly error?: never;
 }
 
-export interface LoginFail {
-  readonly email?: never;
-  readonly error: Error<Kind>;
-}
+export type LoginFail = ExpectedError<LoginErrorKind>;
 
 export type LoginResponse = LoginSuccess | LoginFail;
 
@@ -34,8 +35,6 @@ export function isLoginFail(dto: LoginResponse): dto is LoginFail {
 }
 
 export const wrongEmailPassword: LoginFail = {
-  error: {
-    kind: 'WrongEmailPassword',
-    body: 'Wrong email or password',
-  },
+  kind: 'WrongEmailPassword',
+  message: 'Wrong email or password.',
 } as const;

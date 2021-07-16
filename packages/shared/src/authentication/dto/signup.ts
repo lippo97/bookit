@@ -1,6 +1,6 @@
 import { IsDefined, IsEmail, MinLength } from 'class-validator';
-import { Email } from '../../types/authentication';
-import { Error } from './error';
+import { ErrorMap, Error } from '../../errors';
+import { Email } from '../types';
 
 export class SignupRequest {
   @IsDefined()
@@ -16,15 +16,18 @@ export class SignupRequest {
   public readonly passwordConfirmation!: string;
 }
 
-type Kind = 'DuplicateEmail' | 'PasswordsDoNotMatch';
+export type SignupErrorKind = 'DuplicateEmail' | 'PasswordsDoNotMatch';
+
+export const SignupErrors: ErrorMap<SignupErrorKind> = {
+  DuplicateEmail: 'DuplicateEmail',
+  PasswordsDoNotMatch: 'PasswordsDoNotMatch',
+};
 
 export interface SignupSuccess {
   readonly email: Email;
 }
 
-export interface SignupFail {
-  readonly error: Error<Kind>;
-}
+export type SignupFail = Error<SignupErrorKind>;
 
 export type SignupResponse = SignupSuccess | SignupFail;
 
@@ -37,13 +40,9 @@ export function isSignupFail(dto: SignupResponse): dto is SignupFail {
 }
 
 export const passwordsDoNotMatch = {
-  error: {
-    kind: 'PasswordsDoNotMatch',
-  },
+  kind: 'PasswordsDoNotMatch',
 } as const;
 
 export const duplicateEmail = {
-  error: {
-    kind: 'DuplicateEmail',
-  },
+  kind: 'DuplicateEmail',
 } as const;

@@ -1,10 +1,14 @@
-import { LoginRequest } from '@asw-project/shared/dto/authentication/login';
-import { SignupRequest } from '@asw-project/shared/dto/authentication/signup';
+import { LoginRequest } from '@asw-project/shared/authentication/dto/login';
+import { SignupRequest } from '@asw-project/shared/authentication/dto/signup';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import * as authenticationService2 from '../services/authentication.fp';
+import * as authenticationService2 from '../services/authentication';
 
-export async function login(req: Request<any, any, LoginRequest>, res: Response): Promise<void> {
+export async function login(
+  req: Request<any, any, LoginRequest>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
   const { email, password } = req.body;
   const result = await authenticationService2.login(email, password);
   result.caseOf({
@@ -13,8 +17,21 @@ export async function login(req: Request<any, any, LoginRequest>, res: Response)
       req.session.userId = success.email;
       return res.json(success);
     },
-    Left: (fail) => res.status(StatusCodes.UNAUTHORIZED).json(fail),
+    Left: next,
   });
+}
+
+export async function logout(req: Request, res: Response, next: NextFunction) {
+  const { userId } = req.session;
+  if (userId !== undefined) {
+    return req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.sendStatus(StatusCodes.RESET_CONTENT);
+    });
+  }
+  return res.sendStatus(StatusCodes.NOT_FOUND);
 }
 
 export async function signup(
@@ -26,13 +43,6 @@ export async function signup(
   const result = await authenticationService2.signup(email, password, passwordConfirmation);
   result.caseOf({
     Right: (success) => res.status(StatusCodes.CREATED).json(success),
-    Left: (fail) => {
-      switch (fail.error.kind) {
-        case 'InternalError':
-          return next(fail.error.object);
-        default:
-          return res.status(StatusCodes.CONFLICT).json(fail);
-      }
-    },
+    Left: next,
   });
 }

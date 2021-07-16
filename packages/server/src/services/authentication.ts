@@ -1,46 +1,47 @@
-import { Email, Password } from '@asw-project/shared/types/authentication';
-import { LoginResponse } from '@asw-project/shared/dto/authentication/login';
-import { SignupResponse, SignupFail } from '@asw-project/shared/dto/authentication/signup';
+import {
+  LoginFail,
+  LoginSuccess,
+  wrongEmailPassword,
+} from '@asw-project/shared/authentication/dto/login';
+import {
+  duplicateEmail,
+  passwordsDoNotMatch,
+  SignupFail,
+  SignupSuccess,
+} from '@asw-project/shared/authentication/dto/signup';
+import { Email, Password } from '@asw-project/shared/authentication/types';
+import { always, EitherAsync, Maybe } from 'purify-ts';
+import { unexpectedError } from '@asw-project/shared/errors';
+import { isTrue } from '@asw-project/shared/util/boolean';
+import { pick } from '@asw-project/shared/util/objects';
 import User from '../models/User';
 
-export function login(email: Email, password: Password): Promise<LoginResponse> {
-  return User.findOne({ email })
-    .exec()
-    .then((user) => {
-      if (user === null) {
-        return {
-          error: {
-            kind: 'WrongEmailPassword',
-            description: "The requested user couldn't be found",
-          },
-        };
-      }
-      const { email } = user;
-      return { email };
-    });
+export function login(email: Email, password: Password): EitherAsync<LoginFail, LoginSuccess> {
+  return User.findByEmailAndComparePassword(email, password) //
+    .map(pick('email'))
+    .toEitherAsync(wrongEmailPassword);
 }
 
 export function signup(
   email: Email,
   password: Password,
   passwordConfirmation: Password,
-): Promise<SignupResponse> {
-  if (password !== passwordConfirmation) {
-    return Promise.resolve({
-      error: {
-        kind: 'PasswordsDoNotMatch',
-      },
-    });
-  }
-  return User.create({ email, password })
-    .then((user) => {
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const { email } = user;
-      return { email };
-    })
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      throw new Error('hello');
-    });
+): EitherAsync<SignupFail, SignupSuccess> {
+  /* eslint-disable @typescript-eslint/no-shadow */
+  const createUser = (email: Email, password: Password): EitherAsync<SignupFail, SignupSuccess> =>
+    EitherAsync(() => User.create({ email, password }))
+      .map(pick('email'))
+      .mapLeft((err: any) => {
+        if (err.name === 'MongoError' && err.code === 11000) {
+          return duplicateEmail;
+        }
+        // eslint-disable-next-line no-console
+        return unexpectedError(err);
+      });
+
+  return EitherAsync.liftEither(
+    Maybe.of(password === passwordConfirmation)
+      .filter(isTrue)
+      .toEither(passwordsDoNotMatch),
+  ).chain(always(createUser(email, password)));
 }

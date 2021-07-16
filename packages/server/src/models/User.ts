@@ -1,5 +1,5 @@
 import bcrypt, { compare } from 'bcrypt';
-import { Email, Password } from '@asw-project/shared/types/authentication';
+import { Email, Password } from '@asw-project/shared/authentication/types';
 import { getModelForClass, pre, prop, ReturnModelType } from '@typegoose/typegoose';
 import { always, MaybeAsync } from 'purify-ts';
 import { isTrue } from '@asw-project/shared/util/boolean';
@@ -29,14 +29,6 @@ class User {
     const comparePasswords = (password: Password, hash: string) =>
       MaybeAsync(() => compare(password, hash));
 
-    // return MaybeAsync(async () => this.findOne({ email }).exec())
-    //   .filter((u) => u !== null)
-    //   .chain((user) =>
-    //     comparePasswords(password, user!.password) // I think this bang usage is safe
-    //       .map((match) => [user, match] as [User, boolean]),
-    //   )
-    //   .filter(([, match]) => match)
-    //   .map(([user]) => user);
     return MaybeAsync(() => this.findOne({ email }).exec())
       .filter((u) => u !== null)
       .map((u) => u!) // I think this is safe

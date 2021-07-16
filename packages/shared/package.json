@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "exports": {
     ".": "./dist/index.js",
-    "./dto/*": "./dist/dto/*.js",
-    "./util/*": "./dist/util/*.js"
-  },
+    "./*": "./dist/*.js"  },
   "scripts": {
     "build": "tsc --build tsconfig.prod.json",
     "lint": "eslint --fix --ext=ts,tsx src",
