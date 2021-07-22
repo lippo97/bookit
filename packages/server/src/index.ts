@@ -3,6 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import { ENVIRONMENT } from './config/constants';
 import sessionOptions from './config/session';
 import configureMongoose from './config/mongoose';
@@ -18,6 +19,7 @@ async function main() {
 
   const app = express();
 
+  app.use(cors({ credentials: true, origin: ['http://localhost:8080'] }));
   app.use(session(sessionOptions));
   app.use(express.json());
 

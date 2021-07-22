@@ -5,5 +5,10 @@
     "source.fixAll": true
   },
   // "eslint.enable": true,
-  "eslint.workingDirectories": ["./packages/shared", "./packages/server", "./packages/app"]
+  "eslint.workingDirectories": [
+    "./packages/shared",
+    "./packages/server",
+    "./packages/app"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

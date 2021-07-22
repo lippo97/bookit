@@ -1,11 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
     "composite": false,
-    "incremental": false
+    "incremental": false,
+    "typeRoots": ["../../node_modules/@types", "src/types"]
   },
   "include": ["./src/**/*"],
-  "references": [{ "path": "../shared/tsconfig.prod.json" }]
+  "references": [{ "path": "../shared/tsconfig.prod.json", "prepend": false }]
 }

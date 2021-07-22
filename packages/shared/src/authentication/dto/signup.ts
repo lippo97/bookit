@@ -1,6 +1,6 @@
 import { IsDefined, IsEmail, MinLength } from 'class-validator';
 import { ErrorMap, Error } from '../../errors';
-import { Email } from '../types';
+import { ReturnedUser } from '../types';
 
 export class SignupRequest {
   @IsDefined()
@@ -23,9 +23,10 @@ export const SignupErrors: ErrorMap<SignupErrorKind> = {
   PasswordsDoNotMatch: 'PasswordsDoNotMatch',
 };
 
-export interface SignupSuccess {
-  readonly email: Email;
-}
+export type SignupSuccess = ReturnedUser;
+// export interface SignupSuccess {
+//   readonly email: Email;
+// }
 
 export type SignupFail = Error<SignupErrorKind>;
 

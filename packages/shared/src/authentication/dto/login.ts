@@ -1,6 +1,6 @@
 import { IsDefined, IsEmail } from 'class-validator';
 import { ErrorMap, ExpectedError } from '../../errors';
-import { Email, Password } from '../types';
+import { Email, Password, ReturnedUser } from '../types';
 
 export class LoginRequest {
   @IsEmail()
@@ -17,10 +17,11 @@ export const LoginErrors: ErrorMap<LoginErrorKind> = {
   WrongEmailPassword: 'WrongEmailPassword',
 };
 
-export interface LoginSuccess {
-  readonly email: Email;
-  readonly error?: never;
-}
+export type LoginSuccess = ReturnedUser;
+// export interface LoginSuccess {
+//   readonly email: Email;
+//   readonly error?: never;
+// }
 
 export type LoginFail = ExpectedError<LoginErrorKind>;
 

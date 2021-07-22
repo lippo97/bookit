@@ -1,0 +1,6 @@
+session_name: development_servers
+windows:
+  - window_name: main
+    panes:
+      - cd packages/app && REACT_APP_BACKEND_URL=http://localhost:3000 yarn serve
+      - cd packages/server && yarn serve:dev

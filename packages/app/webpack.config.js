@@ -1,6 +1,12 @@
 const path = require('path');
+const { EnvironmentPlugin, webpack, DefinePlugin } = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+
+const startsWith = (start) => (str) => str.startsWith(start);
+const environmentVariables = Object.keys(process.env).filter(startsWith('REACT_APP'));
+const isDevelopment = process.env.NODE_ENV === 'production' ? 'development' : 'production';
+const tsConfig = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 module.exports = {
   mode: process.env.NODE_ENV == 'development' ? 'development' : 'production',
@@ -17,7 +23,8 @@ module.exports = {
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
-          configFile: path.join('.', 'tsconfig.prod.json'),
+          configFile: path.join('.', 'tsconfig.json'),
+          // configFile: path.join('.', 'tsconfig.prod.json'),
           projectReferences: true,
         },
       },
@@ -52,6 +59,7 @@ module.exports = {
       template: 'src/index.html',
       inject: false,
     }),
+    new EnvironmentPlugin(environmentVariables),
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -62,8 +70,7 @@ module.exports = {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'X-Requested-With, content-type, Authorization',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
   },
 };
