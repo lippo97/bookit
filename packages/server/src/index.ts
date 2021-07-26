@@ -22,6 +22,10 @@ async function main() {
   app.use(cors({ credentials: true, origin: ['http://localhost:8080'] }));
   app.use(session(sessionOptions));
   app.use(express.json());
+  app.use((req, res, next) => {
+    console.log(req.url);
+    next();
+  });
 
   app.use(authenticationRouter);
   app.get('/whoami', (req, res) => {

@@ -78,4 +78,40 @@ describe('Authentication controller', () => {
       expect(next).toBeCalledWith(fail);
     });
   });
+  describe('logout', () => {
+    it('should return code 205', async () => {
+      const req2 = {
+        ...req,
+        session: {
+          userId: 10,
+          destroy: jest.fn((cb) => cb(null)),
+        },
+      } as any as Request;
+      await authenticationController.logout(req2, res, next);
+      expect(res.sendStatus).toBeCalledWith(StatusCodes.RESET_CONTENT);
+    });
+    it('should return code 404', async () => {
+      const req2 = {
+        ...req,
+        session: {
+          userId: undefined,
+          destroy: jest.fn((cb) => cb()),
+        },
+      } as any as Request;
+      await authenticationController.logout(req2, res, next);
+      expect(res.sendStatus).toBeCalledWith(StatusCodes.NOT_FOUND);
+    });
+    it('should pass error to next', async () => {
+      const error = new Error('hello');
+      const req2 = {
+        ...req,
+        session: {
+          userId: 10,
+          destroy: jest.fn((cb) => cb(error)),
+        },
+      } as any as Request;
+      await authenticationController.logout(req2, res, next);
+      expect(next).toBeCalledWith(error);
+    });
+  });
 });

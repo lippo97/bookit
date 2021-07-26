@@ -1,4 +1,4 @@
-import ky, { HTTPError } from 'ky';
+import { HTTPError } from 'ky';
 import { Redirect, useHistory } from 'react-router-dom';
 import { SideImagePage } from '../components/authentication/SideImagePage';
 import SignupForm from '../components/authentication/SignupForm';
@@ -8,6 +8,7 @@ import { useAtom } from 'jotai';
 import { authentication } from '../state/authentication';
 import { SignupSuccess } from '@asw-project/shared/authentication/dto/signup';
 import { useState } from 'react';
+import ky from '../config/ky';
 
 function Signup() {
   const [user, setUser] = useAtom(authentication);

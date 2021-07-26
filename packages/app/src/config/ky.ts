@@ -7,5 +7,6 @@ const options: Options = {
 };
 
 const instance = ky.create(options);
+console.log('backendurl', BACKEND_URL);
 
 export default instance;

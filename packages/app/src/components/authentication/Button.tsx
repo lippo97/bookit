@@ -22,9 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const height = 36;
 function Button({ isLoading, children, ...props }: ButtonProps) {
   const classes = useStyles();
-  // if (isLoading) {
-  //   return <CircularProgress />;
-  // }
+
   return (
     <BaseButton
       type="submit"

@@ -2,11 +2,13 @@ const path = require('path');
 const { EnvironmentPlugin, webpack, DefinePlugin } = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+
+const isDevelopment = process.env.NODE_ENV === 'production' ? 'development' : 'production';
+const tsConfig = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 const startsWith = (start) => (str) => str.startsWith(start);
 const environmentVariables = Object.keys(process.env).filter(startsWith('REACT_APP'));
-const isDevelopment = process.env.NODE_ENV === 'production' ? 'development' : 'production';
-const tsConfig = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 
 module.exports = {
   mode: process.env.NODE_ENV == 'development' ? 'development' : 'production',
@@ -32,21 +34,6 @@ module.exports = {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
-      // {
-      //   test: /\.less$/,
-      //   use: [
-      //     'style-loader',
-      //     'css-loader',
-      //     {
-      //       loader: 'less-loader',
-      //       options: {
-      //         lessOptions: {
-      //           javascriptEnabled: true,
-      //         },
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.(png|jpe?g|gif)$/i,
         loader: 'file-loader',
@@ -58,6 +45,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: false,
+    }),
+    new Dotenv({
+      path: isDevelopment ? path.join('.', '.env.dev') : path.join(__dirname, '../../.env.app'),
     }),
     new EnvironmentPlugin(environmentVariables),
   ],

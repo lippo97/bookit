@@ -1,5 +1,6 @@
 import { Provider } from 'jotai';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Editor from './components/editor';
 import Error404 from './pages/Error404';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -17,6 +18,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/logout" component={Logout} />
+          <Route exact path="/editor" component={Editor} />
           <ProtectedRoute exact path="/secret" component={Secret} />
           <Route component={Error404} />
         </Switch>

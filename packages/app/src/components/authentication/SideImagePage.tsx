@@ -1,10 +1,10 @@
 import { Button, Grid, makeStyles, Paper, Theme } from '@material-ui/core';
+import FullVertical from '../FullVertical';
 
 type ClassProps = Pick<SideImagePageProps, 'image'>;
 const useStyles = makeStyles<Theme, ClassProps>((theme) => ({
   root: {
-    height: '100vh',
-    overflow: 'hidden',
+    height: '100%',
   },
   image: {
     backgroundImage: (props) => `url(${props.image})`,
@@ -24,11 +24,13 @@ interface SideImagePageProps {
 export const SideImagePage = ({ image, children }: SideImagePageProps) => {
   const classes = useStyles({ image });
   return (
-    <Grid container component="main" className={classes.root}>
-      <Grid item xs={false} sm={4} md={7} className={classes.image}></Grid>
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        {children}
+    <FullVertical>
+      <Grid container component="main" className={classes.root}>
+        <Grid item xs={false} sm={4} md={7} className={classes.image}></Grid>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          {children}
+        </Grid>
       </Grid>
-    </Grid>
+    </FullVertical>
   );
 };
