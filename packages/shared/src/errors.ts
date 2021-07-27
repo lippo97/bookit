@@ -19,7 +19,7 @@ type UnexpectedErrorKind = 'InternalError';
  * something unexpected happened. It carries the error object so that it can
  * be printed to the logs.
  */
-interface UnexpectedError {
+export interface UnexpectedError {
   readonly kind: UnexpectedErrorKind;
   readonly body: any;
 }
