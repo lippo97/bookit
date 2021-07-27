@@ -10,6 +10,7 @@ import configureMongoose from './config/mongoose';
 import dotenvConfig from './config/dotenv';
 import { handleResponse, logError } from './middleware/errorHandlers';
 import authenticationRouter from './routers/authentication';
+import roomRouter from './routers/rooms';
 
 async function main() {
   console.log(`Application running in ${ENVIRONMENT}.`);
@@ -27,6 +28,7 @@ async function main() {
     next();
   });
 
+  app.use(roomRouter);
   app.use(authenticationRouter);
   app.get('/whoami', (req, res) => {
     if (req.session.userId) {

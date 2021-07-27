@@ -14,10 +14,13 @@ import { always, EitherAsync, Maybe } from 'purify-ts';
 import { unexpectedError } from '@asw-project/shared/errors';
 import { isTrue } from '@asw-project/shared/util/boolean';
 import { pick } from '@asw-project/shared/util/objects';
-import User from '../models/User';
+import { AuthenticationModel } from '../models/Authentication';
 
-export function login(email: Email, password: Password): EitherAsync<LoginFail, LoginSuccess> {
-  return User.findByEmailAndComparePassword(email, password) //
+export function login(
+  email: Email,
+  password: Password,
+): EitherAsync<LoginFail, LoginSuccess> {
+  return AuthenticationModel.findByEmailAndComparePassword(email, password) //
     .map(pick('email'))
     .toEitherAsync(wrongEmailPassword);
 }
@@ -28,8 +31,11 @@ export function signup(
   passwordConfirmation: Password,
 ): EitherAsync<SignupFail, SignupSuccess> {
   /* eslint-disable @typescript-eslint/no-shadow */
-  const createUser = (email: Email, password: Password): EitherAsync<SignupFail, SignupSuccess> =>
-    EitherAsync(() => User.create({ email, password }))
+  const createUser = (
+    email: Email,
+    password: Password,
+  ): EitherAsync<SignupFail, SignupSuccess> =>
+    EitherAsync(() => AuthenticationModel.create({ email, password }))
       .map(pick('email'))
       .mapLeft((err: any) => {
         if (err.name === 'MongoError' && err.code === 11000) {
