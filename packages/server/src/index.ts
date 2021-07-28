@@ -4,7 +4,7 @@ import session from 'express-session';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { ENVIRONMENT, IS_DEVELOPMENT } from './config/constants';
+import { ENVIRONMENT, APPLICATION_PORT } from './config/constants';
 import sessionOptions from './config/session';
 import configureMongoose from './config/mongoose';
 import dotenvConfig from './config/dotenv';
@@ -28,8 +28,8 @@ async function main() {
   app.use(logError);
   app.use(handleResponse);
 
-  app.listen(3000, () => {
-    console.log('running...');
+  app.listen(APPLICATION_PORT, () => {
+    console.log(`running at port ${APPLICATION_PORT}...`);
   });
 }
 

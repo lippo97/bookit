@@ -8,6 +8,8 @@ const mongodbPort = 27017;
 
 const redisPort = 6379;
 
+export const APPLICATION_PORT = process.env.PORT || 3000;
+
 export const ENVIRONMENT = process.env.NODE_ENV || development;
 
 export const IS_PRODUCTION = ENVIRONMENT === production;
