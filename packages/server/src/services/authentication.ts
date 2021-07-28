@@ -4,8 +4,8 @@ import {
   wrongEmailPassword,
 } from '@asw-project/shared/authentication/dto/login';
 import {
-  duplicateEmail,
   passwordsDoNotMatch,
+  duplicateIdentifier,
   SignupFail,
   SignupSuccess,
 } from '@asw-project/shared/authentication/dto/signup';
@@ -39,7 +39,7 @@ export function signup(
       .map(pick('email'))
       .mapLeft((err: any) => {
         if (err.name === 'MongoError' && err.code === 11000) {
-          return duplicateEmail;
+          return duplicateIdentifier;
         }
         // eslint-disable-next-line no-console
         return unexpectedError(err);

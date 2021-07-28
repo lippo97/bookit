@@ -1,4 +1,4 @@
-import { Error, unexpectedError } from '@asw-project/shared/errors';
+import { Error } from '@asw-project/shared/errors';
 import {
   AnyParamConstructor,
   DocumentType,
@@ -6,19 +6,18 @@ import {
 import { UpdateQuery } from 'mongoose';
 import { EitherAsync } from 'purify-ts';
 import { DocumentCreationError, handleCreationError } from './documentCreation';
+import { definedOrNotFound } from './documentFind';
 import { FindById, FindByIdError } from './FindById';
 
 type EditError = DocumentCreationError | FindByIdError;
 
 export class Update<T extends AnyParamConstructor<any>> extends FindById<T> {
-  update(id: any, update: UpdateQuery<T>): EitherAsync<Error<EditError>, void> {
-    function updateDocument(
-      document: DocumentType<T>, // ciao
-    ): EitherAsync<Error<DocumentCreationError>, void> {
-      return EitherAsync(() => document.update(update).exec()) //
-        .mapLeft(handleCreationError);
-    }
-
-    return this.findById(id).chain(updateDocument);
+  update(
+    id: any,
+    update: UpdateQuery<DocumentType<InstanceType<T>>>,
+  ): EitherAsync<Error<EditError>, DocumentType<InstanceType<T>>> {
+    return EitherAsync(() => this.model.findByIdAndUpdate(id, update)) //
+      .mapLeft(handleCreationError)
+      .chain(definedOrNotFound);
   }
 }

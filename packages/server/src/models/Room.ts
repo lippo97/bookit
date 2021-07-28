@@ -1,5 +1,7 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
 
+export const roomKeys = ['capacity', 'name'];
+
 export class Room {
   @prop({ required: true })
   public name!: string;

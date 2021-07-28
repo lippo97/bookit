@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import * as roomController from '../controllers/rooms';
+import { roomKeys } from '../models/Room';
+import { mapServiceRoutes } from '../services/resources/mapServiceRoutes';
+import { RoomService } from '../services/rooms';
 
 const router = Router();
 
-router.get('/rooms', roomController.findAll);
-router.delete('/rooms/:id', roomController.remove);
+mapServiceRoutes(new RoomService(), roomKeys)(router);
 
 export default router;

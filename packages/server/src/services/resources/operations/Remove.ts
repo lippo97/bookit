@@ -1,14 +1,9 @@
 import { Error, unexpectedError } from '@asw-project/shared/errors';
-import {
-  AnyParamConstructor,
-  DocumentType,
-} from '@typegoose/typegoose/lib/types';
-import { UpdateQuery } from 'mongoose';
+import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { EitherAsync } from 'purify-ts';
 import AbstractService from '../AbstractService';
-import { DocumentCreationError } from './documentCreation';
 import { definedOrNotFound } from './documentFind';
-import { FindById, FindByIdError } from './FindById';
+import { FindByIdError } from './FindById';
 
 type RemoveError = FindByIdError;
 

@@ -18,7 +18,9 @@
     "@types/express": "^4.17.12",
     "@types/express-session": "^1.17.4",
     "@types/jest": "^26.0.23",
+    "@types/lodash": "^4.14.171",
     "@types/mongoose": "5.10",
+    "@types/pluralize": "^0.0.29",
     "@types/redis": "^2.8.31",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
@@ -45,8 +47,10 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "http-status-codes": "^2.1.4",
+    "lodash": "^4.17.21",
     "mongodb": "^3.6.10",
     "mongoose": "5.10.18",
+    "pluralize": "^8.0.0",
     "purify-ts": "^0.16.3",
     "redis": "^3.1.2"
   }

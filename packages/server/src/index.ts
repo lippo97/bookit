@@ -9,8 +9,7 @@ import sessionOptions from './config/session';
 import configureMongoose from './config/mongoose';
 import dotenvConfig from './config/dotenv';
 import { handleResponse, logError } from './middleware/errorHandlers';
-import authenticationRouter from './routers/authentication';
-import roomRouter from './routers/rooms';
+import apiV1 from './api/v1';
 
 async function main() {
   console.log(`Application running in ${ENVIRONMENT}.`);
@@ -23,21 +22,8 @@ async function main() {
   app.use(cors({ credentials: true, origin: ['http://localhost:8080'] }));
   app.use(session(sessionOptions));
   app.use(express.json());
-  app.use((req, res, next) => {
-    console.log(req.url);
-    next();
-  });
 
-  app.use(roomRouter);
-  app.use(authenticationRouter);
-  app.get('/whoami', (req, res) => {
-    if (req.session.userId) {
-      return res.json({
-        userId: req.session.userId,
-      });
-    }
-    return res.sendStatus(401);
-  });
+  app.use('/api/v1', apiV1);
 
   app.use(logError);
   app.use(handleResponse);

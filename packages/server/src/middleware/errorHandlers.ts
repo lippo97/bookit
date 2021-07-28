@@ -7,16 +7,22 @@ import {
   SignupErrors,
 } from '@asw-project/shared/authentication/dto/signup';
 import { Error } from '@asw-project/shared/errors';
+import {
+  CastError,
+  DuplicateIdentifier,
+  NotFound,
+  ValidationError,
+} from '@asw-project/shared/errors/all';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { DocumentCreationError } from '../services/resources/operations/documentCreation';
-import { FindByIdError } from '../services/resources/operations/FindById';
 
 type ApplicationError =
   | LoginErrorKind
   | SignupErrorKind
-  | DocumentCreationError
-  | FindByIdError;
+  | NotFound
+  | ValidationError
+  | CastError
+  | DuplicateIdentifier;
 
 export function handleResponse(
   err: any,
@@ -34,22 +40,32 @@ export function handleResponse(
     switch (_err.kind) {
       case LoginErrors.WrongEmailPassword:
         return StatusCodes.UNAUTHORIZED;
-      case SignupErrors.DuplicateEmail:
+      case 'DuplicateIdentifier':
         return StatusCodes.CONFLICT;
       case SignupErrors.PasswordsDoNotMatch:
+      case 'CastError':
+      case 'ValidationError':
         return StatusCodes.BAD_REQUEST;
+      case 'NotFound':
+        return StatusCodes.NOT_FOUND;
       case 'InternalError':
-      default:
+        // default:
         return StatusCodes.INTERNAL_SERVER_ERROR;
     }
   }
 
+  // Handle user defined errors
   if (isError(err)) {
     const statusCode = matchError(err);
     if (statusCode !== StatusCodes.INTERNAL_SERVER_ERROR) {
       return res.status(statusCode).json(err);
     }
   }
+  // Handle express.json() error
+  if (err.name === 'SyntaxError') {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+  }
+  // Handle unrecognized error
   res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   return next(err);
 }

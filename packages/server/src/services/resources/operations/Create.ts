@@ -16,8 +16,7 @@ export class Create<
   create(
     query: CreateQuery<InstanceType<T>>,
   ): EitherAsync<Error<CreateError>, DocumentType<T>> {
-    return EitherAsync(() => this.model.create(query)).mapLeft(
-      handleCreationError,
-    );
+    return EitherAsync(() => this.model.create(query)) //
+      .mapLeft(handleCreationError);
   }
 }
