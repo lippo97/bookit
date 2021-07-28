@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "exports": {
     ".": "./dist/index.js",
-    "./*": "./dist/*.js"  },
+    "./*": "./dist/*.js"
+  },
   "scripts": {
     "build": "tsc --build tsconfig.prod.json",
     "lint": "eslint --fix --ext=ts,tsx src",

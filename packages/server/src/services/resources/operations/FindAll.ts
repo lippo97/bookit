@@ -1,10 +1,15 @@
 import { unexpectedError, UnexpectedError } from '@asw-project/shared/errors';
-import { AnyParamConstructor, DocumentType } from '@typegoose/typegoose/lib/types';
+import {
+  AnyParamConstructor,
+  DocumentType,
+} from '@typegoose/typegoose/lib/types';
 import { FilterQuery, QueryFindOptions } from 'mongoose';
 import { EitherAsync } from 'purify-ts';
 import AbstractService from '../AbstractService';
 
-export class FindAll<T extends AnyParamConstructor<any>> extends AbstractService<T> {
+export class FindAll<
+  T extends AnyParamConstructor<any>,
+> extends AbstractService<T> {
   findAll(
     filterQuery: FilterQuery<DocumentType<T>>,
     projection?: any | null,

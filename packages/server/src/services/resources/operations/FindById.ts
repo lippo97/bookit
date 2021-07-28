@@ -16,7 +16,6 @@ export class FindById<
   findById(id: any): EitherAsync<Error<FindByIdError>, DocumentType<T>> {
     return EitherAsync(() => this.model.findById(id))
       .mapLeft((err: any) => {
-        console.log(err);
         if (err.name === 'CastError') {
           return {
             kind: 'CastError',
