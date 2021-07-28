@@ -93,5 +93,12 @@ export function mapServiceRoutes<TConstructor extends AnyParamConstructor<any>>(
         },
       );
     }
+
+    if (isRemove(service)) {
+      router.delete(idPath, (req: Request<WithId>, res, next) => {
+        const result = service.remove(req.params.id);
+        handleResult(res, next)(result);
+      });
+    }
   };
 }
