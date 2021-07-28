@@ -2,6 +2,7 @@ import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { NextFunction, Request, Response, Router } from 'express';
 import _ from 'lodash';
 import { EitherAsync } from 'purify-ts';
+import validate from '../../middleware/validate';
 import BaseService from './BaseService';
 import { Create, FindById, Remove, Update } from './operations';
 import { FindAll } from './operations/FindAll';
@@ -49,6 +50,7 @@ function handleResult(res: Response, next: NextFunction) {
 
 export function mapServiceRoutes<TConstructor extends AnyParamConstructor<any>>(
   service: BaseService<TConstructor>,
+  Constructor: TConstructor,
   keys: string[],
 ) {
   return (router: Router) => {
@@ -73,7 +75,7 @@ export function mapServiceRoutes<TConstructor extends AnyParamConstructor<any>>(
     }
 
     if (isCreate(service)) {
-      router.post(rootPath, (req, res, next) => {
+      router.post(rootPath, validate(Constructor), (req, res, next) => {
         const fields = _.pick(req.body, keys) as any;
         const result = service.create(fields);
         handleResult(res, next)(result);
@@ -81,18 +83,15 @@ export function mapServiceRoutes<TConstructor extends AnyParamConstructor<any>>(
     }
 
     if (isUpdate(service)) {
-      router.put(idPath, (req: Request<WithId>, res, next) => {
-        const fields = _.pick(req.body, keys) as any;
-        const result = service.update(req.params.id, fields);
-        handleResult(res, next)(result);
-      });
-    }
-
-    if (isRemove(service)) {
-      router.delete(idPath, (req: Request<WithId>, res, next) => {
-        const result = service.remove(req.params.id);
-        handleResult(res, next)(result);
-      });
+      router.put(
+        idPath,
+        validate(Constructor),
+        (req: Request<WithId>, res, next) => {
+          const fields = _.pick(req.body, keys) as any;
+          const result = service.update(req.params.id, fields);
+          handleResult(res, next)(result);
+        },
+      );
     }
   };
 }

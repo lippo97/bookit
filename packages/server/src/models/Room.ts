@@ -6,7 +6,7 @@ export class Room {
   @prop({ required: true })
   public name!: string;
 
-  @prop({ required: true })
+  @prop({ required: true, min: 5 })
   public capacity!: number;
 }
 

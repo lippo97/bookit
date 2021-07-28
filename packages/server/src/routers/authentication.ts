@@ -7,7 +7,11 @@ import * as authenticationController from '../controllers/authentication';
 const router = Router();
 
 router.post('/login', validate(LoginRequest), authenticationController.login);
-router.post('/signup', validate(SignupRequest), authenticationController.signup);
+router.post(
+  '/signup',
+  validate(SignupRequest),
+  authenticationController.signup,
+);
 router.post('/logout', authenticationController.logout);
 
 export default router;

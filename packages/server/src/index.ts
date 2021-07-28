@@ -4,7 +4,7 @@ import session from 'express-session';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { ENVIRONMENT } from './config/constants';
+import { ENVIRONMENT, IS_DEVELOPMENT } from './config/constants';
 import sessionOptions from './config/session';
 import configureMongoose from './config/mongoose';
 import dotenvConfig from './config/dotenv';
