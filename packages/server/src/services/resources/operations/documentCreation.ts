@@ -38,9 +38,6 @@ function parseErrors(errObj: any): Reason[] {
 
 export function handleCreationError(err: any): Error<DocumentCreationError> {
   if (err.name === 'ValidationError') {
-    console.log('Errore');
-    console.log(err);
-
     return {
       kind: Kinds.ValidationError,
       reason: parseErrors(err),
