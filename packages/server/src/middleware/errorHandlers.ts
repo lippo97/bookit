@@ -7,22 +7,11 @@ import {
   SignupErrors,
 } from '@asw-project/shared/authentication/dto/signup';
 import { Error } from '@asw-project/shared/errors';
-import {
-  CastError,
-  DuplicateIdentifier,
-  NotFound,
-  ValidationError,
-} from '@asw-project/shared/errors/all';
+import { AllBaseErrors } from '@asw-project/shared/errors/kinds';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-type ApplicationError =
-  | LoginErrorKind
-  | SignupErrorKind
-  | NotFound
-  | ValidationError
-  | CastError
-  | DuplicateIdentifier;
+type ApplicationError = LoginErrorKind | SignupErrorKind | AllBaseErrors;
 
 export function handleResponse(
   err: any,
@@ -45,6 +34,7 @@ export function handleResponse(
       case SignupErrors.PasswordsDoNotMatch:
       case 'CastError':
       case 'ValidationError':
+      case 'BodyParseError':
         return StatusCodes.BAD_REQUEST;
       case 'NotFound':
         return StatusCodes.NOT_FOUND;

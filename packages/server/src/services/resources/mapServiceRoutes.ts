@@ -75,7 +75,7 @@ export function mapServiceRoutes<TConstructor extends AnyParamConstructor<any>>(
     }
 
     if (isCreate(service)) {
-      router.post(rootPath, validate(Constructor), (req, res, next) => {
+      router.post(rootPath, (req, res, next) => {
         const fields = _.pick(req.body, keys) as any;
         const result = service.create(fields);
         handleResult(res, next)(result);
@@ -85,7 +85,7 @@ export function mapServiceRoutes<TConstructor extends AnyParamConstructor<any>>(
     if (isUpdate(service)) {
       router.put(
         idPath,
-        validate(Constructor),
+        // validate(Constructor),
         (req: Request<WithId>, res, next) => {
           const fields = _.pick(req.body, keys) as any;
           const result = service.update(req.params.id, fields);

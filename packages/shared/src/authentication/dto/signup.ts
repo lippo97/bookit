@@ -1,4 +1,4 @@
-import { DuplicateIdentifier } from '@asw-project/shared/errors/all';
+import { DuplicateIdentifierKind } from '@asw-project/shared/errors/kinds';
 import { IsDefined, IsEmail, MinLength } from 'class-validator';
 import { ErrorMap, Error } from '../../errors';
 import { ReturnedUser } from '../types';
@@ -17,7 +17,7 @@ export class SignupRequest {
   public readonly passwordConfirmation!: string;
 }
 
-export type SignupErrorKind = DuplicateIdentifier | 'PasswordsDoNotMatch';
+export type SignupErrorKind = DuplicateIdentifierKind | 'PasswordsDoNotMatch';
 
 export const SignupErrors: ErrorMap<SignupErrorKind> = {
   DuplicateIdentifier: 'DuplicateIdentifier',

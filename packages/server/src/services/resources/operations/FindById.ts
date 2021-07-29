@@ -1,5 +1,5 @@
 import { Error, unexpectedError } from '@asw-project/shared/errors';
-import { CastError, NotFound } from '@asw-project/shared/errors/all';
+import { CastErrorKind, NotFoundKind } from '@asw-project/shared/errors/kinds';
 import {
   AnyParamConstructor,
   DocumentType,
@@ -8,7 +8,7 @@ import { EitherAsync } from 'purify-ts';
 import AbstractService from '../AbstractService';
 import { definedOrNotFound } from './documentFind';
 
-export type FindByIdError = NotFound | CastError;
+export type FindByIdError = NotFoundKind | CastErrorKind;
 
 export class FindById<
   T extends AnyParamConstructor<any>,

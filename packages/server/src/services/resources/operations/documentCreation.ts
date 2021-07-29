@@ -1,21 +1,54 @@
 import { Error, unexpectedError } from '@asw-project/shared/errors';
 import {
-  DuplicateIdentifier,
-  Errors,
-  ValidationError,
-} from '@asw-project/shared/errors/all';
+  DuplicateIdentifierKind,
+  Kinds,
+  ValidationErrorKind,
+} from '@asw-project/shared/errors/kinds';
+import { Reason } from '@asw-project/shared/errors/ValidationError';
+import _ from 'lodash';
 
-export type DocumentCreationError = DuplicateIdentifier | ValidationError;
+export type DocumentCreationError =
+  | DuplicateIdentifierKind
+  | ValidationErrorKind;
+
+// declare function parseErrors(err: any): Reason[];
+
+function parseErrors(errObj: any): Reason[] {
+  function parseOne(error: any): Reason[] {
+    const {
+      value,
+      path: property,
+      kind,
+      properties: { message },
+    } = error;
+    return [
+      {
+        value,
+        property,
+        constraints: {
+          [kind]: message,
+        },
+      },
+    ];
+  }
+  const { errors } = errObj;
+
+  return _.flatMap(_.values(errors), parseOne);
+}
 
 export function handleCreationError(err: any): Error<DocumentCreationError> {
   if (err.name === 'ValidationError') {
+    console.log('Errore');
+    console.log(err);
+
     return {
-      kind: Errors.ValidationError,
-    };
+      kind: Kinds.ValidationError,
+      reason: parseErrors(err),
+    } as Error<DocumentCreationError>;
   }
   if (err.name === 'MongoError' && err.code === 11000) {
     return {
-      kind: Errors.DuplicateIdentifier,
+      kind: Kinds.DuplicateIdentifier,
     };
   }
   return unexpectedError(err);
