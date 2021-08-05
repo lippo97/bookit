@@ -1,9 +1,7 @@
-import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { NextFunction, Request, Response, Router } from 'express';
 import _ from 'lodash';
 import { EitherAsync } from 'purify-ts';
-import validate from '../../middleware/validate';
-import BaseService from './BaseService';
+import { BaseService } from './BaseService';
 import { Create, FindById, Remove, Update } from './operations';
 import { FindAll } from './operations/FindAll';
 
@@ -11,31 +9,21 @@ type WithId = {
   id: any;
 };
 
-function isFindAll<T extends AnyParamConstructor<any>>(
-  service: BaseService<T>,
-): service is FindAll<T> {
+function isFindAll<T>(service: BaseService<T>): service is FindAll<T> {
   return 'findAll' in service;
 }
 
-function isFindById<T extends AnyParamConstructor<any>>(
-  service: BaseService<T>,
-): service is FindById<T> {
+function isFindById<T>(service: BaseService<T>): service is FindById<T> {
   return 'findById' in service;
 }
 
-function isCreate<T extends AnyParamConstructor<any>>(
-  service: BaseService<T>,
-): service is Create<T> {
+function isCreate<T>(service: BaseService<T>): service is Create<T> {
   return 'create' in service;
 }
-function isUpdate<T extends AnyParamConstructor<any>>(
-  service: BaseService<T>,
-): service is Update<T> {
+function isUpdate<T>(service: BaseService<T>): service is Update<T> {
   return 'update' in service;
 }
-function isRemove<T extends AnyParamConstructor<any>>(
-  service: BaseService<T>,
-): service is Remove<T> {
+function isRemove<T>(service: BaseService<T>): service is Remove<T> {
   return 'remove' in service;
 }
 
@@ -48,9 +36,8 @@ function handleResult(res: Response, next: NextFunction) {
   };
 }
 
-export function mapServiceRoutes<TConstructor extends AnyParamConstructor<any>>(
+export function mapServiceRoutes<TConstructor>(
   service: BaseService<TConstructor>,
-  Constructor: TConstructor,
   keys: string[],
 ) {
   return (router: Router) => {

@@ -1,27 +1,26 @@
-import { Room, RoomModel } from '../models/Room';
-import applyMixins from './resources/applyMixins';
-import BaseService from './resources/BaseService';
+import { Room } from '@asw-project/shared/generatedTypes/room';
 import {
+  applyMixins,
   Create,
   FindAll,
   FindById,
   Remove,
   Update,
-} from './resources/operations';
+  BaseService,
+} from '@asw-project/resources/routes';
+import { RoomModel } from '../models/Room';
 
-type TRoom = typeof Room;
-
-export class RoomService extends BaseService<TRoom> {
+export class RoomService extends BaseService<Room> {
   constructor() {
     super(RoomModel);
   }
 }
 
 export interface RoomService
-  extends FindById<TRoom>,
-    Create<TRoom>,
-    FindAll<TRoom>,
-    Remove<TRoom>,
-    Update<TRoom> {}
+  extends FindById<Room>,
+    Create<Room>,
+    FindAll<Room>,
+    Remove<Room>,
+    Update<Room> {}
 
 applyMixins(RoomService, [FindById, Create, FindAll, Remove, Update]);

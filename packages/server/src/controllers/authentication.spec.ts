@@ -1,5 +1,5 @@
-import { LoginFail } from '@asw-project/shared/authentication/dto/login';
-import { SignupFail } from '@asw-project/shared/authentication/dto/signup';
+import { LoginFail } from '@asw-project/shared/data/authentication/login/response';
+import { SignupFail } from '@asw-project/shared/data/authentication/signup/response';
 import { Request, NextFunction, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { Left, Right } from 'purify-ts';
@@ -71,7 +71,7 @@ describe('Authentication controller', () => {
     });
     it('should pass through the error', async () => {
       const fail: SignupFail = {
-        kind: 'DuplicateEmail',
+        kind: 'DuplicateIdentifier',
       };
       mockedService.signup.mockResolvedValue(Left(fail));
       await authenticationController.signup(req, res, next);

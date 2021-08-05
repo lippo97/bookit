@@ -1,15 +1,19 @@
-import { LoginRequest } from '@asw-project/shared/authentication/dto/login';
-import { SignupRequest } from '@asw-project/shared/authentication/dto/signup';
+import { LoginRequestSchema } from '@asw-project/shared/data/authentication/login/request';
+import { SignupRequestSchema } from '@asw-project/shared/data/authentication/signup/request';
 import { Router } from 'express';
-import validate from '../middleware/validate';
+import { validate } from '../middleware/joiValidator';
 import * as authenticationController from '../controllers/authentication';
 
 const router = Router();
 
-router.post('/login', validate(LoginRequest), authenticationController.login);
+router.post(
+  '/login',
+  validate(LoginRequestSchema),
+  authenticationController.login,
+);
 router.post(
   '/signup',
-  validate(SignupRequest),
+  validate(SignupRequestSchema),
   authenticationController.signup,
 );
 router.post('/logout', authenticationController.logout);

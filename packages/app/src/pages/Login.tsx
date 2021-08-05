@@ -1,4 +1,4 @@
-import { LoginSuccess } from '@asw-project/shared/authentication/dto/login';
+import { LoginSuccess } from '@asw-project/shared/src/data/authentication/login/response';
 import { useAtom } from 'jotai';
 import { HTTPError } from 'ky';
 import ky from '../config/ky';
@@ -48,7 +48,11 @@ function Login() {
 
   return (
     <SideImagePage image={image}>
-      <LoginForm errors={errors} handleSubmit={handleSubmit} isLoading={isLoading} />
+      <LoginForm
+        errors={errors}
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
     </SideImagePage>
   );
 }

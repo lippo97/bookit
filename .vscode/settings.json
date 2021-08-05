@@ -8,7 +8,8 @@
   "eslint.workingDirectories": [
     "./packages/shared",
     "./packages/server",
-    "./packages/app"
+    "./packages/app",
+    "./packages/resources"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

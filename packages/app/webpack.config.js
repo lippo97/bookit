@@ -4,11 +4,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
-const isDevelopment = process.env.NODE_ENV === 'production' ? 'development' : 'production';
-const tsConfig = process.env.NODE_ENV === 'development' ? 'development' : 'production';
+const isDevelopment =
+  process.env.NODE_ENV === 'production' ? 'development' : 'production';
 
 const startsWith = (start) => (str) => str.startsWith(start);
-const environmentVariables = Object.keys(process.env).filter(startsWith('REACT_APP'));
+const environmentVariables = Object.keys(process.env).filter(
+  startsWith('REACT_APP'),
+);
 
 module.exports = {
   mode: process.env.NODE_ENV == 'development' ? 'development' : 'production',
@@ -47,7 +49,9 @@ module.exports = {
       inject: false,
     }),
     new Dotenv({
-      path: isDevelopment ? path.join('.', '.env.dev') : path.join(__dirname, '../../.env.app'),
+      path: isDevelopment
+        ? path.join('.', '.env.dev')
+        : path.join(__dirname, '../../.env.app'),
     }),
     new EnvironmentPlugin(environmentVariables),
   ],
@@ -60,7 +64,8 @@ module.exports = {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      'Access-Control-Allow-Headers':
+        'X-Requested-With, content-type, Authorization',
     },
   },
 };

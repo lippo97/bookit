@@ -1,13 +1,6 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { RoomSchema as RoomJoiSchema } from '@asw-project/shared/data/room';
+import { Room } from '@asw-project/shared/generatedTypes/room';
+import { Resource } from '@asw-project/resources';
 
-export const roomKeys = ['capacity', 'name'];
-
-export class Room {
-  @prop({ required: true, minlength: 4, match: /Room [0-9]+/ })
-  public name!: string;
-
-  @prop({ required: true, min: 5 })
-  public capacity!: number;
-}
-
-export const RoomModel = getModelForClass(Room);
+export const [RoomModel, RoomSchema, roomKeys] =
+  Resource.fromJoi<Room>(RoomJoiSchema);

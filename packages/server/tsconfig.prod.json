@@ -1,5 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "exclude": ["**/*.test.ts", "**/*.spec.ts"],
-  "references": [{ "path": "../shared/tsconfig.prod.json", "prepend": false }]
+  "references": [
+    { "path": "../shared/tsconfig.prod.json", "prepend": false },
+    { "path": "../resources/tsconfig.prod.json" }
+  ]
 }

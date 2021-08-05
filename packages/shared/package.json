@@ -2,14 +2,15 @@
   "name": "@asw-project/shared",
   "version": "1.0.0",
   "exports": {
-    ".": "./dist/index.js",
+    "./errors": "./dist/errors/index.js",
     "./*": "./dist/*.js"
   },
   "scripts": {
+    "prebuild": "ts-node scripts/generateTypes.ts",
     "build": "tsc --build tsconfig.prod.json",
     "lint": "eslint --fix --ext=ts,tsx src",
     "format": "prettier --write src",
-    "clean": "rimraf dist tsconfig*.tsbuildinfo",
+    "clean": "rimraf dist tsconfig*.tsbuildinfo src/generatedTypes",
     "test": "jest"
   },
   "license": "MIT",
@@ -22,12 +23,14 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "jest": "^27.0.4",
+    "joi-to-typescript": "^2.1.0",
     "prettier": "^2.3.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.2"
   },
   "dependencies": {
-    "class-validator": "^0.13.1"
+    "class-validator": "^0.13.1",
+    "joi": "^17.4.1"
   }
 }

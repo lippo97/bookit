@@ -1,5 +1,5 @@
-import { LoginRequest } from '@asw-project/shared/authentication/dto/login';
-import { SignupRequest } from '@asw-project/shared/authentication/dto/signup';
+import { LoginRequest } from '@asw-project/shared/generatedTypes/authentication/login';
+import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as authenticationService from '../services/authentication';
@@ -39,8 +39,8 @@ export async function signup(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const { email, password, passwordConfirmation } = req.body;
-  const result = await authenticationService.signup(email, password, passwordConfirmation);
+  const { email, password } = req.body;
+  const result = await authenticationService.signup(email, password);
   result.caseOf({
     Right: (success) => res.status(StatusCodes.CREATED).json(success),
     Left: next,

@@ -1,17 +1,6 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { AccountSchema as AccountJoiSchema } from '@asw-project/shared/src/data/account';
+import { Account } from '@asw-project/shared/generatedTypes/account';
+import { Resource } from '@asw-project/resources';
 
-export class Account {
-  @prop()
-  public firstName!: string;
-
-  @prop()
-  public secondName!: string;
-
-  @prop()
-  public birthDate!: Date;
-
-  @prop()
-  public maleFemale!: 'male' | 'female' | 'other';
-}
-
-export const AccountModel = getModelForClass(Account);
+export const [AccountModel, AccountSchema, accountKeys] =
+  Resource.fromJoi<Account>(AccountJoiSchema);

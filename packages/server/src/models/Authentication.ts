@@ -1,52 +1,63 @@
-import bcrypt, { compare } from 'bcrypt';
-import { Email, Password } from '@asw-project/shared/authentication/types';
+import { SignupRequestSchema as SignupRequestJoiSchema } from '@asw-project/shared/data/authentication/signup/request';
 import {
-  getModelForClass,
-  pre,
-  prop,
-  ReturnModelType,
-} from '@typegoose/typegoose';
-import { always, MaybeAsync } from 'purify-ts';
+  Authentication,
+  Email,
+  Password,
+} from '@asw-project/shared/generatedTypes/authentication';
 import { isTrue } from '@asw-project/shared/util/boolean';
-import { Account } from './Account';
+import bcrypt, { compare } from 'bcrypt';
+import { Document, model, Model, Schema } from 'mongoose';
+import { always, Maybe, MaybeAsync } from 'purify-ts';
+import { Resource } from '@asw-project/resources';
 
 const SALT_ROUNDS = 10;
 
-@pre<Authentication>('save', async function preSave() {
-  if (this.modifiedPaths().includes('password')) {
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
-    const hashed = await bcrypt.hash(this.password, salt);
-    this.password = hashed;
-  }
-})
-export class Authentication {
-  @prop({ required: true, unique: true })
-  public email!: Email;
+type AuthenticationDocument = Authentication & Document;
 
-  @prop({ required: true })
-  public password!: Password;
+// type AuthenticationDocument = SignupRequest &
+//   Document & {
+//     account: Account | null;
+//   };
 
-  @prop({})
-  public account?: Account;
-
-  public static findByEmailAndComparePassword(
-    this: ReturnModelType<typeof Authentication>,
+interface TAuthenticationModel extends Model<AuthenticationDocument> {
+  findByEmailAndComparePassword(
     email: Email,
     password: Password,
-  ): MaybeAsync<Authentication> {
+  ): MaybeAsync<Pick<Authentication, 'email'>>;
+}
+
+const AuthenticationSchema = new Schema<
+  AuthenticationDocument,
+  TAuthenticationModel
+>(Resource.extractSchema<AuthenticationDocument>(SignupRequestJoiSchema));
+
+AuthenticationSchema.pre<AuthenticationDocument>(
+  'save',
+  async function preSave() {
+    if (this.isModified('password')) {
+      const salt = await bcrypt.genSalt(SALT_ROUNDS);
+      const hashed = await bcrypt.hash(this.password, salt);
+      this.password = hashed;
+    }
+  },
+);
+
+AuthenticationSchema.statics.findByEmailAndComparePassword =
+  function findByEmailAndComparePassword(email: Email, password: Password) {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const comparePasswords = (password: Password, hash: string) =>
       MaybeAsync(() => compare(password, hash));
 
     return MaybeAsync(() => this.findOne({ email }).exec())
-      .filter((u) => u !== null)
-      .map((u) => u!) // I think this is safe
+      .chain((u) => MaybeAsync.liftMaybe(Maybe.fromNullable(u)))
       .chain((user) =>
         comparePasswords(password, user.password) //
           .filter(isTrue)
           .map(always(user)),
       );
-  }
-}
+  };
 
-export const AuthenticationModel = getModelForClass(Authentication);
+export const AuthenticationModel = model(
+  'Authentication',
+  AuthenticationSchema,
+);

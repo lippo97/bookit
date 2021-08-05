@@ -1,11 +1,5 @@
-import {
-  LoginErrorKind,
-  LoginErrors,
-} from '@asw-project/shared/authentication/dto/login';
-import {
-  SignupErrorKind,
-  SignupErrors,
-} from '@asw-project/shared/authentication/dto/signup';
+import { LoginErrorKind } from '@asw-project/shared/data/authentication/login/response';
+import { SignupErrorKind } from '@asw-project/shared/data/authentication/signup/response';
 import { Error } from '@asw-project/shared/errors';
 import { AllBaseErrors } from '@asw-project/shared/errors/kinds';
 import { NextFunction, Request, Response } from 'express';
@@ -27,11 +21,10 @@ export function handleResponse(
   function matchError(_err: Error<ApplicationError>): number {
     // eslint-disable-next-line default-case
     switch (_err.kind) {
-      case LoginErrors.WrongEmailPassword:
+      case 'WrongEmailPassword':
         return StatusCodes.UNAUTHORIZED;
       case 'DuplicateIdentifier':
         return StatusCodes.CONFLICT;
-      case SignupErrors.PasswordsDoNotMatch:
       case 'CastError':
       case 'ValidationError':
       case 'BodyParseError':

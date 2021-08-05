@@ -1,28 +1,24 @@
 {
-  "name": "@asw-project/server",
+  "name": "@asw-project/resources",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./routes": "./dist/routes/index.js"
+  },
   "scripts": {
-    "serve:dev": "TS_NODE_FILES=true ts-node-dev src/index.ts",
     "build": "tsc --build tsconfig.prod.json",
     "lint": "eslint --fix --ext=ts,tsx src",
     "format": "prettier --write src",
-    "clean": "rimraf dist tsconfig*.tsbuildinfo",
+    "clean": "rimraf dist tsconfig*.tsbuildinfo src/generatedTypes",
     "test": "jest"
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
-    "@types/connect-redis": "^0.0.17",
-    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.12",
-    "@types/express-session": "^1.17.4",
     "@types/jest": "^26.0.23",
-    "@types/joigoose": "^2.0.6",
     "@types/lodash": "^4.14.171",
     "@types/mongoose": "^5.11.97",
-    "@types/pluralize": "^0.0.29",
-    "@types/redis": "^2.8.31",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
     "eslint": "^7.28.0",
@@ -30,28 +26,19 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "jest": "^27.0.4",
+    "joi-to-typescript": "^2.1.0",
     "prettier": "^2.3.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.3",
-    "ts-node-dev": "^1.1.8",
     "typescript": "^4.3.2"
   },
   "dependencies": {
-    "@asw-project/resources": "^1.0.0",
-    "@asw-project/shared": "^1.0.0",
-    "bcrypt": "^5.0.1",
-    "connect-redis": "^6.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.2",
-    "http-status-codes": "^2.1.4",
     "joi": "^17.4.1",
     "joigoose": "^8.0.2",
     "lodash": "^4.17.21",
-    "mongodb": "^3.6.10",
-    "mongoose": "^5.13.5",
     "purify-ts": "^0.16.3",
-    "redis": "^3.1.2"
+    "mongodb": "^3.6.10",
+    "mongoose": "^5.13.5"
   }
 }

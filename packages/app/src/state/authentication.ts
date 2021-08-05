@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { ReturnedUser } from '@asw-project/shared/authentication/types';
+import { ReturnedUser } from '@asw-project/shared/src/data/authentication/returnedUser';
 
 export type Authentication = ReturnedUser | null;
 

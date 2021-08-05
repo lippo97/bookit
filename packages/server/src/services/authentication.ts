@@ -2,18 +2,19 @@ import {
   LoginFail,
   LoginSuccess,
   wrongEmailPassword,
-} from '@asw-project/shared/authentication/dto/login';
+} from '@asw-project/shared/data/authentication/login/response';
 import {
-  passwordsDoNotMatch,
   duplicateIdentifier,
   SignupFail,
   SignupSuccess,
-} from '@asw-project/shared/authentication/dto/signup';
-import { Email, Password } from '@asw-project/shared/authentication/types';
-import { always, EitherAsync, Maybe } from 'purify-ts';
+} from '@asw-project/shared/data/authentication/signup/response';
 import { unexpectedError } from '@asw-project/shared/errors';
-import { isTrue } from '@asw-project/shared/util/boolean';
+import {
+  Email,
+  Password,
+} from '@asw-project/shared/generatedTypes/authentication';
 import { pick } from '@asw-project/shared/util/objects';
+import { EitherAsync } from 'purify-ts';
 import { AuthenticationModel } from '../models/Authentication';
 
 export function login(
@@ -28,26 +29,13 @@ export function login(
 export function signup(
   email: Email,
   password: Password,
-  passwordConfirmation: Password,
 ): EitherAsync<SignupFail, SignupSuccess> {
-  /* eslint-disable @typescript-eslint/no-shadow */
-  const createUser = (
-    email: Email,
-    password: Password,
-  ): EitherAsync<SignupFail, SignupSuccess> =>
-    EitherAsync(() => AuthenticationModel.create({ email, password }))
-      .map(pick('email'))
-      .mapLeft((err: any) => {
-        if (err.name === 'MongoError' && err.code === 11000) {
-          return duplicateIdentifier;
-        }
-        // eslint-disable-next-line no-console
-        return unexpectedError(err);
-      });
-
-  return EitherAsync.liftEither(
-    Maybe.of(password === passwordConfirmation)
-      .filter(isTrue)
-      .toEither(passwordsDoNotMatch),
-  ).chain(always(createUser(email, password)));
+  return EitherAsync(() => AuthenticationModel.create({ email, password }))
+    .map(pick('email'))
+    .mapLeft((err: any) => {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        return duplicateIdentifier;
+      }
+      return unexpectedError(err);
+    });
 }

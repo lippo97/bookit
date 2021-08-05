@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { Room, roomKeys } from '../models/Room';
-import { mapServiceRoutes } from '../services/resources/mapServiceRoutes';
+import { mapServiceRoutes } from '@asw-project/resources/routes';
+import { roomKeys } from '../models/Room';
 import { RoomService } from '../services/rooms';
 
 const router = Router();
 
-mapServiceRoutes(new RoomService(), Room, roomKeys)(router);
+mapServiceRoutes(new RoomService(), roomKeys)(router);
 
 export default router;

@@ -9,5 +9,10 @@
     "typeRoots": ["../../node_modules/@types", "./src/types"]
   },
   "include": ["./src/**/*"],
-  "references": [{ "path": "../shared/tsconfig.prod.json", "prepend": false }]
+  "references": [
+    { "path": "../shared/tsconfig.prod.json", "prepend": false },
+    {
+      "path": "../resources/tsconfig.prod.json"
+    }
+  ]
 }

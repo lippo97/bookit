@@ -14,7 +14,8 @@
     "incremental": true,
     "baseUrl": "./packages",
     "paths": {
-      "@asw-project/shared/*": ["shared/src/*"]
+      "@asw-project/shared/*": ["shared/src/*"],
+      "@asw-project/resources/*": ["resources/src/*"]
     }
   },
   "exclude": [

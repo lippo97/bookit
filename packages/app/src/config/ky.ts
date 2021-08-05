@@ -3,7 +3,7 @@ import { BACKEND_URL } from '.';
 
 const options: Options = {
   credentials: 'include',
-  prefixUrl: BACKEND_URL,
+  prefixUrl: `${BACKEND_URL}/api/v1`,
 };
 
 const instance = ky.create(options);

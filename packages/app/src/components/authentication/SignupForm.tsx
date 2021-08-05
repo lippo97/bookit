@@ -1,14 +1,24 @@
-import { Avatar, Typography } from '@material-ui/core';
-import { PersonAddOutlined as PersonAddIcon } from '@material-ui/icons';
+import {
+  Avatar,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from '@material-ui/core';
+import { SignupRequestSchema } from '@asw-project/shared/data/authentication/signup/request';
+import {
+  PersonAddOutlined as PersonAddIcon,
+  VisibilityOutlined as VisibilityIcon,
+  VisibilityOffOutlined as VisibilityOffIcon,
+} from '@material-ui/icons';
 import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
 import Link from '../Link';
 import Copyright from '../Copyright';
 import Alert from './Alert';
 import CustomButton from './Button';
 import useStyles from './style';
 import CustomTextField from './TextField';
-
-const emailRegexp = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+import { useState } from 'react';
 
 interface SignUpFormProps {
   readonly isLoading: boolean;
@@ -22,14 +32,16 @@ interface FormValue {
   readonly email: string;
 
   readonly password: string;
-
-  readonly passwordConfirmation: string;
 }
 
 function SignupForm({ isLoading, errors, handleSubmit }: SignUpFormProps) {
-  const onSubmit = ({ email, password, passwordConfirmation }: FormValue) => {
+  const [visible, setVisible] = useState(false);
+
+  const onSubmit = ({ email, password }: FormValue) => {
     handleSubmit(email, password);
   };
+
+  const handleChangePasswordVisibility = () => setVisible((prev) => !prev);
 
   const classes = useStyles();
   const {
@@ -37,7 +49,9 @@ function SignupForm({ isLoading, errors, handleSubmit }: SignUpFormProps) {
     handleSubmit: internalHandleSubmit,
     watch,
     formState: { errors: validationErrors },
-  } = useForm<FormValue>();
+  } = useForm<FormValue>({
+    resolver: joiResolver(SignupRequestSchema),
+  });
 
   return (
     <div className={classes.container}>
@@ -47,52 +61,55 @@ function SignupForm({ isLoading, errors, handleSubmit }: SignUpFormProps) {
       <Typography component="h1" variant="h5">
         Sign up
       </Typography>
-      <form className={classes.form} noValidate onSubmit={internalHandleSubmit(onSubmit)}>
+      <form
+        className={classes.form}
+        noValidate
+        onSubmit={internalHandleSubmit(onSubmit)}
+      >
         {errors.map((e) => (
           <Alert key={e} body={e} />
         ))}
         <CustomTextField
           error={!!validationErrors.email}
-          helperText={validationErrors.email?.message}
+          helperText={validationErrors.email?.message?.replace(
+            '"email"',
+            'Email address',
+          )}
           id="email"
           type="email"
           label="Email Address"
           autoComplete="email"
           autoFocus
-          {...register('email', {
-            required: true,
-            pattern: { value: emailRegexp, message: 'Enter a valid email address.' },
-          })}
+          {...register('email')}
         />
         <CustomTextField
           error={!!validationErrors.password}
-          helperText={validationErrors.password?.message}
+          helperText={validationErrors.password?.message?.replace(
+            '"password"',
+            'Password',
+          )}
           id="password"
           label="Password"
-          type="password"
+          type={visible ? 'text' : 'password'}
           autoComplete="new-password"
-          {...register('password', {
-            required: true,
-            minLength: { value: 7, message: 'The password should be at least 7 characters long.' },
-          })}
-        />
-        <CustomTextField
-          error={!!validationErrors.passwordConfirmation}
-          helperText={validationErrors.passwordConfirmation?.message}
-          id="password-confirmation"
-          label="Password confirmation"
-          type="password"
-          autoComplete="password-confirmation"
-          {...register('passwordConfirmation', {
-            required: true,
-            minLength: 7,
-            validate: (value) =>
-              value === watch('password', '') || "Password confirmation doesn't match password.",
-          })}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleChangePasswordVisibility}>
+                  {visible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          {...register('password')}
         />
         <CustomButton isLoading={isLoading}>Sign in</CustomButton>
       </form>
-      <Typography component="p" variant="subtitle1" className={classes.signupLink}>
+      <Typography
+        component="p"
+        variant="subtitle1"
+        className={classes.signupLink}
+      >
         Already have an account? <Link to="/login">Log in</Link>
       </Typography>
       <Copyright />

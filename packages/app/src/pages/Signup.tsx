@@ -6,7 +6,7 @@ import library2 from '../static/library2.jpg';
 import { BACKEND_URL } from '../config';
 import { useAtom } from 'jotai';
 import { authentication } from '../state/authentication';
-import { SignupSuccess } from '@asw-project/shared/authentication/dto/signup';
+import { SignupSuccess } from '@asw-project/shared/data/authentication/signup/response';
 import { useState } from 'react';
 import ky from '../config/ky';
 
@@ -29,7 +29,6 @@ function Signup() {
           json: {
             email,
             password,
-            passwordConfirmation: password,
           },
         })
         .json<SignupSuccess>();
@@ -49,7 +48,11 @@ function Signup() {
 
   return (
     <SideImagePage image={library2}>
-      <SignupForm errors={errors} handleSubmit={handleSubmit} isLoading={isLoading} />
+      <SignupForm
+        errors={errors}
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
     </SideImagePage>
   );
 }
