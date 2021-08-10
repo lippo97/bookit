@@ -6,9 +6,9 @@
     "Corinz <jacopo.corina@studio.unibo.it>"
   ],
   "scripts": {
-    "lint": "lerna run lint --parallel --no-bail",
-    "format": "lerna run format --parallel --no-bail",
-    "clean": "lerna run clean"
+    "lint": "cross-env lerna run lint --parallel --no-bail",
+    "format": "cross-env lerna run format --parallel --no-bail",
+    "clean": "cross-env lerna run clean"
   },
   "license": "MIT",
   "private": true,

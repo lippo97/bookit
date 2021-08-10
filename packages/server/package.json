@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "serve:dev": "TS_NODE_FILES=true ts-node-dev src/index.ts",
-    "build": "tsc --build tsconfig.prod.json",
-    "lint": "eslint --fix --ext=ts,tsx src",
-    "format": "prettier --write src",
-    "clean": "rimraf dist tsconfig*.tsbuildinfo",
-    "test": "jest"
+    "serve:dev": "cross-env TS_NODE_FILES=true ts-node-dev src/index.ts",
+    "build": "cross-env tsc --build tsconfig.prod.json",
+    "lint": "cross-env eslint --fix --ext=ts,tsx src",
+    "format": "cross-env prettier --write src",
+    "clean": "cross-env rimraf dist tsconfig*.tsbuildinfo",
+    "test": "cross-env jest"
   },
   "license": "MIT",
   "devDependencies": {
@@ -25,6 +25,7 @@
     "@types/redis": "^2.8.31",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
+    "cross-env": "^7.0.3",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",

@@ -6,18 +6,19 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
-    "prebuild": "ts-node scripts/generateTypes.ts",
-    "build": "tsc --build tsconfig.prod.json",
-    "lint": "eslint --fix --ext=ts,tsx src",
-    "format": "prettier --write src",
-    "clean": "rimraf dist tsconfig*.tsbuildinfo src/generatedTypes",
-    "test": "jest"
+    "prebuild": "cross-env ts-node scripts/generateTypes.ts",
+    "build": "cross-env tsc --build tsconfig.prod.json",
+    "lint": "cross-env eslint --fix --ext=ts,tsx src",
+    "format": "cross-env prettier --write src",
+    "clean": "cross-env rimraf dist tsconfig*.tsbuildinfo src/generatedTypes",
+    "test": "cross-env jest"
   },
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
+    "cross-env": "^7.0.3",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",
