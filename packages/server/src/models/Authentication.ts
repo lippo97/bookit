@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { SignupRequestSchema as SignupRequestJoiSchema } from '@asw-project/shared/data/authentication/signup/request';
 import {
   Authentication,
@@ -14,16 +15,11 @@ const SALT_ROUNDS = 10;
 
 type AuthenticationDocument = Authentication & Document;
 
-// type AuthenticationDocument = SignupRequest &
-//   Document & {
-//     account: Account | null;
-//   };
-
 interface TAuthenticationModel extends Model<AuthenticationDocument> {
   findByEmailAndComparePassword(
     email: Email,
     password: Password,
-  ): MaybeAsync<Pick<Authentication, 'email'>>;
+  ): MaybeAsync<Required<Pick<AuthenticationDocument, '_id'>>>;
 }
 
 const AuthenticationSchema = new Schema<
@@ -53,7 +49,7 @@ AuthenticationSchema.statics.findByEmailAndComparePassword =
       .chain((user) =>
         comparePasswords(password, user.password) //
           .filter(isTrue)
-          .map(always(user)),
+          .map(always(user._id)),
       );
   };
 

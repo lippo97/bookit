@@ -9,6 +9,8 @@ module.exports = {
     project: "./tsconfig.json",
   },
   rules: {
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "max-classes-per-file": "off",
+    "class-methods-use-this": "off"
   }
 }

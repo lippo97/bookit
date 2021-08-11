@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   LoginFail,
   LoginSuccess,
@@ -14,7 +15,7 @@ import {
   Password,
 } from '@asw-project/shared/generatedTypes/authentication';
 import { pick } from '@asw-project/shared/util/objects';
-import { EitherAsync } from 'purify-ts';
+import { EitherAsync, Left, Right } from 'purify-ts';
 import { AuthenticationModel } from '../models/Authentication';
 
 export function login(
@@ -22,7 +23,6 @@ export function login(
   password: Password,
 ): EitherAsync<LoginFail, LoginSuccess> {
   return AuthenticationModel.findByEmailAndComparePassword(email, password) //
-    .map(pick('email'))
     .toEitherAsync(wrongEmailPassword);
 }
 
@@ -31,7 +31,21 @@ export function signup(
   password: Password,
 ): EitherAsync<SignupFail, SignupSuccess> {
   return EitherAsync(() => AuthenticationModel.create({ email, password }))
-    .map(pick('email'))
+    .map(pick('_id'))
+    .chain((res) => {
+      const { _id } = res;
+      if (_id === undefined) {
+        return EitherAsync.liftEither(
+          Left(new Error("Document doesn't have property '_id' ")),
+        );
+      }
+
+      return EitherAsync.liftEither(
+        Right({
+          _id: _id as any,
+        }),
+      );
+    })
     .mapLeft((err: any) => {
       if (err.name === 'MongoError' && err.code === 11000) {
         return duplicateIdentifier;

@@ -2,7 +2,11 @@ import Joi from 'joi';
 import { AccountSchema } from '../account';
 import { Email, Password } from './common';
 
-const email = Email.required();
+const email = Email.required().meta({
+  _mongoose: {
+    unique: true,
+  },
+});
 
 const password = Password.required();
 

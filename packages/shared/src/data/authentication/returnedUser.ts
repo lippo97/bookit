@@ -1,3 +1,3 @@
 export type ReturnedUser = {
-  email: string;
+  _id: any;
 };

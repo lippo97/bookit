@@ -22,6 +22,7 @@ export function handleResponse(
     // eslint-disable-next-line default-case
     switch (_err.kind) {
       case 'WrongEmailPassword':
+      case 'UnauthorizedError':
         return StatusCodes.UNAUTHORIZED;
       case 'DuplicateIdentifier':
         return StatusCodes.CONFLICT;

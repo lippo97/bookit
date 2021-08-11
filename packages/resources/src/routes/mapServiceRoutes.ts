@@ -2,8 +2,9 @@ import { NextFunction, Request, Response, Router } from 'express';
 import _ from 'lodash';
 import { EitherAsync } from 'purify-ts';
 import { BaseService } from './BaseService';
-import { Create, FindById, Remove, Update } from './operations';
+import { Create, Remove, Update } from './operations';
 import { FindAll } from './operations/FindAll';
+import { FindById } from './operations/FindById';
 
 type WithId = {
   id: any;
@@ -23,6 +24,7 @@ function isCreate<T>(service: BaseService<T>): service is Create<T> {
 function isUpdate<T>(service: BaseService<T>): service is Update<T> {
   return 'update' in service;
 }
+
 function isRemove<T>(service: BaseService<T>): service is Remove<T> {
   return 'remove' in service;
 }
@@ -34,6 +36,13 @@ function handleResult(res: Response, next: NextFunction) {
       Left: next,
     });
   };
+}
+
+function getUserId(session: any): string | undefined {
+  if (session.userId !== undefined) {
+    return session.userId;
+  }
+  return undefined;
 }
 
 export function mapServiceRoutes<TConstructor>(
@@ -56,34 +65,38 @@ export function mapServiceRoutes<TConstructor>(
 
     if (isFindById(service)) {
       router.get(idPath, (req: Request<WithId>, res, next) => {
-        const result = service.findById(req.params.id);
+        const userId = getUserId(req.session);
+        const result = service.findById(req.params.id, { userId });
         handleResult(res, next)(result);
       });
     }
 
     if (isCreate(service)) {
       router.post(rootPath, (req, res, next) => {
+        const userId = getUserId(req.session);
         const fields = _.pick(req.body, keys) as any;
-        const result = service.create(fields);
+        const result = service.create(fields, { userId });
         handleResult(res, next)(result);
       });
     }
 
     if (isUpdate(service)) {
-      router.put(
-        idPath,
-        // validate(Constructor),
-        (req: Request<WithId>, res, next) => {
-          const fields = _.pick(req.body, keys) as any;
-          const result = service.update(req.params.id, fields);
-          handleResult(res, next)(result);
-        },
-      );
+      router.put(idPath, (req: Request<WithId>, res, next) => {
+        const userId = getUserId(req.session);
+        const fields = _.pick(req.body, keys) as any;
+        const result = service.update(req.params.id, fields, {
+          userId,
+        });
+        handleResult(res, next)(result);
+      });
     }
 
     if (isRemove(service)) {
       router.delete(idPath, (req: Request<WithId>, res, next) => {
-        const result = service.remove(req.params.id);
+        const userId = getUserId(req.session);
+        const result = service.remove(req.params.id, {
+          userId,
+        });
         handleResult(res, next)(result);
       });
     }

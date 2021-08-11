@@ -1,13 +1,16 @@
-import { Room } from '@asw-project/shared/generatedTypes/room';
 import {
   applyMixins,
+  BaseService,
   Create,
   FindAll,
-  FindById,
-  Remove,
+  SimpleFindById,
+  ProtectedRemove,
+  SimpleUpdate,
   Update,
-  BaseService,
+  ProtectedUpdate,
 } from '@asw-project/resources/routes';
+import { FindById } from '@asw-project/resources/routes/operations/FindById';
+import { Room } from '@asw-project/shared/generatedTypes/room';
 import { RoomModel } from '../models/Room';
 
 export class RoomService extends BaseService<Room> {
@@ -20,7 +23,13 @@ export interface RoomService
   extends FindById<Room>,
     Create<Room>,
     FindAll<Room>,
-    Remove<Room>,
+    ProtectedRemove<Room>,
     Update<Room> {}
 
-applyMixins(RoomService, [FindById, Create, FindAll, Remove, Update]);
+applyMixins(RoomService, [
+  SimpleFindById,
+  Create,
+  FindAll,
+  ProtectedRemove,
+  ProtectedUpdate,
+]);

@@ -10,12 +10,15 @@ export type NotFoundKind = 'NotFound';
 
 export type ValidationErrorKind = 'ValidationError';
 
+export type UnauthorizedKind = 'UnauthorizedError';
+
 export type AllBaseErrors =
   | DuplicateIdentifierKind
   | CastErrorKind
   | BodyParseErrorKind
   | NotFoundKind
-  | ValidationErrorKind;
+  | ValidationErrorKind
+  | UnauthorizedKind;
 
 export const Kinds: ErrorMap<AllBaseErrors> = {
   NotFound: 'NotFound',
@@ -23,4 +26,5 @@ export const Kinds: ErrorMap<AllBaseErrors> = {
   BodyParseError: 'BodyParseError',
   DuplicateIdentifier: 'DuplicateIdentifier',
   ValidationError: 'ValidationError',
+  UnauthorizedError: 'UnauthorizedError',
 };
