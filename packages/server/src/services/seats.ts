@@ -10,23 +10,23 @@ import {
   Remove,
 } from '@asw-project/resources/routes';
 import { FindById } from '@asw-project/resources/routes/operations/FindById';
-import { Room } from '@asw-project/shared/generatedTypes/room';
-import { RoomModel } from '../models/Room';
+import { Seat } from '@asw-project/shared/generatedTypes/seat';
+import { SeatModel } from '../models/Seat';
 
-export class RoomService extends BaseService<Room> {
+export class SeatService extends BaseService<Seat> {
   constructor() {
-    super(RoomModel);
+    super(SeatModel);
   }
 }
 
-export interface RoomService
-  extends FindById<Room>,
-    Create<Room>,
-    FindAll<Room>,
-    Remove<Room>,
-    Update<Room> {}
+export interface SeatService
+  extends FindById<Seat>,
+    Create<Seat>,
+    FindAll<Seat>,
+    Remove<Seat>,
+    Update<Seat> {}
 
-applyMixins(RoomService, [
+applyMixins(SeatService, [
   SimpleFindById,
   Create,
   FindAll,

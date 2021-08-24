@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+/* import { NextFunction, Request, Response } from 'express';
 import { RoomService } from '../services/rooms';
 
 const roomService = new RoomService();
@@ -26,3 +26,4 @@ export async function remove(
     Left: next,
   });
 }
+*/

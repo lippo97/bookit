@@ -1,13 +1,17 @@
 import Joi, { required } from 'joi';
-import { Email } from './authentication/common';
+import { SeatSchema } from './seat';
 
-const name = Joi.string()
-  .regex(/Room [0-9]+/)
-  .required();
-
-const capacity = Joi.number() //
-  .min(1)
-  .required();
+const buildingId = Joi.string()
+  .required()
+  .meta({
+    _mongoose: {
+      type: 'ObjectId',
+      ref: 'Building',
+      // validate: null
+    },
+  });
+/* valutare se usare un array per building
+ */
 
 const ownerId = Joi.string()
   .required()
@@ -19,6 +23,22 @@ const ownerId = Joi.string()
     },
   });
 
-export const RoomSchema = Joi.object({ name, capacity, ownerId }).meta({
+const name = Joi.string()
+  .regex(/Room [0-9]+/)
+  .required();
+
+const seats = Joi.array().items(SeatSchema).required();
+
+const capacity = Joi.number() //
+  .min(1)
+  .required();
+
+export const RoomSchema = Joi.object({
+  buildingId,
+  ownerId,
+  name,
+  seats,
+  capacity,
+}).meta({
   className: 'Room',
 });
