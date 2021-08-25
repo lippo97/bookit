@@ -3,6 +3,7 @@ const { EnvironmentPlugin, webpack, DefinePlugin } = require('webpack');
 const WebpackBundleAnalyzer =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const tsImportPluginFactory = require('ts-import-plugin');
@@ -55,8 +56,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: path.resolve(__dirname, 'public', 'index.html'),
       inject: false,
+      filename: '200.html'
     }),
     new Dotenv({
       path: isDevelopment
@@ -65,6 +67,14 @@ module.exports = {
     }),
     new EnvironmentPlugin(environmentVariables),
     // ...(isDevelopment ? [new WebpackBundleAnalyzer()] : []),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'CNAME'),
+          to: path.resolve(__dirname, 'dist'),
+        },
+      ],
+    }),
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
