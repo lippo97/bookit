@@ -1,7 +1,8 @@
 import ky from '../config/ky';
 import { useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { CircularProgress, Grid, makeStyles, Paper } from '@material-ui/core';
+import { CircularProgress, Grid, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { useAtom } from 'jotai';
 import { authentication } from '../state/authentication';
 import LoadingPage from '../components/Loading';

@@ -1,4 +1,5 @@
-import { Button, Grid, makeStyles, Paper, Theme } from '@material-ui/core';
+import { Button, Grid, Paper, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import FullVertical from '../FullVertical';
 
 type ClassProps = Pick<SideImagePageProps, 'image'>;
@@ -10,7 +11,9 @@ const useStyles = makeStyles<Theme, ClassProps>((theme) => ({
     backgroundImage: (props) => `url(${props.image})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+      theme.palette.type === 'light'
+        ? theme.palette.grey[50]
+        : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },

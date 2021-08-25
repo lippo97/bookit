@@ -1,6 +1,7 @@
-import { IconButton, InputBase, makeStyles, Paper } from '@material-ui/core';
-import { SearchOutlined as SearchIcon } from '@material-ui/icons';
-import _ from 'lodash';
+import { IconButton, InputBase, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import SearchIcon from '@material-ui/icons/SearchOutlined';
+import property from 'lodash/property';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { compose, composeC } from '@asw-project/shared/util/functions';
@@ -35,7 +36,7 @@ function Searchbar({ onSearch, defaultValue, placeholder }: SearchbarProps) {
     <Paper
       component="form"
       className={classes.root}
-      onSubmit={handleSubmit(compose(_.property('query'), onSearch))}
+      onSubmit={handleSubmit(compose(property('query'), onSearch))}
     >
       <InputBase
         autoFocus

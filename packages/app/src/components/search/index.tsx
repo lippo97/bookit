@@ -1,3 +1,4 @@
+import zipWith from 'lodash/zipWith';
 import Header from './Header';
 import PlacesList from './PlacesList';
 
@@ -45,10 +46,21 @@ function Search() {
     },
   ];
 
+  const placesWithId = zipWith(
+    Array.from(Array(places.length)).map((_, i) => i),
+    places,
+    function (id, p) {
+      return {
+        ...p,
+        id,
+      };
+    },
+  );
+
   return (
     <>
       <Header />
-      <PlacesList places={places} />
+      <PlacesList places={placesWithId} />
     </>
   );
 }

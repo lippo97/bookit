@@ -5,11 +5,9 @@ import {
   Typography,
 } from '@material-ui/core';
 import { SignupRequestSchema } from '@asw-project/shared/data/authentication/signup/request';
-import {
-  PersonAddOutlined as PersonAddIcon,
-  VisibilityOutlined as VisibilityIcon,
-  VisibilityOffOutlined as VisibilityOffIcon,
-} from '@material-ui/icons';
+import PersonAddIcon from '@material-ui/icons/PersonAddOutlined';
+import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOffOutlined';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Link from '../Link';

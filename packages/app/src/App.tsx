@@ -9,6 +9,8 @@ import Search from './pages/Search';
 import Secret from './pages/Secret';
 import Signup from './pages/Signup';
 import ProtectedRoute from './pages/_protected';
+import Place from './pages/Place';
+import BookingPage from './pages/library/BookingPage';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Route exact path="/editor" component={Editor} />
           <Route exact path="/search" component={Search} />
           <ProtectedRoute exact path="/secret" component={Secret} />
+          <Route exact path="/places/:id" component={Place} />
+          <Route exact path="/room/:roomId/book" component={BookingPage} />
           <Route component={Error404} />
         </Switch>
       </Router>

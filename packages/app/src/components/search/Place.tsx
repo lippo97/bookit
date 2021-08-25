@@ -4,9 +4,10 @@ import {
   CardMedia,
   CardContent,
   Typography,
-  makeStyles,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Place as TPlace } from '@asw-project/shared/types/place';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface PlaceProps {
   readonly place: TPlace;
@@ -18,11 +19,11 @@ const useStyles = makeStyles({
   },
 });
 
-function Place({ place: { name, address } }: PlaceProps) {
+function Place({ place: { name, address, id } }: PlaceProps) {
   const classes = useStyles();
   return (
     <Card>
-      <CardActionArea>
+      <CardActionArea component={RouterLink} to={`places/${id}`}>
         <CardMedia
           image="https://source.unsplash.com/random/800x600"
           title="Presentation image"

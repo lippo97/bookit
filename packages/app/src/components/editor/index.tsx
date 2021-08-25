@@ -1,6 +1,13 @@
-import { Toolbar as MuiToolbar, makeStyles, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import useRect from 'app/src/hooks/useRect';
+import React, { useRef } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 import FullVertical from '../FullVertical';
-import ToolbarContent from './ToolbarContent';
+import * as Vector2 from '@asw-project/shared/util/vector';
+import Board from './Board';
+import Toolbar from './Toolbar';
+
 interface EditorProps {}
 
 const useStyles = makeStyles((theme) => ({
@@ -13,65 +20,21 @@ const useStyles = makeStyles((theme) => ({
     "main    main"
     `,
   },
-  toolbarWrapper: {
-    color: '#fff',
-    background: theme.palette.primary.main,
-    gridArea: 'toolbar',
-    zIndex: theme.zIndex.appBar,
-  },
-  toolbarPaper: {
-    color: 'inherit',
-    background: 'inherit',
-  },
-  toolbar: {},
-  main: {
-    gridArea: 'main',
-    background: theme.palette.background.paper,
-    overflow: 'scroll',
-  },
 }));
 
-function Toolbar() {
-  const classes = useStyles();
-  return (
-    <header className={classes.toolbarWrapper}>
-      <Paper elevation={6} square className={classes.toolbarPaper}>
-        <MuiToolbar className={classes.toolbar}>
-          <ToolbarContent />
-        </MuiToolbar>
-      </Paper>
-    </header>
-  );
-}
-
-function Main() {
-  const classes = useStyles();
-  return (
-    <div className={classes.main}>
-      <div
-        style={{
-          width: 1300,
-          height: 700,
-          background: 'red',
-        }}
-      >
-        <Paper elevation={3}>
-          <div>content</div>
-          <div>content</div>
-          <div>content</div>
-        </Paper>
-      </div>
-    </div>
-  );
-}
+type Tool = 'add' | 'remove';
 
 function Editor({}: EditorProps) {
   const classes = useStyles();
+  const tool = useState<Tool | null>(null);
+
+  const handleClick = (x: number, y: number) => console.log(x, y);
+
   return (
     <FullVertical>
       <div className={classes.root}>
         <Toolbar />
-        <Main />
+        <Board onClick={handleClick} />
       </div>
     </FullVertical>
   );

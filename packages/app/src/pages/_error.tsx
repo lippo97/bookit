@@ -4,10 +4,10 @@ import {
   Container,
   Divider,
   Grid,
-  makeStyles,
   Paper,
   Typography,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 
 interface ErrorPageProps {
@@ -64,7 +64,11 @@ function ErrorPage({ code, text }: ErrorPageProps) {
               404
             </Typography>
             <Divider />
-            <Typography variant="h6" align="center" className={classes.subtitle}>
+            <Typography
+              variant="h6"
+              align="center"
+              className={classes.subtitle}
+            >
               We could't find the page you're looking for.
             </Typography>
             <Button variant="outlined" component={RouterLink} to="/">

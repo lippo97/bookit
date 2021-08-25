@@ -2,8 +2,8 @@ import {
   Button as BaseButton,
   ButtonProps as BaseButtonProps,
   CircularProgress,
-  makeStyles,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 type ButtonProps = BaseButtonProps & {
   isLoading?: boolean;

@@ -4,10 +4,10 @@ import {
   CardContent,
   CardMedia,
   Grid,
-  makeStyles,
   Paper,
   Typography,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Place as TPlace } from '@asw-project/shared/types/place';
 import Place from './Place';
 

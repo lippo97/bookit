@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import _ from 'lodash';
+import pick from 'lodash/pick';
 import { EitherAsync } from 'purify-ts';
 import { BaseService } from './BaseService';
 import { Create, Remove, Update } from './operations';
@@ -57,7 +57,7 @@ export function mapServiceRoutes<TConstructor>(
       router.get(rootPath, (req, res, next) => {
         // Coulnd't find a better way to type this,
         // so we'll stick with any.
-        const filters = _.pick(req.query, keys) as any;
+        const filters = pick(req.query, keys) as any;
         const result = service.findAll(filters);
         handleResult(res, next)(result);
       });
@@ -74,7 +74,7 @@ export function mapServiceRoutes<TConstructor>(
     if (isCreate(service)) {
       router.post(rootPath, (req, res, next) => {
         const userId = getUserId(req.session);
-        const fields = _.pick(req.body, keys) as any;
+        const fields = pick(req.body, keys) as any;
         const result = service.create(fields, { userId });
         handleResult(res, next)(result);
       });
@@ -83,7 +83,7 @@ export function mapServiceRoutes<TConstructor>(
     if (isUpdate(service)) {
       router.put(idPath, (req: Request<WithId>, res, next) => {
         const userId = getUserId(req.session);
-        const fields = _.pick(req.body, keys) as any;
+        const fields = pick(req.body, keys) as any;
         const result = service.update(req.params.id, fields, {
           userId,
         });

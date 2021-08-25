@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core';
-import { Alert as MaterialAlert } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
+import MaterialAlert from '@material-ui/lab/Alert';
 
 interface AlertProps {
   readonly body: string;

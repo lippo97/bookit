@@ -5,7 +5,8 @@ import {
   ValidationErrorKind,
 } from '@asw-project/shared/errors/kinds';
 import { Reason } from '@asw-project/shared/errors/ValidationError';
-import _ from 'lodash';
+import flatMap from 'lodash/flatMap';
+import values from 'lodash/values';
 
 export type DocumentCreationError =
   | DuplicateIdentifierKind
@@ -33,7 +34,7 @@ function parseErrors(errObj: any): Reason[] {
   }
   const { errors } = errObj;
 
-  return _.flatMap(_.values(errors), parseOne);
+  return flatMap(values(errors), parseOne);
 }
 
 export function handleCreationError(err: any): Error<DocumentCreationError> {

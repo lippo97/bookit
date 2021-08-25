@@ -8,7 +8,7 @@ import {
   Reason,
   ValidationError,
 } from '@asw-project/shared/errors/ValidationError';
-import _ from 'lodash';
+import flatMap from 'lodash/flatMap';
 import { IS_DEVELOPMENT } from '../config/constants';
 
 function parseError({ details }: JoiValidationError): ValidationError {
@@ -30,7 +30,7 @@ function parseError({ details }: JoiValidationError): ValidationError {
 
   return {
     kind: 'ValidationError',
-    reason: _.flatMap(details, parseOne),
+    reason: flatMap(details, parseOne),
   };
 }
 

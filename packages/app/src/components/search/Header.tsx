@@ -1,4 +1,5 @@
-import { Paper, InputBase, makeStyles } from '@material-ui/core';
+import { Paper, InputBase } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import Searchbar from './Searchbar';
 
 interface HeaderProps {}

@@ -1,11 +1,13 @@
 const path = require('path');
 const { EnvironmentPlugin, webpack, DefinePlugin } = require('webpack');
+const WebpackBundleAnalyzer =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const tsImportPluginFactory = require('ts-import-plugin');
 
-const isDevelopment =
-  process.env.NODE_ENV === 'production' ? 'development' : 'production';
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const startsWith = (start) => (str) => str.startsWith(start);
 const environmentVariables = Object.keys(process.env).filter(
@@ -13,7 +15,7 @@ const environmentVariables = Object.keys(process.env).filter(
 );
 
 module.exports = {
-  mode: process.env.NODE_ENV == 'development' ? 'development' : 'production',
+  mode: isDevelopment ? 'development' : 'production',
   entry: './src/index.tsx',
   output: {
     filename: 'bundle.js',
@@ -28,8 +30,17 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           configFile: path.join('.', 'tsconfig.json'),
-          // configFile: path.join('.', 'tsconfig.prod.json'),
           projectReferences: true,
+          // This seem not to work
+          // getCustomTransformers: () => ({
+          // before: [
+          // tsImportPluginFactory({
+          //   libraryName: '@material-ui/core',
+          //   libraryDirectory: '',
+          //   camel2DashComponentName: false,
+          // }),
+          //   ],
+          // }),
         },
       },
       {
@@ -43,7 +54,6 @@ module.exports = {
     ],
   },
   plugins: [
-    // use html plugin to just load our index.html
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: false,
@@ -54,6 +64,7 @@ module.exports = {
         : path.join(__dirname, '../../.env.app'),
     }),
     new EnvironmentPlugin(environmentVariables),
+    // ...(isDevelopment ? [new WebpackBundleAnalyzer()] : []),
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],

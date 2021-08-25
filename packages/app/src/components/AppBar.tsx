@@ -3,13 +3,14 @@ import {
   Menu,
   Button,
   IconButton,
-  makeStyles,
   Toolbar,
   Typography,
   MenuItem,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { Menu as MenuIcon, AccountCircleOutlined as AccountCircleIcon } from '@material-ui/icons';
+import MenuIcon from '@material-ui/icons/MenuOutlined';
+import AccountCircleIcon from '@material-ui/icons/AccountCircleOutlined';
 import { authentication, Authentication } from '../state/authentication';
 import React from 'react';
 import { useAtom } from 'jotai';
@@ -41,7 +42,9 @@ function UserButton() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleClick = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = ({
+    currentTarget,
+  }: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(currentTarget);
   };
 
