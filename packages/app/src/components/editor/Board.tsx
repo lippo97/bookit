@@ -76,7 +76,7 @@ function Board({ onClick }: BoardProps) {
             style={{
               transform,
               transformOrigin: '0 0',
-              height: '60vh'
+              height: '60vh',
             }}
           >
             <Grid size={squareSize} />
@@ -86,7 +86,7 @@ function Board({ onClick }: BoardProps) {
                   key={s.id}
                   position={Vector2.mul(s.position, squareSize)}
                   id={s.id}
-                squareSize={80}
+                  squareSize={80}
                   onClick={() => handleSeatClick(s.id)}
                 />
               );
