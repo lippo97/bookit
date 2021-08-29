@@ -13,20 +13,40 @@ const timeRange = Joi.object().keys({
   from: Joi.number().required(),
   to: Joi.number().required(),
 });
-const daytime = Joi.array().items(timeRange);
+const daytime = Joi.array().items(timeRange); /*Joi.object().keys({
+  daytime: Joi.array().items(timeRange),
+});*/
 //
-
-const timetable = Joi.array()
+const defaultTimerange = Joi.object().keys({
+  from: Joi.number().default(10).required(),
+  to: Joi.number().default(12).required(),
+});
+/*const timetable = Joi.array()
   .length(7)
   .items(daytime)
+ 
+  .required();*/
+const timetable = Joi.array()
+  .length(7)
+  .items({
+    daytimes: Joi.array()
+      .items(
+        Joi.object()
+          .keys({
+            from: Joi.number().required(),
+            to: Joi.number().required(),
+          })
+          .required(),
+      )
+      .required(),
+  })
+  .required()
   .default([
     [
-      {
-        from: 8,
-        to: 12,
-      },
-
-      { from: 13, to: 17 },
+      Joi.object().keys({
+        from: Joi.number().default(10).required(),
+        to: Joi.number().default(12).required(),
+      }),
     ],
     emptyDay(),
     emptyDay(),
@@ -34,8 +54,7 @@ const timetable = Joi.array()
     emptyDay(),
     emptyDay(),
     emptyDay(),
-  ])
-  .required();
+  ]);
 
 const posts = Joi.array().items(Joi.string()).required();
 
@@ -56,6 +75,6 @@ export const BuildingSchema = Joi.object({
   className: 'Building',
 });
 
-function emptyDay(): any {
-  Joi.array().default([]);
+function emptyDay(): Joi.ArraySchema {
+  return Joi.array().default([]);
 }
