@@ -7,7 +7,7 @@ import { room } from './fakeData';
 import Grid from '../picker/Grid';
 import Seat from '../picker/Seat';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   main: {
     gridArea: 'main',
     background: '#f1f1f1',

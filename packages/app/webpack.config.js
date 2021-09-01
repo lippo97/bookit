@@ -15,6 +15,11 @@ const environmentVariables = Object.keys(process.env).filter(
   startsWith('REACT_APP'),
 );
 
+const htmlWebpackPluginOptions = {
+  template: path.resolve(__dirname, 'src', 'index.html'),
+  inject: false,
+};
+
 module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   entry: './src/index.tsx',
@@ -55,10 +60,11 @@ module.exports = {
     ],
   },
   plugins: [
+    new HtmlWebpackPlugin(htmlWebpackPluginOptions),
+    // This second one is useful for surge.sh deployment
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'public', 'index.html'),
-      inject: false,
-      filename: '200.html'
+      ...htmlWebpackPluginOptions,
+      filename: '200.html',
     }),
     new Dotenv({
       path: isDevelopment
