@@ -4,7 +4,7 @@ import SearchIcon from '@material-ui/icons/SearchOutlined';
 import property from 'lodash/property';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { compose, composeC } from '@asw-project/shared/util/functions';
+import { compose } from '@asw-project/shared/util/functions';
 
 type SearchbarProps = {
   onSearch(query: string): void;

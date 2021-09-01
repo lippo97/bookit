@@ -1,12 +1,11 @@
 import { LoginSuccess } from '@asw-project/shared/src/data/authentication/login/response';
 import { useAtom } from 'jotai';
 import { HTTPError } from 'ky';
-import ky from '../config/ky';
 import { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
+import ky from '../config/ky';
 import LoginForm from '../components/authentication/LoginForm';
 import { SideImagePage } from '../components/authentication/SideImagePage';
-import { BACKEND_URL } from '../config';
 import { authentication } from '../state/authentication';
 import image from '../static/library.jpg';
 

@@ -1,3 +1,5 @@
+import { Building as TBuilding } from '@asw-project/shared/generatedTypes/building';
+import { WithId } from '@asw-project/shared/data/withId';
 import {
   Card,
   CardActionArea,
@@ -6,11 +8,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Place as TPlace } from '@asw-project/shared/types/place';
 import { Link as RouterLink } from 'react-router-dom';
 
-interface PlaceProps {
-  readonly place: TPlace;
+interface BuildingProps {
+  readonly data: WithId<TBuilding>;
 }
 
 const useStyles = makeStyles({
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Place({ place: { name, address, id } }: PlaceProps) {
+function Building({ data: { id, name, street } }: BuildingProps) {
   const classes = useStyles();
   return (
     <Card>
@@ -34,7 +35,7 @@ function Place({ place: { name, address, id } }: PlaceProps) {
             {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {address}
+            {street}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -42,4 +43,4 @@ function Place({ place: { name, address, id } }: PlaceProps) {
   );
 }
 
-export default Place;
+export default Building;

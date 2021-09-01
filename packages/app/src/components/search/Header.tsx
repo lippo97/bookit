@@ -1,8 +1,11 @@
-import { Paper, InputBase } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Searchbar from './Searchbar';
 
-interface HeaderProps {}
+interface HeaderProps {
+  readonly previousQuery?: string;
+  onSearch(query: String): void;
+}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -14,11 +17,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header({}: HeaderProps) {
+function Header({ onSearch, previousQuery }: HeaderProps) {
   const classes = useStyles();
   return (
     <Paper elevation={1} className={classes.paper}>
-      <Searchbar onSearch={(query) => console.log(query)} />
+      <Searchbar defaultValue={previousQuery} onSearch={onSearch} />
     </Paper>
   );
 }

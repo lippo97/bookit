@@ -6,7 +6,7 @@ function Search() {
   return (
     <Layout title="Search">
       <Container>
-        <SearchComponent />;
+        <SearchComponent />
       </Container>
     </Layout>
   );
