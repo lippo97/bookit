@@ -1,7 +1,23 @@
 import {} from '@asw-project/shared/generatedTypes/';
 
+type Slot = { from: number; to: number };
+
+type SimpleSlot = Slot[];
+
+type ComplexSlot = [
+  SimpleSlot,
+  SimpleSlot,
+  SimpleSlot,
+  SimpleSlot,
+  SimpleSlot,
+  SimpleSlot,
+  SimpleSlot,
+];
+
+type Timetable = SimpleSlot | ComplexSlot;
+
 interface LibraryTimetableProps {
-  readonly data?: any[];
+  readonly data: Timetable;
 }
 
 export const LibraryTimetable = ({ data }: LibraryTimetableProps) => (
@@ -9,13 +25,13 @@ export const LibraryTimetable = ({ data }: LibraryTimetableProps) => (
     <thead>
       <tr>
         <td />
-        <th>Mo</th>
-        <th>Tu</th>
-        <th>We</th>
-        <th>Th</th>
-        <th>Fr</th>
-        <th>Sa</th>
-        <th>Su</th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
       </tr>
     </thead>
     <tbody>

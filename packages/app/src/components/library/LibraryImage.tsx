@@ -32,9 +32,11 @@ const useStyles = makeStyles(() => ({
 
 interface ImageProps {
   src?: string;
+  isStarred: boolean;
+  onStar: () => void;
 }
 
-export const LibraryImage = ({ src }: ImageProps) => {
+export const LibraryHeader = ({ src, isStarred, onStar }: ImageProps) => {
   const classes = useStyles();
 
   return (
@@ -46,8 +48,8 @@ export const LibraryImage = ({ src }: ImageProps) => {
       />
       <div className={classes.starBg} />
       <Tooltip title="Star" className={classes.star}>
-        <Fab color="primary" aria-label="star">
-          <StarIcon />
+        <Fab color="primary" aria-label="star" onClick={onStar}>
+          <StarIcon color={isStarred ? 'secondary' : 'inherit'} />
         </Fab>
       </Tooltip>
     </div>

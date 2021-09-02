@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     margin: theme.spacing(2),
     fontWeight: 'bold',
+    width: '60%',
   },
   info: {
     marginBottom: theme.spacing(2),
@@ -68,7 +69,7 @@ export const LibraryData = ({
           icon={<AccessibilityIcon />}
         />
       </div>
-      <Typography align="center" variant="h6">
+      <Typography align="center" variant="h5" className={classes.info}>
         Timetable
       </Typography>
       <Timetable />

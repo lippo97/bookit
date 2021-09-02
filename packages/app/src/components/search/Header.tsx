@@ -22,7 +22,7 @@ function Header({ onSearch, previousQuery }: HeaderProps) {
   return (
     <Paper elevation={1} className={classes.paper}>
       <Searchbar
-        defaultValue={previousQuery}
+        defaultValue={previousQuery || ''}
         onSearch={onSearch}
         placeholder="Look for a library"
       />
