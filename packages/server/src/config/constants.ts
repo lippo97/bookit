@@ -8,6 +8,8 @@ const mongodbPort = 27017;
 
 const redisPort = 6379;
 
+const s3Port = 9000;
+
 export const APPLICATION_PORT = process.env.PORT || 3000;
 
 export const ENVIRONMENT = process.env.NODE_ENV || development;
@@ -23,9 +25,9 @@ function parse(num: string | null | undefined): number {
   throw new Error(`Couldnt parse ${num}.`);
 }
 
-function keyOrDefault(k: string, default_: string) {
-  if (process.env[k]) {
-    return process.env[k];
+function keyOrDefault(k: string, default_: string): string {
+  if (process.env[k] !== undefined) {
+    return process.env[k] as string;
   }
   if (IS_PRODUCTION) {
     throw new Error('Undefined environment variable.');
@@ -33,7 +35,7 @@ function keyOrDefault(k: string, default_: string) {
   return default_;
 }
 
-function keyOrDefaultNum(k: string, default_: number) {
+function keyOrDefaultNum(k: string, default_: number): number {
   return parse(keyOrDefault(k, default_.toString()));
 }
 
@@ -52,3 +54,11 @@ export const MONGODB_PORT = num('MONGODB_PORT', mongodbPort);
 export const REDIS_HOST = str('REDIS_HOST', localhost);
 
 export const REDIS_PORT = num('REDIS_PORT', redisPort);
+
+export const S3_HOST = str('S3_HOST', localhost);
+
+export const S3_PORT = num('S3_PORT', s3Port);
+
+export const S3_ACCESS_KEY_ID = str('S3_ACCESS_KEY_ID', 'development');
+
+export const S3_SECRET_ACCESS_KEY = str('S3_SECRET_ACCESS_KEY', 'development');
