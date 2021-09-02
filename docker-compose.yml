@@ -5,6 +5,8 @@ services:
     image: mongo
     ports:
       - 27017:27017
+    volumes:
+      - mongo-data:/data/db
 
   mongo-express:
     image: mongo-express
@@ -35,6 +37,6 @@ services:
       timeout: 20s
       retries: 3
 
-
 volumes:
+  mongo-data:
   s3-data:

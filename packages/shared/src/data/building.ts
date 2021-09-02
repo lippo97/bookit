@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { RoomSchema } from './room';
-import { AvalaibleServiceSchema } from './avalaibleService';
+import { AvailableServiceSchema } from './availableService';
 
 const name = Joi.string().required();
 
@@ -8,6 +8,7 @@ const street = Joi.string().required();
 
 const city = Joi.string().required();
 
+const imageFilename = Joi.string();
 //
 const timeRange = Joi.object().keys({
   from: Joi.number().required(),
@@ -59,7 +60,7 @@ const timetable = Joi.array()
 const posts = Joi.array().items(Joi.string()).required();
 
 //properties
-const avalaibleServices = Joi.array().items(AvalaibleServiceSchema).required();
+const availableServices = Joi.array().items(AvailableServiceSchema).required();
 
 const rooms = Joi.array().items(RoomSchema).required();
 
@@ -69,8 +70,9 @@ export const BuildingSchema = Joi.object({
   city,
   timetable,
   posts,
-  avalaibleServices,
+  availableServices,
   rooms,
+  imageFilename,
 }).meta({
   className: 'Building',
 });

@@ -1,22 +1,22 @@
 import {
   AppBar as MuiAppBar,
-  Menu,
   Button,
   IconButton,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
-  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link as RouterLink } from 'react-router-dom';
-import MenuIcon from '@material-ui/icons/MenuOutlined';
 import AccountCircleIcon from '@material-ui/icons/AccountCircleOutlined';
-import { authentication, Authentication } from '../state/authentication';
-import React from 'react';
+import MenuIcon from '@material-ui/icons/MenuOutlined';
 import { useAtom } from 'jotai';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { authentication } from '../state/authentication';
 
 export interface AppBarProps {
-  readonly title: string;
+  readonly title?: string;
 
   onMenuOpen(): void;
 }
@@ -88,10 +88,11 @@ function AppBar({ title, onMenuOpen }: AppBarProps) {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          {title}
-        </Typography>
-
+        {title && (
+          <Typography variant="h6" className={classes.title}>
+            {title}
+          </Typography>
+        )}
         {auth ? (
           <UserButton />
         ) : (

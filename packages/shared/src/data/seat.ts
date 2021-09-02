@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { PositionSchema } from './position';
-import { AvalaibleServiceSchema } from './avalaibleService';
+import { AvailableServiceSchema } from './availableService';
 
 const roomId = Joi.string()
   .required()
@@ -15,7 +15,7 @@ const roomId = Joi.string()
 
 const name = Joi.string().required();
 
-const services = Joi.array().items(AvalaibleServiceSchema).required();
+const services = Joi.array().items(AvailableServiceSchema).required();
 
 const position = PositionSchema.required();
 

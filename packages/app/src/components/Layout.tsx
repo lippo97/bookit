@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import AppBar, { AppBarProps } from './AppBar';
 import Drawer from './Drawer';
-import { useState } from 'react';
 
-type LayoutProps = Pick<AppBarProps, 'title'> & {
+type LayoutProps = Partial<Pick<AppBarProps, 'title'>> & {
   children?: JSX.Element | JSX.Element[];
 };
 

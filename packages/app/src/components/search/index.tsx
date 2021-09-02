@@ -71,6 +71,7 @@ function Search() {
   async function queryBackend(
     query: string | null,
   ): Promise<WithId<Building>[]> {
+    console.log(query);
     const searchParams = {
       ...(query === null || query === ''
         ? {}
@@ -87,7 +88,7 @@ function Search() {
 
   const handleSearch = async (query: string) => {
     history.push({
-      pathname: 'places',
+      // pathname: 'places',
       search: `?${new URLSearchParams({ search: query }).toString()}`,
     });
   };
@@ -107,7 +108,10 @@ function Search() {
 
   return (
     <>
-      <Header onSearch={handleSearch} />
+      <Header
+        previousQuery={searchQueryParam || undefined}
+        onSearch={handleSearch}
+      />
       <BuildingList isLoading={loading} places={buildings} />
     </>
   );

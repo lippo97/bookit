@@ -21,7 +21,11 @@ function Header({ onSearch, previousQuery }: HeaderProps) {
   const classes = useStyles();
   return (
     <Paper elevation={1} className={classes.paper}>
-      <Searchbar defaultValue={previousQuery} onSearch={onSearch} />
+      <Searchbar
+        defaultValue={previousQuery}
+        onSearch={onSearch}
+        placeholder="Look for a library"
+      />
     </Paper>
   );
 }
