@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { getImageUrlOrFallback, fallbackImage } from '../../config/images';
+import { getImageUrlOrFallback } from '../../config/images';
 
 interface BuildingProps {
   readonly data: WithId<TBuilding>;
