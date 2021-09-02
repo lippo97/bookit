@@ -3,4 +3,4 @@ import { Account } from '@asw-project/shared/generatedTypes/account';
 import { Resource } from '@asw-project/resources';
 
 export const [AccountModel, AccountSchema, accountKeys] =
-  Resource.fromJoi<Account>(AccountJoiSchema);
+  Resource.getModelFromJoi<Account>(AccountJoiSchema);

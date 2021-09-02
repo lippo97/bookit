@@ -20,11 +20,11 @@ const useStyles = makeStyles({
   },
 });
 
-function Building({ data: { id, name, street } }: BuildingProps) {
+function Building({ data: { _id, name, street } }: BuildingProps) {
   const classes = useStyles();
   return (
     <Card>
-      <CardActionArea component={RouterLink} to={`places/${id}`}>
+      <CardActionArea component={RouterLink} to={`places/${_id}`}>
         <CardMedia
           image="https://source.unsplash.com/random/800x600"
           title="Presentation image"

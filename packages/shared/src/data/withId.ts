@@ -1,3 +1,3 @@
 export type WithId<A> = {
-  id: string;
+  _id: string;
 } & A;

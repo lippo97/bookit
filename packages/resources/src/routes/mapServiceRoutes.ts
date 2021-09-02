@@ -6,6 +6,8 @@ import { Create, Remove, Update } from './operations';
 import { FindAll } from './operations/FindAll';
 import { FindById } from './operations/FindById';
 
+const allowedKeys = ['$text'];
+
 type WithId = {
   id: any;
 };
@@ -57,7 +59,7 @@ export function mapServiceRoutes<TConstructor>(
       router.get(rootPath, (req, res, next) => {
         // Coulnd't find a better way to type this,
         // so we'll stick with any.
-        const filters = pick(req.query, keys) as any;
+        const filters = pick(req.query, [...keys, ...allowedKeys]) as any;
         const result = service.findAll(filters);
         handleResult(res, next)(result);
       });

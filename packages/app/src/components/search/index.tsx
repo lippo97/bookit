@@ -1,6 +1,7 @@
 import { Building } from '@asw-project/shared/generatedTypes/building';
 import { WithId } from '@asw-project/shared/data/withId';
 import { useEffect, useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import zipWith from 'lodash/zipWith';
 import ky from '../../config/ky';
 import Header from './Header';
@@ -57,27 +58,52 @@ const placesWithId = zipWith(
   }),
 );
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 function Search() {
+  const searchQueryParam = useQuery().get('search');
+  const history = useHistory();
   const [buildings, setBuildings] = useState<WithId<Building>[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  async function queryBackend(query: String): Promise<Building[]> {
-    return ky.get('buildings').json<WithId<Building>[]>();
+  async function queryBackend(
+    query: string | null,
+  ): Promise<WithId<Building>[]> {
+    const searchParams = {
+      ...(query === null || query === ''
+        ? {}
+        : {
+            '$text[$search]': query,
+          }),
+    };
+    return ky
+      .get('buildings', {
+        searchParams,
+      })
+      .json<WithId<Building>[]>();
   }
 
-  const handleSearch = async (query: String) => {
-    setLoading(true);
-    try {
-      const res = await queryBackend(query);
-      setBuildings(res);
-    } finally {
-      setLoading(false);
-    }
+  const handleSearch = async (query: string) => {
+    history.push({
+      pathname: 'places',
+      search: `?${new URLSearchParams({ search: query }).toString()}`,
+    });
   };
 
   useEffect(() => {
-    handleSearch('');
-  }, []);
+    const go = async () => {
+      setLoading(true);
+      try {
+        const res = await queryBackend(searchQueryParam);
+        setBuildings(res);
+      } finally {
+        setLoading(false);
+      }
+    };
+    go();
+  }, [searchQueryParam]);
 
   return (
     <>

@@ -6,4 +6,4 @@ export const [
   AvalaibleServiceModel,
   AvalaibleServiceSchema,
   avalaibleServiceKeys,
-] = Resource.fromJoi<AvalaibleService>(AvalaibleServiceJoiSchema);
+] = Resource.getModelFromJoi<AvalaibleService>(AvalaibleServiceJoiSchema);

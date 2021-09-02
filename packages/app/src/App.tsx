@@ -9,7 +9,7 @@ import Search from './pages/Search';
 import Secret from './pages/Secret';
 import Signup from './pages/Signup';
 import ProtectedRoute from './pages/_protected';
-import Place from './pages/Place';
+import Building from './pages/Building';
 import BookingPage from './pages/library/BookingPage';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
           <Route exact path="/editor" component={Editor} />
           <Route exact path="/places" component={Search} />
           <ProtectedRoute exact path="/secret" component={Secret} />
-          <Route exact path="/places/:id" component={Place} />
+          <Route exact path="/places/:id" component={Building} />
           <Route exact path="/room/:roomId/book" component={BookingPage} />
           <Route component={Error404} />
         </Switch>
