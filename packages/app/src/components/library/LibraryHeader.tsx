@@ -28,8 +28,12 @@ const useStyles = makeStyles(() => ({
     bottom: '-28px',
     right: '16px',
   },
-  fab: {},
-  starIcon: {},
+  starredIcon: {
+    color: '#ffbe46',
+  },
+  unstarredIcon: {
+    color: '#808080',
+  },
 }));
 
 interface LibraryHeaderProps {
@@ -54,29 +58,9 @@ export const LibraryHeader = ({
       />
       <div className={classes.starBg} />
       <Tooltip title="Bookmark" className={classes.tooltip}>
-        <Fab
-          color="default"
-          aria-label="bookmark"
-          onClick={onStar}
-          className={classes.fab}
-          style={{
-            ...(isStarred
-              ? {
-                  background: '#fffddb',
-                }
-              : {}),
-          }}
-        >
+        <Fab color="default" aria-label="bookmark" onClick={onStar}>
           <BookmarkIcon
-            style={{
-              ...(isStarred
-                ? {
-                    color: 'yellow',
-                  }
-                : {
-                    color: 'grey',
-                  }),
-            }}
+            className={isStarred ? classes.starredIcon : classes.unstarredIcon}
           />
         </Fab>
       </Tooltip>

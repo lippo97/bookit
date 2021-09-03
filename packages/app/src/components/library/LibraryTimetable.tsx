@@ -2,7 +2,7 @@
 import { fst, snd } from '@asw-project/shared/util/tuples';
 import { makeStyles } from '@material-ui/core';
 
-type Slot = { from: number; to: number };
+type Slot = { from: number; to: number } | null;
 
 type Day = [Slot, Slot];
 
@@ -14,10 +14,8 @@ interface LibraryTimetableProps {
   readonly data: Timetable;
 }
 
-const renderSlot = ({ from, to }: Slot) => (
-  <td>
-    {from} - {to}
-  </td>
+const renderSlot = (slot: Slot) => (
+  <td>{slot ? `${slot.from} - ${slot.to}` : '-'}</td>
 );
 
 const renderFirstSlot = (timetable: Timetable) =>

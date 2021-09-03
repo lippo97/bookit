@@ -49,10 +49,7 @@ const timetableData = [
     },
   ],
   [
-    {
-      from: 8,
-      to: 12,
-    },
+    null,
     {
       from: 14,
       to: 19,
