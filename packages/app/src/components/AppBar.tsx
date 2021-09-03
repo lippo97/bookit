@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    fontFamily: "'Oswald', sans-serif",
+    fontSize: '24px',
+    userSelect: 'none',
   },
   iconButton: {
     color: 'inherit',
@@ -88,18 +91,9 @@ function AppBar({ title, onMenuOpen }: AppBarProps) {
         >
           <MenuIcon />
         </IconButton>
-        {title && (
-          <Typography variant="h6" className={classes.title}>
-            {title}
-          </Typography>
-        )}
-        {auth ? (
-          <UserButton />
-        ) : (
-          <Button component={RouterLink} to="/login" className={classes.button}>
-            Login
-          </Button>
-        )}
+        <Typography variant="h6" className={classes.title}>
+          bookit
+        </Typography>
       </Toolbar>
     </MuiAppBar>
   );

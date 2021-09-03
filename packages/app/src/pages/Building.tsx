@@ -3,7 +3,7 @@ import { CircularProgress } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { LibraryHeader } from '../components/library/LibraryImage';
+import { LibraryHeader } from '../components/library/LibraryHeader';
 import { LibraryData } from '../components/library/LibraryData';
 import ky from '../config/ky';
 

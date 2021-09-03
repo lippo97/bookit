@@ -1,60 +1,63 @@
-import {} from '@asw-project/shared/generatedTypes/';
+// import {} from '@asw-project/shared/
+import { fst, snd } from '@asw-project/shared/util/tuples';
+import { makeStyles } from '@material-ui/core';
 
 type Slot = { from: number; to: number };
 
-type SimpleSlot = Slot[];
+type Day = [Slot, Slot];
 
-type ComplexSlot = [
-  SimpleSlot,
-  SimpleSlot,
-  SimpleSlot,
-  SimpleSlot,
-  SimpleSlot,
-  SimpleSlot,
-  SimpleSlot,
-];
+type ComplexSlot = [Day, Day, Day, Day, Day, Day, Day];
 
-type Timetable = SimpleSlot | ComplexSlot;
+type Timetable = ComplexSlot;
 
 interface LibraryTimetableProps {
   readonly data: Timetable;
 }
 
-export const LibraryTimetable = ({ data }: LibraryTimetableProps) => (
-  <table>
-    <thead>
-      <tr>
-        <td />
-        <th>Mon</th>
-        <th>Tue</th>
-        <th>Wed</th>
-        <th>Thu</th>
-        <th>Fri</th>
-        <th>Sat</th>
-        <th>Sun</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th>9-12</th>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-      </tr>
-      <tr>
-        <th>14-19</th>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-        <td>open</td>
-      </tr>
-    </tbody>
-  </table>
+const renderSlot = ({ from, to }: Slot) => (
+  <td>
+    {from} - {to}
+  </td>
 );
+
+const renderFirstSlot = (timetable: Timetable) =>
+  timetable.map(fst).map(renderSlot);
+
+const renderSecondSlot = (timetable: Timetable) =>
+  timetable.map(snd).map(renderSlot);
+
+const useStyles = makeStyles((theme) => ({
+  table: {
+    width: '100%',
+    maxWidth: '600px',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    '& td': {
+      paddingTop: theme.spacing(1),
+      fontSize: '14px',
+    },
+  },
+}));
+
+export const LibraryTimetable = ({ data }: LibraryTimetableProps) => {
+  const classes = useStyles();
+  return (
+    <table className={classes.table}>
+      <thead>
+        <tr>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+          <th>Sun</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>{renderFirstSlot(data)}</tr>
+        <tr>{renderSecondSlot(data)}</tr>
+      </tbody>
+    </table>
+  );
+};

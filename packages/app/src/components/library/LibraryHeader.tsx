@@ -1,6 +1,6 @@
 import { Tooltip, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import StarIcon from '@material-ui/icons/Star';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { getImageUrlOrFallback } from '../../config/images';
 
 const useStyles = makeStyles(() => ({
@@ -23,20 +23,26 @@ const useStyles = makeStyles(() => ({
     borderRadius: '50%',
     background: 'white',
   },
-  star: {
+  tooltip: {
     position: 'absolute',
     bottom: '-28px',
     right: '16px',
   },
+  fab: {},
+  starIcon: {},
 }));
 
-interface ImageProps {
+interface LibraryHeaderProps {
   src?: string;
   isStarred: boolean;
   onStar: () => void;
 }
 
-export const LibraryHeader = ({ src, isStarred, onStar }: ImageProps) => {
+export const LibraryHeader = ({
+  src,
+  isStarred,
+  onStar,
+}: LibraryHeaderProps) => {
   const classes = useStyles();
 
   return (
@@ -47,9 +53,31 @@ export const LibraryHeader = ({ src, isStarred, onStar }: ImageProps) => {
         alt="The library"
       />
       <div className={classes.starBg} />
-      <Tooltip title="Star" className={classes.star}>
-        <Fab color="primary" aria-label="star" onClick={onStar}>
-          <StarIcon color={isStarred ? 'secondary' : 'inherit'} />
+      <Tooltip title="Bookmark" className={classes.tooltip}>
+        <Fab
+          color="default"
+          aria-label="bookmark"
+          onClick={onStar}
+          className={classes.fab}
+          style={{
+            ...(isStarred
+              ? {
+                  background: '#fffddb',
+                }
+              : {}),
+          }}
+        >
+          <BookmarkIcon
+            style={{
+              ...(isStarred
+                ? {
+                    color: 'yellow',
+                  }
+                : {
+                    color: 'grey',
+                  }),
+            }}
+          />
         </Fab>
       </Tooltip>
     </div>

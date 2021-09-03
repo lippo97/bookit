@@ -1,4 +1,4 @@
-* ASW
+* Lato cliente
 ** home
 *** funzioni
 - login
@@ -62,3 +62,9 @@ Pulsante raggiungibile dalla home
 - logout
 - modifica password
 - modifica immagine (opt)
+
+
+* Lato fornitore
+** Dashboard
+*** crud libraries
+**** crud rooms
