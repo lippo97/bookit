@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { SignupRequestSchema as SignupRequestJoiSchema } from '@asw-project/shared/data/authentication/signup/request';
+import { AuthenticationSchema as AuthenticationJoiSchema } from '@asw-project/shared/data/authentication/authentication';
 import {
   Authentication,
   Email,
@@ -25,7 +25,17 @@ interface TAuthenticationModel extends Model<AuthenticationDocument> {
 const AuthenticationSchema = new Schema<
   AuthenticationDocument,
   TAuthenticationModel
->(Resource.extractSchema<AuthenticationDocument>(SignupRequestJoiSchema));
+>(Resource.extractSchema<AuthenticationDocument>(AuthenticationJoiSchema));
+
+// Unfortunate unexpected behavior by joigoose
+// see: https://github.com/yoitsro/joigoose/issues/25
+AuthenticationSchema.remove([
+  'account.email',
+  'account.firstName',
+  'account.secondName',
+  'account.birthDate',
+  'account.maleFemale',
+]);
 
 AuthenticationSchema.pre<AuthenticationDocument>(
   'save',

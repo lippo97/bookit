@@ -7,7 +7,12 @@
     "outDir": "./dist",
     "composite": false,
     "incremental": false,
-    "typeRoots": ["../../node_modules/@types", "src/types"]
+    "typeRoots": ["../../node_modules/@types", "src/types"],
+    "paths": {
+      "@/*": ["./app/src/*"],
+      "@asw-project/shared/*": ["shared/src/*"],
+      "@asw-project/resources/*": ["resources/src/*"]
+    }
   },
   "include": ["./src/**/*"],
   "references": [{ "path": "../shared/tsconfig.prod.json", "prepend": false }]

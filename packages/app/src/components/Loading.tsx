@@ -1,7 +1,7 @@
 import { CircularProgress, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100vh',
     justifyContent: 'center',

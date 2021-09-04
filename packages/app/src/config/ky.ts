@@ -1,12 +1,11 @@
-import ky, { Options } from 'ky';
-import { BACKEND_URL } from '.';
+import kyFactory, { Options } from 'ky';
+import { BACKEND_URL } from './constants';
 
 const options: Options = {
   credentials: 'include',
   prefixUrl: `${BACKEND_URL}/api/v1`,
 };
 
-const instance = ky.create(options);
-console.log('backendurl', BACKEND_URL);
+const instance = kyFactory.create(options);
 
-export default instance;
+export const ky = instance;

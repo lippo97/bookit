@@ -1,16 +1,10 @@
 import Joi from 'joi';
 
 export const AccountSchema = Joi.object({
-  email: Joi.string()
-    .required()
-    .meta({
-      _mongoose: {
-        unique: true,
-      },
-    }),
+  email: Joi.string().required(),
   firstName: Joi.string().required(),
   secondName: Joi.string().required(),
-  birtDate: Joi.date().required(),
+  birthDate: Joi.date().required(),
   maleFemale: Joi.valid('male', 'female', 'other').required(),
 }).meta({
   className: 'Account',

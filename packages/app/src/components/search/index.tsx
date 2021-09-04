@@ -1,9 +1,9 @@
 import { Building } from '@asw-project/shared/generatedTypes/building';
 import { WithId } from '@asw-project/shared/data/withId';
 import { useEffect, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import zipWith from 'lodash/zipWith';
-import ky from '../../config/ky';
+import { ky } from '@/config';
 import Header from './Header';
 import BuildingList from './BuildingList';
 
@@ -62,9 +62,9 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-function Search() {
+export const Search = () => {
   const searchQueryParam = useQuery().get('search');
-  const history = useHistory();
+  const navigate = useNavigate();
   const [buildings, setBuildings] = useState<WithId<Building>[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -87,7 +87,7 @@ function Search() {
   }
 
   const handleSearch = async (query: string) => {
-    history.push({
+    navigate({
       // pathname: 'places',
       search: `?${new URLSearchParams({ search: query }).toString()}`,
     });
@@ -115,6 +115,4 @@ function Search() {
       <BuildingList isLoading={loading} places={buildings} />
     </>
   );
-}
-
-export default Search;
+};

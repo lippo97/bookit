@@ -10,7 +10,7 @@ const email = Email.required().meta({
 
 const password = Password.required();
 
-const account = AccountSchema.optional();
+const account = AccountSchema.allow(null);
 
 export const AuthenticationSchema = Joi.object({
   email,

@@ -1,10 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 import useRect from 'app/src/hooks/useRect';
-import React, { useRef } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import FullVertical from '../FullVertical';
+import React, { useRef, useEffect, useState } from 'react';
+
 import * as Vector2 from '@asw-project/shared/util/vector';
+import FillHeight from '../FillHeight';
 import Board from './Board';
 import Toolbar from './Toolbar';
 
@@ -31,12 +30,12 @@ function Editor({}: EditorProps) {
   const handleClick = (x: number, y: number) => console.log(x, y);
 
   return (
-    <FullVertical>
+    <FillHeight>
       <div className={classes.root}>
         <Toolbar />
         <Board onClick={handleClick} />
       </div>
-    </FullVertical>
+    </FillHeight>
   );
 }
 

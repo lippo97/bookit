@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { getImageUrlOrFallback } from '../../config/images';
+import { getImageUrlOrFallback } from '@/config';
 
 interface BuildingProps {
   readonly data: WithId<TBuilding>;
@@ -21,14 +21,15 @@ const useStyles = makeStyles({
   },
 });
 
-function Building({
+export function LibraryListItem({
   data: { _id, name, street, imageFilename },
 }: BuildingProps) {
   const classes = useStyles();
   const image = getImageUrlOrFallback(imageFilename);
+
   return (
     <Card>
-      <CardActionArea component={RouterLink} to={`places/${_id}`}>
+      <CardActionArea component={RouterLink} to={`/libraries/${_id}`}>
         <CardMedia
           image={image}
           title="Presentation image"
@@ -46,5 +47,3 @@ function Building({
     </Card>
   );
 }
-
-export default Building;
