@@ -8,6 +8,8 @@ const email = Email.required().meta({
   },
 });
 
+const isManager = Joi.boolean().required().default(false);
+
 const password = Password.required();
 
 const account = AccountSchema.allow(null);
@@ -15,6 +17,7 @@ const account = AccountSchema.allow(null);
 export const AuthenticationSchema = Joi.object({
   email,
   password,
+  isManager,
   account,
 }).meta({
   className: 'Authentication',
