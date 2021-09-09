@@ -1,4 +1,4 @@
-import { Building as TBuilding } from '@asw-project/shared/generatedTypes/building';
+import { Library as TLibrary } from '@asw-project/shared/generatedTypes/library';
 import { WithId } from '@asw-project/shared/data/withId';
 import {
   Card,
@@ -11,8 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import { getImageUrlOrFallback } from '../../config/images';
 
-interface BuildingProps {
-  readonly data: WithId<TBuilding>;
+interface LibraryProps {
+  readonly data: WithId<TLibrary>;
 }
 
 const useStyles = makeStyles({
@@ -21,9 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Building({
-  data: { _id, name, street, imageFilename },
-}: BuildingProps) {
+function Library({ data: { _id, name, street, imageFilename } }: LibraryProps) {
   const classes = useStyles();
   const image = getImageUrlOrFallback(imageFilename);
   return (
@@ -47,4 +45,4 @@ function Building({
   );
 }
 
-export default Building;
+export default Library;

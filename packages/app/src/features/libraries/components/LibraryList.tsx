@@ -1,14 +1,14 @@
-import { Building as TBuilding } from '@asw-project/shared/generatedTypes';
+import { Library as TLibrary } from '@asw-project/shared/generatedTypes';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { LibraryListItem } from './LibraryListItem';
 
-interface BuildingListProps {
+interface LibraryListProps {
   readonly isLoading?: boolean;
-  readonly places: WithId<TBuilding>[];
+  readonly places: WithId<TLibrary>[];
 }
 
-export function LibraryList({ isLoading, places }: BuildingListProps) {
+export function LibraryList({ isLoading, places }: LibraryListProps) {
   if (isLoading === true) {
     return (
       <div>

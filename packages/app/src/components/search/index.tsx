@@ -1,11 +1,11 @@
-import { Building } from '@asw-project/shared/generatedTypes/building';
+import { Library } from '@asw-project/shared/generatedTypes/library';
 import { WithId } from '@asw-project/shared/data/withId';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import zipWith from 'lodash/zipWith';
 import { ky } from '@/config';
 import Header from './Header';
-import BuildingList from './BuildingList';
+import LibraryList from './LibraryList';
 
 const places = [
   {
@@ -65,12 +65,12 @@ function useQuery() {
 export const Search = () => {
   const searchQueryParam = useQuery().get('search');
   const navigate = useNavigate();
-  const [buildings, setBuildings] = useState<WithId<Building>[]>([]);
+  const [libraries, setLibraries] = useState<WithId<Library>[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   async function queryBackend(
     query: string | null,
-  ): Promise<WithId<Building>[]> {
+  ): Promise<WithId<Library>[]> {
     console.log(query);
     const searchParams = {
       ...(query === null || query === ''
@@ -80,10 +80,10 @@ export const Search = () => {
           }),
     };
     return ky
-      .get('buildings', {
+      .get('libraries', {
         searchParams,
       })
-      .json<WithId<Building>[]>();
+      .json<WithId<Library>[]>();
   }
 
   const handleSearch = async (query: string) => {
@@ -98,7 +98,7 @@ export const Search = () => {
       setLoading(true);
       try {
         const res = await queryBackend(searchQueryParam);
-        setBuildings(res);
+        setLibraries(res);
       } finally {
         setLoading(false);
       }
@@ -112,7 +112,7 @@ export const Search = () => {
         previousQuery={searchQueryParam || undefined}
         onSearch={handleSearch}
       />
-      <BuildingList isLoading={loading} places={buildings} />
+      <LibraryList isLoading={loading} places={libraries} />
     </>
   );
 };

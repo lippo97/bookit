@@ -8,7 +8,7 @@ const app = express();
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'building-images',
+    bucket: 'library-images',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     cacheControl: 'max-age=31536000',
     key: function (req, file, cb) {
@@ -27,7 +27,7 @@ app.listen(3000, function () {
 });
 
 // s3.putObject({
-//   Bucket: 'building-images',
+//   Bucket: 'library-images',
 //   Key: 'testkey',
 //   Body: 'Hello man',
 // })

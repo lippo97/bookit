@@ -1,14 +1,14 @@
-import { Building as TBuilding } from '@asw-project/shared/generatedTypes';
+import { Library as TLibrary } from '@asw-project/shared/generatedTypes';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Grid, CircularProgress } from '@material-ui/core';
-import Building from './Building';
+import Library from './Library';
 
-interface BuildingListProps {
+interface LibraryListProps {
   readonly isLoading?: boolean;
-  readonly places: WithId<TBuilding>[];
+  readonly places: WithId<TLibrary>[];
 }
 
-function BuildingList({ isLoading, places }: BuildingListProps) {
+function LibraryList({ isLoading, places }: LibraryListProps) {
   if (isLoading === true) {
     return (
       <div>
@@ -26,7 +26,7 @@ function BuildingList({ isLoading, places }: BuildingListProps) {
       <Grid container spacing={5}>
         {places.map((p) => (
           <Grid item xs={12} sm={6} lg={4}>
-            <Building data={p} />
+            <Library data={p} />
           </Grid>
         ))}
       </Grid>
@@ -34,4 +34,4 @@ function BuildingList({ isLoading, places }: BuildingListProps) {
   );
 }
 
-export default BuildingList;
+export default LibraryList;

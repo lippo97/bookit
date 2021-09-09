@@ -1,16 +1,16 @@
 import Joi, { required } from 'joi';
 import { SeatSchema } from './seat';
 
-const buildingId = Joi.string()
+const libraryId = Joi.string()
   .required()
   .meta({
     _mongoose: {
       type: 'ObjectId',
-      ref: 'Building',
+      ref: 'Library',
       // validate: null
     },
   });
-/* valutare se usare un array per building
+/* valutare se usare un array per library
  */
 
 const ownerId = Joi.string()
@@ -34,7 +34,7 @@ const capacity = Joi.number() //
   .required();
 
 export const RoomSchema = Joi.object({
-  buildingId,
+  libraryId,
   ownerId,
   name,
   seats,

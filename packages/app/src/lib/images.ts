@@ -1,11 +1,11 @@
 import { S3_URL } from '@/config';
 
-const buildingBucket = 'building-images';
+const libraryBucket = 'library-images';
 
 export const fallbackImage = 'https://source.unsplash.com/random/800x600';
 
 export function getImageUrl(filename: string): string {
-  return `${S3_URL}/${buildingBucket}/${filename}`;
+  return `${S3_URL}/${libraryBucket}/${filename}`;
 }
 
 export function getImageUrlOrFallback(

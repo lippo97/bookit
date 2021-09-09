@@ -1,6 +1,6 @@
 import { Router } from 'express';
 // import availableServiceRouter from '../../routers/avalaibleServices';
-import buildingRouter from '../../routers/buildings';
+import libraryRouter from '../../routers/libraries';
 import positionRouter from '../../routers/positions';
 import roomRouter from '../../routers/rooms';
 import seatRouter from '../../routers/seats';
@@ -10,7 +10,7 @@ const router = Router();
 
 router.use(authenticationRouter);
 // router.use('/avalaibleServices', avalaibleServiceRouter);
-router.use('/buildings', buildingRouter);
+router.use('/libraries', libraryRouter);
 router.use('/positions', positionRouter);
 router.use('/rooms', roomRouter);
 router.use('/seats', seatRouter);

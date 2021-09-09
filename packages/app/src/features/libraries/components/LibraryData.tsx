@@ -1,4 +1,4 @@
-import { Building } from '@asw-project/shared/generatedTypes';
+import { Library } from '@asw-project/shared/generatedTypes';
 import PlaceIcon from '@material-ui/icons/Place';
 import PowerIcon from '@material-ui/icons/Power';
 import WifiIcon from '@material-ui/icons/Wifi';
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface LibraryDataProps {
-  data: Building;
+  data: Library;
 }
 
 export const LibraryData = ({

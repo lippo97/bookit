@@ -1,9 +1,9 @@
-const buildingBucket = 'building-images';
+const libraryBucket = 'library-images';
 
 export const fallbackImage = 'https://source.unsplash.com/random/800x600';
 
 export function getImageUrl(filename: string): string {
-  return `http://localhost:9000/${buildingBucket}/${filename}`;
+  return `http://localhost:9000/${libraryBucket}/${filename}`;
 }
 
 export function getImageUrlOrFallback(

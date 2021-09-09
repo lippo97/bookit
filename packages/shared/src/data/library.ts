@@ -64,7 +64,7 @@ const availableServices = Joi.array().items(AvailableServiceSchema).required();
 
 const rooms = Joi.array().items(RoomSchema).required();
 
-export const BuildingSchema = Joi.object({
+export const LibrarySchema = Joi.object({
   name,
   street,
   city,
@@ -74,7 +74,7 @@ export const BuildingSchema = Joi.object({
   rooms,
   imageFilename,
 }).meta({
-  className: 'Building',
+  className: 'Library',
 });
 
 function emptyDay(): Joi.ArraySchema {
