@@ -10,10 +10,26 @@ import bcrypt, { compare } from 'bcrypt';
 import { Document, model, Model, Schema } from 'mongoose';
 import { always, Maybe, MaybeAsync } from 'purify-ts';
 import { Resource } from '@asw-project/resources';
+import {
+  ManagerAccount,
+  UserAccount,
+} from '@asw-project/shared/generatedTypes';
 
 const SALT_ROUNDS = 10;
 
 type AuthenticationDocument = Authentication & Document;
+
+type Account = UserAccount | ManagerAccount;
+
+const isUserFun = function isUser(account: Account): account is UserAccount {
+  return account.firstName !== undefined;
+};
+
+const isManagerFun = function isManager(
+  account: Account,
+): account is ManagerAccount {
+  return !isUserFun(account);
+};
 
 interface TAuthenticationModel extends Model<AuthenticationDocument> {
   findByEmailAndComparePassword(
@@ -27,8 +43,8 @@ const AuthenticationSchema = new Schema<
   TAuthenticationModel
 >(Resource.extractSchema<AuthenticationDocument>(AuthenticationJoiSchema));
 
-// Unfortunate unexpected behavior by joigoose
-// see: https://github.com/yoitsro/joigoose/issues/25
+// see: https://github.com/yoitsro/joigoose/issues/25 // Unfortunate unexpected behavior by joigoose
+
 AuthenticationSchema.remove([
   'account.email',
   'account.firstName',
@@ -47,6 +63,10 @@ AuthenticationSchema.pre<AuthenticationDocument>(
     }
   },
 );
+
+AuthenticationSchema.statics.isUser = isUserFun;
+
+AuthenticationSchema.statics.isManager = isManagerFun;
 
 AuthenticationSchema.statics.findByEmailAndComparePassword =
   function findByEmailAndComparePassword(email: Email, password: Password) {
