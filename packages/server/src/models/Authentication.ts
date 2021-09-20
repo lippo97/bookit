@@ -1,6 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import { AuthenticationSchema as AuthenticationJoiSchema } from '@asw-project/shared/data/authentication/authentication';
 import {
+  AccountSchema,
+  AuthenticationSchema as AuthenticationJoiSchema,
+} from '@asw-project/shared/data/authentication/authentication';
+import {
+  Account,
   Authentication,
   Email,
   Password,
@@ -10,10 +14,25 @@ import bcrypt, { compare } from 'bcrypt';
 import { Document, model, Model, Schema } from 'mongoose';
 import { always, Maybe, MaybeAsync } from 'purify-ts';
 import { Resource } from '@asw-project/resources';
+import {
+  ManagerAccount,
+  UserAccount,
+} from '@asw-project/shared/generatedTypes';
 
 const SALT_ROUNDS = 10;
 
-type AuthenticationDocument = Authentication & Document;
+export function isUser(account: Account): account is UserAccount {
+  return account.type === 'user';
+}
+
+export function isManager(account: Account): account is ManagerAccount {
+  return !isUser(account);
+}
+
+type AuthenticationDocument = Authentication &
+  Document & {
+    isUninitialized(): boolean;
+  };
 
 interface TAuthenticationModel extends Model<AuthenticationDocument> {
   findByEmailAndComparePassword(
@@ -27,8 +46,8 @@ const AuthenticationSchema = new Schema<
   TAuthenticationModel
 >(Resource.extractSchema<AuthenticationDocument>(AuthenticationJoiSchema));
 
-// Unfortunate unexpected behavior by joigoose
-// see: https://github.com/yoitsro/joigoose/issues/25
+// see: https://github.com/yoitsro/joigoose/issues/25 // Unfortunate unexpected behavior by joigoose
+
 AuthenticationSchema.remove([
   'account.email',
   'account.firstName',
@@ -47,6 +66,10 @@ AuthenticationSchema.pre<AuthenticationDocument>(
     }
   },
 );
+
+AuthenticationSchema.methods.isUninitialized = function isUninitialized() {
+  return this.account === undefined;
+};
 
 AuthenticationSchema.statics.findByEmailAndComparePassword =
   function findByEmailAndComparePassword(email: Email, password: Password) {

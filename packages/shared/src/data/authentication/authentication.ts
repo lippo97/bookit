@@ -1,5 +1,6 @@
 import Joi from 'joi';
-import { AccountSchema } from '../account';
+import { UserAccountSchema } from '../userAccount';
+import { ManagerAccountSchema } from '../managerAccount';
 import { Email, Password } from './common';
 
 const email = Email.required().meta({
@@ -10,12 +11,18 @@ const email = Email.required().meta({
 
 const password = Password.required();
 
-const account = AccountSchema.allow(null);
+export const AccountSchema = Joi.alternatives()
+  .try(UserAccountSchema, ManagerAccountSchema)
+  .meta({
+    className: 'Account',
+  });
 
-export const AuthenticationSchema = Joi.object({
+const schema = {
   email,
   password,
-  account,
-}).meta({
+  account: AccountSchema,
+};
+
+export const AuthenticationSchema = Joi.object(schema).meta({
   className: 'Authentication',
 });
