@@ -71,7 +71,7 @@ export function Error({ code, message }: ErrorPageProps) {
               {message}
             </Typography>
             <Button variant="outlined" component={RouterLink} to="/">
-              Go back
+              Go home
             </Button>
           </Box>
         </Paper>

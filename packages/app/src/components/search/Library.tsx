@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { getImageUrlOrFallback } from '../../config/images';
+import { getImageUrlOrFallback } from '@/lib/images';
 
 interface LibraryProps {
   readonly data: WithId<TLibrary>;

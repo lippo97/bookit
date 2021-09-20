@@ -1,36 +1,38 @@
 import { HTTPError } from 'ky';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/stores/authentication';
 import image from '@/assets/library.jpg';
 import { useMutation } from 'react-query';
+import { LoginRequest } from '@asw-project/shared/generatedTypes/authentication/login/request';
 import { LoginForm } from '../components/LoginForm';
 import { Layout } from '../components/Layout';
 
 export function Login() {
   const loginWithEmailAndPassword = useAuth((s) => s.loginWithEmailAndPassword);
-  const [errors, setErrors] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  const { mutate, isLoading } = useMutation(loginWithEmailAndPassword);
+  const { mutate, isLoading, error } = useMutation<
+    void,
+    Error,
+    LoginRequest,
+    unknown
+  >(loginWithEmailAndPassword);
+
+  const switchError = (_error: Error | null): string[] => {
+    if (_error === null) {
+      return [];
+    }
+    if (_error instanceof HTTPError && _error.response.status === 401) {
+      return ['Wrong username or password.'];
+    }
+    return ['Whoops! Something went wrong. Try to reload the page.'];
+  };
 
   const handleSubmit = async (email: string, password: string) => {
-    setErrors([]);
     mutate(
       { email, password },
       {
         onSuccess: () => navigate('/'),
-        onError: (err) => {
-          if (err instanceof HTTPError && err.response.status === 401) {
-            setErrors(['Wrong username or password.']);
-          } else {
-            setErrors([
-              'Whoops! Something went wrong. Try to reload the page.',
-            ]);
-            // eslint-disable-next-line no-console
-            console.error(err);
-          }
-        },
       },
     );
   };
@@ -38,7 +40,7 @@ export function Login() {
   return (
     <Layout image={image}>
       <LoginForm
-        errors={errors}
+        errors={switchError(error)}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
       />

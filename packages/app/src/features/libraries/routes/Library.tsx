@@ -1,5 +1,6 @@
-import Layout from '@/components/Layout';
-import { CircularProgress, Container } from '@material-ui/core';
+import { Layout } from '@/components/Layout';
+import { QueryContent } from '@/components/QueryContent';
+import { Container } from '@material-ui/core';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -12,31 +13,21 @@ export const Library = () => {
   const { id } = useParams();
   const { data, status } = useQuery(['library', id], () => getLibrary(id));
 
-  const Content = () => {
-    if (status === 'loading') {
-      return <CircularProgress />;
-    }
-
-    if (status === 'error') {
-      return <CircularProgress />;
-    }
-
-    return (
-      <>
-        <LibraryHeader
-          src={data!.imageFilename}
-          isStarred={isStarred}
-          onStar={() => setStarred(!isStarred)}
-        />
-        <LibraryData data={data!} />
-      </>
-    );
-  };
-
   return (
     <Layout>
       <Container>
-        <Content />
+        <QueryContent status={status} data={data}>
+          {(d) => (
+            <>
+              <LibraryHeader
+                src={d.imageFilename}
+                isStarred={isStarred}
+                onStar={() => setStarred(!isStarred)}
+              />
+              <LibraryData data={d} />
+            </>
+          )}
+        </QueryContent>
       </Container>
     </Layout>
   );

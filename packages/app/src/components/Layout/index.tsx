@@ -5,8 +5,9 @@ import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { makeStyles, styled } from '@material-ui/core/styles';
 
-import { useAuth, useIsLoggedIn } from '@/stores/authentication';
+import { useIsLoggedIn } from '@/stores/authentication';
 import { AppBar, AppBarProps } from './AppBar';
 import { Drawer, DrawerItem } from './Drawer';
 
@@ -14,7 +15,21 @@ type LayoutProps = Partial<Pick<AppBarProps, 'title'>> & {
   children?: React.ReactNode;
 };
 
-function Layout({ title, children }: LayoutProps) {
+const useStyles = makeStyles(() => ({
+  root: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
+
+const Relative = styled('div')(() => ({
+  position: 'relative',
+  flex: 1,
+}));
+
+export function Layout({ title, children }: LayoutProps) {
+  const classes = useStyles();
   const isLoggedIn = useIsLoggedIn();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -22,7 +37,7 @@ function Layout({ title, children }: LayoutProps) {
   const handleClose = () => setDrawerOpen(false);
 
   return (
-    <div>
+    <div className={classes.root}>
       <AppBar title={title} onMenuOpen={handleMenuOpen} />
       <Drawer open={drawerOpen} onClose={handleClose}>
         <DrawerItem
@@ -53,10 +68,7 @@ function Layout({ title, children }: LayoutProps) {
           </>
         )}
       </Drawer>
-
-      {children}
+      <Relative>{children}</Relative>
     </div>
   );
 }
-
-export default Layout;

@@ -3,13 +3,13 @@ import { WithId } from '@asw-project/shared/data/withId';
 import {
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
+  CardMedia,
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { getImageUrlOrFallback } from '@/config';
+import { getImageUrlOrFallback } from '@/lib/images';
 
 interface LibraryProps {
   readonly data: WithId<TLibrary>;

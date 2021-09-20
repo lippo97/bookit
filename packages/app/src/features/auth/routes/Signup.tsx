@@ -1,34 +1,37 @@
 import { HTTPError } from 'ky';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import library2 from '@/assets/library2.jpg';
 import { useMutation } from 'react-query';
+import { ReturnedUser } from '@asw-project/shared/data/authentication/returnedUser';
+import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup';
 import { SignupForm } from '../components/SignupForm';
 import { Layout } from '../components/Layout';
 import { signupWithEmailAndPassword } from '../api/signup';
 
 export function Signup() {
-  const [errors, setErrors] = useState<string[]>([]);
   const navigate = useNavigate();
-  const { isLoading, mutate } = useMutation(signupWithEmailAndPassword);
+  const { isLoading, mutate, error } = useMutation<
+    ReturnedUser,
+    Error,
+    SignupRequest,
+    unknown
+  >(signupWithEmailAndPassword);
+
+  const switchError = (_error: Error | null): string[] => {
+    if (_error === null) {
+      return [];
+    }
+    if (_error instanceof HTTPError && _error.response.status === 409) {
+      return ['This email is already taken.'];
+    }
+    return ['Whoops! Something went wrong. Try to reload the page'];
+  };
 
   const handleSubmit = (email: string, password: string) => {
-    setErrors([]);
     mutate(
       { email, password },
       {
         onSuccess: () => navigate('/'),
-        onError: (err) => {
-          if (err instanceof HTTPError && err.response.status === 409) {
-            setErrors(['This email is already taken.']);
-          } else {
-            setErrors([
-              'Whoops! Something went wrong. Try to reload the page.',
-            ]);
-            // eslint-disable-next-line no-console
-            console.error(err);
-          }
-        },
       },
     );
   };
@@ -36,7 +39,7 @@ export function Signup() {
   return (
     <Layout image={library2}>
       <SignupForm
-        errors={errors}
+        errors={switchError(error)}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
       />

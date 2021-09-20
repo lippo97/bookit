@@ -2,11 +2,11 @@ import Joi from 'joi';
 import { RoomSchema } from './room';
 import { AvailableServiceSchema } from './availableService';
 
-const name = Joi.string().required();
+export const name = Joi.string().required();
 
-const street = Joi.string().required();
+export const street = Joi.string().required();
 
-const city = Joi.string().required();
+export const city = Joi.string().required();
 
 const imageFilename = Joi.string();
 //

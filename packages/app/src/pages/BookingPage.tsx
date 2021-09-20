@@ -2,7 +2,7 @@ import { Container } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { room } from '@/components/editor/fakeData';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/Layout';
 import PickerForm from '@/components/picker/PickerForm';
 import { Room } from '@/components/picker/types';
 

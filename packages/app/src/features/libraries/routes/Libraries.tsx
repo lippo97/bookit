@@ -1,9 +1,6 @@
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/Layout';
 import { useQueryParams } from '@/hooks';
-import { WithId } from '@asw-project/shared/data/withId';
-import { Library } from '@asw-project/shared/generatedTypes/library';
 import { Container } from '@material-ui/core';
-import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { getLibraries } from '../api/getLibraries';
