@@ -1,5 +1,6 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
+import { useToggle } from '@/hooks/useToggle';
 import { Container } from '@material-ui/core';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
@@ -9,7 +10,7 @@ import { LibraryData } from '../components/LibraryData';
 import { LibraryHeader } from '../components/LibraryHeader';
 
 export const Library = () => {
-  const [isStarred, setStarred] = useState(false);
+  const [isStarred, toggleStarred] = useToggle(false);
   const { id } = useParams();
   const { data, status } = useQuery(['library', id], () => getLibrary(id));
 
@@ -22,7 +23,7 @@ export const Library = () => {
               <LibraryHeader
                 src={d.imageFilename}
                 isStarred={isStarred}
-                onStar={() => setStarred(!isStarred)}
+                onStar={toggleStarred}
               />
               <LibraryData data={d} />
             </>

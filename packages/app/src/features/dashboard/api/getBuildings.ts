@@ -4,7 +4,6 @@ import { Library } from '@asw-project/shared/generatedTypes';
 const buildings = [
   {
     _id: '2',
-    posts: [],
     name: 'Biblioteca San Giovanni',
     street: 'via Passeri',
     city: 'Pesaro',
@@ -15,7 +14,6 @@ const buildings = [
   },
   {
     _id: '1',
-    posts: [],
     name: 'Biblioteca 5 Torri',
     street: 'Largo Volontari del sangue',
     city: 'Pesaro',

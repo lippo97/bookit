@@ -27,37 +27,17 @@ const defaultTimerange = Joi.object().keys({
   .items(daytime)
  
   .required();*/
-const timetable = Joi.array()
-  .length(7)
-  .items({
-    daytimes: Joi.array()
-      .items(
-        Joi.object()
-          .keys({
-            from: Joi.number().required(),
-            to: Joi.number().required(),
-          })
-          .required(),
-      )
-      .required(),
-  })
-  .required()
-  .default([
-    [
-      Joi.object().keys({
-        from: Joi.number().default(10).required(),
-        to: Joi.number().default(12).required(),
-      }),
-    ],
-    emptyDay(),
-    emptyDay(),
-    emptyDay(),
-    emptyDay(),
-    emptyDay(),
-    emptyDay(),
-  ]);
 
-const posts = Joi.array().items(Joi.string()).required();
+const DaySchema = Joi.number().min(0).max(6);
+
+const ShiftSchema = Joi.object({
+  slot: Joi.object({
+    from: Joi.date().required(),
+    to: Joi.date().required(),
+  }).required(),
+  days: Joi.array().min(1).items(DaySchema).required(),
+});
+const timetable = Joi.array().items(ShiftSchema).required();
 
 //properties
 const availableServices = Joi.array().items(AvailableServiceSchema).required();
@@ -69,7 +49,6 @@ export const LibrarySchema = Joi.object({
   street,
   city,
   timetable,
-  posts,
   availableServices,
   rooms,
   imageFilename,
