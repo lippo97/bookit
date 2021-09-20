@@ -1,6 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import { AuthenticationSchema as AuthenticationJoiSchema } from '@asw-project/shared/data/authentication/authentication';
 import {
+  AccountSchema,
+  AuthenticationSchema as AuthenticationJoiSchema,
+} from '@asw-project/shared/data/authentication/authentication';
+import {
+  Account,
   Authentication,
   Email,
   Password,
@@ -17,19 +21,18 @@ import {
 
 const SALT_ROUNDS = 10;
 
-type AuthenticationDocument = Authentication & Document;
+export function isUser(account: Account): account is UserAccount {
+  return account.type === 'user';
+}
 
-type Account = UserAccount | ManagerAccount;
+export function isManager(account: Account): account is ManagerAccount {
+  return !isUser(account);
+}
 
-const isUserFun = function isUser(account: Account): account is UserAccount {
-  return account.firstName !== undefined;
-};
-
-const isManagerFun = function isManager(
-  account: Account,
-): account is ManagerAccount {
-  return !isUserFun(account);
-};
+type AuthenticationDocument = Authentication &
+  Document & {
+    isUninitialized(): boolean;
+  };
 
 interface TAuthenticationModel extends Model<AuthenticationDocument> {
   findByEmailAndComparePassword(
@@ -64,9 +67,9 @@ AuthenticationSchema.pre<AuthenticationDocument>(
   },
 );
 
-AuthenticationSchema.statics.isUser = isUserFun;
-
-AuthenticationSchema.statics.isManager = isManagerFun;
+AuthenticationSchema.methods.isUninitialized = function isUninitialized() {
+  return this.account === undefined;
+};
 
 AuthenticationSchema.statics.findByEmailAndComparePassword =
   function findByEmailAndComparePassword(email: Email, password: Password) {

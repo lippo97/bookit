@@ -9,33 +9,20 @@ const email = Email.required().meta({
   },
 });
 
-//const isManager = Joi.boolean().required().default(false);
-
-//const accountType = Joi.string().valid('user', 'manager').required();
-
-/*const account = Joi
-  .when('type', {
-    is: 'user',
-    then: UserAccountSchema,
-  })
-  .when('type', {
-    is: 'manager',
-    then: ManagerAccountSchema,
-  })
-  .allow(null);*/
-//const account =  Joi.alternatives().conditional( accountType. == Joi.string('user') , {
-
 const password = Password.required();
 
-//const account = AccountSchema.allow(null);
+export const AccountSchema = Joi.alternatives()
+  .try(UserAccountSchema, ManagerAccountSchema)
+  .meta({
+    className: 'Account',
+  });
+
 const schema = {
   email,
   password,
-  accountType: Joi.string().valid('user', 'manager').required(),
-
-  account: Joi.alternatives().try(UserAccountSchema, ManagerAccountSchema),
-  //.conditional('accountType', { is: Joi.any(), then: UserAccountSchema }),
+  account: AccountSchema,
 };
+
 export const AuthenticationSchema = Joi.object(schema).meta({
   className: 'Authentication',
 });
