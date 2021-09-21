@@ -13,9 +13,9 @@ export async function login(
   const result = await authenticationService.login(email, password);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: ({ _id }) => {
-      req.session.userId = _id;
-      return res.json({ _id });
+    Right: ({ userId, email, account }) => {
+      req.session.userId = userId;
+      return res.json({ userId, email, account });
     },
     Left: next,
   });

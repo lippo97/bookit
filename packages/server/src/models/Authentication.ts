@@ -18,6 +18,7 @@ import {
   ManagerAccount,
   UserAccount,
 } from '@asw-project/shared/generatedTypes';
+import { ReturnedUser } from '@asw-project/shared/types/returnedUser';
 
 const SALT_ROUNDS = 10;
 
@@ -38,7 +39,7 @@ interface TAuthenticationModel extends Model<AuthenticationDocument> {
   findByEmailAndComparePassword(
     email: Email,
     password: Password,
-  ): MaybeAsync<Required<Pick<AuthenticationDocument, '_id'>>>;
+  ): MaybeAsync<ReturnedUser>;
 }
 
 const AuthenticationSchema = new Schema<
@@ -72,7 +73,10 @@ AuthenticationSchema.methods.isUninitialized = function isUninitialized() {
 };
 
 AuthenticationSchema.statics.findByEmailAndComparePassword =
-  function findByEmailAndComparePassword(email: Email, password: Password) {
+  function findByEmailAndComparePassword(
+    email: Email,
+    password: Password,
+  ): MaybeAsync<ReturnedUser> {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const comparePasswords = (password: Password, hash: string) =>
       MaybeAsync(() => compare(password, hash));
@@ -82,7 +86,13 @@ AuthenticationSchema.statics.findByEmailAndComparePassword =
       .chain((user) =>
         comparePasswords(password, user.password) //
           .filter(isTrue)
-          .map(always(user._id)),
+          .map(
+            always({
+              userId: user._id,
+              email: user.email,
+              account: user.account,
+            }),
+          ),
       );
   };
 

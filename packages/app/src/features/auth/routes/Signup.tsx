@@ -2,7 +2,6 @@ import { HTTPError } from 'ky';
 import { useNavigate } from 'react-router-dom';
 import library2 from '@/assets/library2.jpg';
 import { useMutation } from 'react-query';
-import { ReturnedUser } from '@asw-project/shared/data/authentication/returnedUser';
 import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup';
 import { SignupForm } from '../components/SignupForm';
 import { Layout } from '../components/Layout';
@@ -11,7 +10,7 @@ import { signupWithEmailAndPassword } from '../api/signup';
 export function Signup() {
   const navigate = useNavigate();
   const { isLoading, mutate, error } = useMutation<
-    ReturnedUser,
+    void,
     Error,
     SignupRequest,
     unknown

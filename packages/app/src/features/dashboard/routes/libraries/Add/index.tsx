@@ -1,4 +1,4 @@
-import { createLibrary } from '@/features/dashboard/api/getBuildings';
+import { createLibrary } from '@/features/dashboard/api/getLibraries';
 import {
   LibraryForm,
   LibraryFormValue,
