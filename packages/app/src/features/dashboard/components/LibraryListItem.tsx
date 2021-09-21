@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { deleteLibrary } from '../api/getBuildings';
+import { deleteLibrary } from '../api/getLibraries';
 
 interface LibraryListItemProps {
   readonly data: WithId<Library>;
