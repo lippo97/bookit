@@ -13,16 +13,6 @@ const libraryId = Joi.string()
 /* valutare se usare un array per library
  */
 
-const ownerId = Joi.string()
-  .required()
-  .meta({
-    _mongoose: {
-      type: 'ObjectId',
-      ref: 'Account',
-      // validate: null
-    },
-  });
-
 const name = Joi.string()
   .regex(/Room [0-9]+/)
   .required();

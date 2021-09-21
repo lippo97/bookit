@@ -8,6 +8,16 @@ export const street = Joi.string().required();
 
 export const city = Joi.string().required();
 
+const ownerId = Joi.string()
+  .required()
+  .meta({
+    _mongoose: {
+      type: 'ObjectId',
+      ref: 'Authentication',
+      // validate: null
+    },
+  });
+
 const imageFilename = Joi.string();
 //
 const timeRange = Joi.object().keys({

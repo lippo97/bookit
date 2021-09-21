@@ -1,4 +1,5 @@
 import { ky } from '@/config/ky';
+import { useAuth } from '@/stores/authentication';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Library } from '@asw-project/shared/generatedTypes';
 import dayjs from 'dayjs';
@@ -43,11 +44,12 @@ export async function getLibraryById(
 }
 
 export async function getLibraries(): Promise<WithId<Library>[]> {
-  return ky
-    .get('libraries', {
-      searchParams,
-    })
-    .json<WithId<Library>[]>();
+  const authInfo = useAuth.getState().auth;
+  const { userId } = authInfo;
+  const searchParams = {
+    ownerId: userId,
+  };
+  return ky.get('libraries', { searchParams }).json<WithId<Library>[]>();
 }
 
 export const getLibraries = async (): Promise<WithId<Library>[]> =>
