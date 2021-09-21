@@ -14,8 +14,7 @@ import {
   Email,
   Password,
 } from '@asw-project/shared/generatedTypes/authentication';
-import { pick } from '@asw-project/shared/util/objects';
-import { EitherAsync, Left, Right } from 'purify-ts';
+import { always, EitherAsync } from 'purify-ts';
 import { AuthenticationModel } from '../models/Authentication';
 
 export function login(
@@ -31,21 +30,7 @@ export function signup(
   password: Password,
 ): EitherAsync<SignupFail, SignupSuccess> {
   return EitherAsync(() => AuthenticationModel.create({ email, password }))
-    .map(pick('_id'))
-    .chain((res) => {
-      const { _id } = res;
-      if (_id === undefined) {
-        return EitherAsync.liftEither(
-          Left(new Error("Document doesn't have property '_id' ")),
-        );
-      }
-
-      return EitherAsync.liftEither(
-        Right({
-          _id: _id as any,
-        }),
-      );
-    })
+    .map(always(undefined))
     .mapLeft((err: any) => {
       if (err.name === 'MongoError' && err.code === 11000) {
         return duplicateIdentifier;
