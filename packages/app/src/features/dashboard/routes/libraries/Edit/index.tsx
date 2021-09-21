@@ -2,7 +2,7 @@ import { QueryContent } from '@/components/QueryContent';
 import {
   getLibraryById,
   updateLibrary,
-} from '@/features/dashboard/api/getBuildings';
+} from '@/features/dashboard/api/getLibraries';
 import {
   LibraryForm,
   LibraryFormValue,
