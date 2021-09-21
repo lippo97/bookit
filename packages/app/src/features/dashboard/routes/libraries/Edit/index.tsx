@@ -1,5 +1,5 @@
 import { QueryContent } from '@/components/QueryContent';
-import { getBuildingById } from '@/features/dashboard/api/getBuildings';
+import { getLibraryById } from '@/features/dashboard/api/getLibraries';
 import {
   LibraryForm,
   LibraryFormValue,
@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 export const EditLibrary = () => {
   const { id } = useParams();
   const { data, status } = useQuery(['edit library', id], () =>
-    getBuildingById(id),
+    getLibraryById(id),
   );
   const [timetable, setTimetable] = useState<TimetableT>([]);
 

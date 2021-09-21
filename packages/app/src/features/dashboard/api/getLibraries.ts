@@ -1,7 +1,21 @@
 import { WithId } from '@asw-project/shared/data/withId';
 import { Library } from '@asw-project/shared/generatedTypes';
+import {
+  getLibraryById as getLibraryByIdLibraryAPI,
+  getLibraries as getLibrariesLibraryAPI,
+} from '@/features/libraries/api/getLibraries';
 
-const buildings = [
+export async function getLibraryById(id: string): Promise<WithId<Library>> {
+  return getLibraryByIdLibraryAPI(id);
+}
+
+export async function getLibraries(): Promise<WithId<Library>[]> {
+  return getLibrariesLibraryAPI('');
+}
+
+/** TO DELETE
+ * 
+ *  const buildings = [
   {
     _id: '2',
     name: 'Biblioteca San Giovanni',
@@ -34,9 +48,5 @@ export const getBuildings = async (): Promise<WithId<Library>[]> =>
 // });
 
 export const getBuildingById = async (id: string): Promise<WithId<Library>> =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(buildings[0]);
-    }, 2000);
-  });
-// Promise.resolve(buildings[0]);
+  ky.get(`buildings/${id}`).json<WithId<Library>>();
+*/
