@@ -1,4 +1,7 @@
-import { createLibrary } from '@/features/dashboard/api/getLibraries';
+import {
+  createLibrary,
+  CreateLibraryArg,
+} from '@/features/dashboard/api/getLibraries';
 import {
   LibraryForm,
   LibraryFormValue,
@@ -40,7 +43,7 @@ export const AddLibrary = () => {
     shouldUnregister: false,
   });
 
-  const { mutateAsync } = useMutation<void, Error, Library, unknown>(
+  const { mutateAsync } = useMutation<void, Error, CreateLibraryArg, unknown>(
     createLibrary,
   );
 
@@ -56,8 +59,6 @@ export const AddLibrary = () => {
         onSubmit={handleSubmit(({ basicInfo }) =>
           mutateAsync({
             ...basicInfo,
-            availableServices: [],
-            rooms: [],
             timetable: convertTimetableToDbFormat(timetable),
           }).then(() => navigate('/dashboard')),
         )}

@@ -58,7 +58,7 @@ export const LibrarySchema = Joi.object({
   name,
   street,
   city,
-  // ownerId,
+  ownerId,
   timetable,
   availableServices,
   rooms,

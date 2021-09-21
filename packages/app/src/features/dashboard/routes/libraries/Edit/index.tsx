@@ -1,5 +1,6 @@
 import { QueryContent } from '@/components/QueryContent';
 import {
+  CreateLibraryArg,
   getLibraryById,
   updateLibrary,
 } from '@/features/dashboard/api/getLibraries';
@@ -52,7 +53,7 @@ export const EditLibrary = () => {
     },
   });
 
-  const { mutateAsync } = useMutation<void, Error, Library, unknown>(
+  const { mutateAsync } = useMutation<void, Error, CreateLibraryArg, unknown>(
     updateLibrary(id),
   );
 
@@ -78,8 +79,6 @@ export const EditLibrary = () => {
               console.log('submitting');
               return mutateAsync({
                 ...basicInfo,
-                availableServices: [],
-                rooms: [],
                 timetable: convertTimetableToDbFormat(timetable),
               }).then(() => {
                 console.log('redirect');

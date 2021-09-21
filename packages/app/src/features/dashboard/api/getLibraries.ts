@@ -52,14 +52,19 @@ export async function getLibraries(): Promise<WithId<Library>[]> {
   return ky.get('libraries', { searchParams }).json<WithId<Library>[]>();
 }
 
-export const createLibrary = (data: Library): Promise<void> => {
+export type CreateLibraryArg = Pick<
+  Library,
+  'name' | 'city' | 'street' | 'timetable'
+>;
+
+export const createLibrary = (data: CreateLibraryArg): Promise<void> => {
   console.log('submitting ', data);
   return Promise.resolve();
 };
 
 export const updateLibrary =
   (id: string) =>
-  (data: Library): Promise<void> => {
+  (data: CreateLibraryArg): Promise<void> => {
     console.log('updating ', id, data);
     return Promise.resolve();
   };
