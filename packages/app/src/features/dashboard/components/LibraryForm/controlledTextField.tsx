@@ -1,4 +1,5 @@
 import { TextFieldProps } from '@material-ui/core';
+import takeRight from 'lodash/takeRight';
 import capitalize from 'lodash/fp/capitalize';
 import {
   ControllerFieldState,
@@ -27,7 +28,10 @@ export function controlledTextField<P>({ name, TextFieldProps }: Input<P>) {
   }: Render<P>) => (
     <TextField
       error={!!error}
-      helperText={error?.message?.replace(`"${name}"`, capitalize(name))}
+      helperText={error?.message?.replace(
+        `"${name}"`,
+        capitalize(takeRight(name.split('.'))[0] ?? name),
+      )}
       inputRef={ref}
       {...inputProps}
       {...TextFieldProps}
