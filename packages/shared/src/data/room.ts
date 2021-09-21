@@ -25,7 +25,6 @@ const capacity = Joi.number() //
 
 export const RoomSchema = Joi.object({
   libraryId,
-  ownerId,
   name,
   seats,
   capacity,

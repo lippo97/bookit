@@ -45,15 +45,12 @@ export async function getLibraryById(
 
 export async function getLibraries(): Promise<WithId<Library>[]> {
   const authInfo = useAuth.getState().auth;
-  const { userId } = authInfo;
+  const { userId } = authInfo?.userId;
   const searchParams = {
     ownerId: userId,
   };
   return ky.get('libraries', { searchParams }).json<WithId<Library>[]>();
 }
-
-export const getLibraries = async (): Promise<WithId<Library>[]> =>
-  Promise.resolve(libraries);
 
 export const createLibrary = (data: Library): Promise<void> => {
   console.log('submitting ', data);
