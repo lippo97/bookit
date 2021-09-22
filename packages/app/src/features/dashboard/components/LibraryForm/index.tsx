@@ -1,5 +1,6 @@
 /* eslint-disable no-sparse-arrays */
 import { Timetable as TimetableT } from '@/lib/timetable/types';
+import { Library } from '@asw-project/shared/generatedTypes/library';
 import {
   Checkbox,
   Link,
@@ -43,6 +44,11 @@ export interface LibraryFormValue {
     readonly street: string;
     readonly city: string;
   };
+  /* Pick<
+    Library,
+    'availableServices' | 'city' | 'imageFilename' | 'name' | 'rooms' | 'street'>
+    // | 'timetable' */
+
   readonly isTermAccepted?: boolean;
 }
 

@@ -45,23 +45,27 @@ export async function getLibraryById(
 
 export async function getLibraries(): Promise<WithId<Library>[]> {
   const authInfo = useAuth.getState().auth;
-  const { userId } = authInfo?.userId;
   const searchParams = {
-    ownerId: userId,
+    ownerId: authInfo?.userId,
   };
   return ky.get('libraries', { searchParams }).json<WithId<Library>[]>();
 }
 
 export type CreateLibraryArg = Pick<
   Library,
-  'name' | 'city' | 'street' | 'timetable'
+  | 'city'
+  // | 'imageFilename'
+  | 'name'
+  // | 'rooms'
+  | 'street'
+  | 'timetable'
 >;
 
-export const createLibrary = (data: CreateLibraryArg): Promise<void> => {
-  console.log('submitting ', data);
-  return Promise.resolve();
-};
-
+export async function createLibrary(
+  data: CreateLibraryArg,
+): Promise<WithId<Library>> {
+  return ky.post('libraries', { json: data }).json<WithId<Library>>();
+}
 export const updateLibrary =
   (id: string) =>
   (data: CreateLibraryArg): Promise<void> => {
