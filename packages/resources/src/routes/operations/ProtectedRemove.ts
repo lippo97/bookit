@@ -16,8 +16,9 @@ export class ProtectedRemove<T extends HasOwner>
     options?: ProtectedFindByIdOptions,
   ): EitherAsync<Error<RemoveError>, T> {
     const userId = options?.userId;
-    return super.findById(id).chain((document) =>
-      userId !== undefined && userId === document.ownerId
+
+    return super.findById(id, options).chain((document) =>
+      userId !== undefined && userId === document.ownerId?.toString()
         ? EitherAsync.fromPromise(() => document.delete().exec())
         : EitherAsync.liftEither(
             Left({

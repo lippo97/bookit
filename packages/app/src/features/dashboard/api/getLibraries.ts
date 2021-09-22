@@ -2,7 +2,6 @@ import { ky } from '@/config/ky';
 import { useAuth } from '@/stores/authentication';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Library } from '@asw-project/shared/generatedTypes';
-import dayjs from 'dayjs';
 
 // TO DELETE
 
@@ -36,6 +35,17 @@ import dayjs from 'dayjs';
     imageFilename: '61311a76140b1f7443dfa38c.jpg',
   },
 ]; */
+export type CreateLibraryArg = Pick<
+  Library,
+  | 'city'
+  // | 'imageFilename'
+  | 'name'
+  // | 'rooms'
+  | 'street'
+  | 'timetable'
+>;
+
+export type UpdateLibraryArg = CreateLibraryArg;
 
 export async function getLibraryById(
   libraryId: string,
@@ -51,18 +61,6 @@ export async function getLibraries(): Promise<WithId<Library>[]> {
   return ky.get('libraries', { searchParams }).json<WithId<Library>[]>();
 }
 
-export type CreateLibraryArg = Pick<
-  Library,
-  | 'city'
-  // | 'imageFilename'
-  | 'name'
-  // | 'rooms'
-  | 'street'
-  | 'timetable'
->;
-
-export type UpdateLibraryArg = CreateLibraryArg;
-
 export async function createLibrary(
   data: CreateLibraryArg,
 ): Promise<WithId<Library>> {
@@ -77,9 +75,8 @@ export const updateLibrary =
       })
       .json<WithId<Library>>();
 
-export const deleteLibrary = (id: string): Promise<void> => {
-  console.log('deleting ', id);
-  return Promise.resolve();
-};
-export const getBuildingById = async (id: string): Promise<WithId<Library>> =>
-  ky.get(`buildings/${id}`).json<WithId<Library>>();
+export async function deleteLibrary(
+  libraryId: string,
+): Promise<WithId<Library>> {
+  return ky.delete(`libraries/${libraryId}`).json<WithId<Library>>();
+}

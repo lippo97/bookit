@@ -32,7 +32,7 @@ const FlexDiv = styled('div')(() => ({
 
 const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
   const navigate = useNavigate();
-  const { mutateAsync } = useMutation<void, Error, void, unknown>(() =>
+  const { mutateAsync } = useMutation<Library, Error, void, unknown>(() =>
     deleteLibrary(_id),
   );
   return (
