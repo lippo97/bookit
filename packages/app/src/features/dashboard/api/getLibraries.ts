@@ -61,17 +61,21 @@ export type CreateLibraryArg = Pick<
   | 'timetable'
 >;
 
+export type UpdateLibraryArg = CreateLibraryArg;
+
 export async function createLibrary(
   data: CreateLibraryArg,
 ): Promise<WithId<Library>> {
   return ky.post('libraries', { json: data }).json<WithId<Library>>();
 }
 export const updateLibrary =
-  (id: string) =>
-  (data: CreateLibraryArg): Promise<void> => {
-    console.log('updating ', id, data);
-    return Promise.resolve();
-  };
+  (libraryId: string) =>
+  (data: UpdateLibraryArg): Promise<WithId<Library>> =>
+    ky
+      .patch(`libraries/${libraryId}`, {
+        json: data,
+      })
+      .json<WithId<Library>>();
 
 export const deleteLibrary = (id: string): Promise<void> => {
   console.log('deleting ', id);

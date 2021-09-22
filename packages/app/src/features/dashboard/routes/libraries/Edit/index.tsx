@@ -1,8 +1,8 @@
 import { QueryContent } from '@/components/QueryContent';
 import {
-  CreateLibraryArg,
   getLibraryById,
   updateLibrary,
+  UpdateLibraryArg,
 } from '@/features/dashboard/api/getLibraries';
 import {
   LibraryForm,
@@ -53,9 +53,12 @@ export const EditLibrary = () => {
     },
   });
 
-  const { mutateAsync } = useMutation<void, Error, CreateLibraryArg, unknown>(
-    updateLibrary(id),
-  );
+  const { mutateAsync } = useMutation<
+    Library,
+    Error,
+    UpdateLibraryArg,
+    unknown
+  >(updateLibrary(id));
 
   useEffect(() => {
     if (status === 'success' && data !== undefined) {
