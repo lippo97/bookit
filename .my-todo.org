@@ -1,0 +1,23 @@
+#+TITLE: My Todo
+
+* [3/4] drawer
+** DONE inserire informazioni sull'utente
+** DONE visualizzare immagine utente o iniziali
+** DONE migliore layout
+** TODO aggiungere bookmarks
+* TODO +user+ -> simple
+- rinominare in maniera uniforme tutti gli
+  /'user'/, /'simple'/ in *simple*
+* [0/2] settings
+** TODO /
+- visualizzazione delle informazioni
+  + simple
+  + manager
+- link alla modifica
+** WAIT cambio password
+* TODO dashboard
+** [0/2] libraries
+*** TODO immagini
+*** TODO stanze e piantine
+** TODO layout più professionale
+copia qualche libreria dashboard di react

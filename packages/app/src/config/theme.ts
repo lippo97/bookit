@@ -24,6 +24,11 @@ export const theme = createTheme({
         fontWeight: 'bold',
       },
     },
+    MuiListSubheader: {
+      root: {
+        fontSize: '0.9em',
+      },
+    },
   },
   // palette: {
   //   primary: {

@@ -1,18 +1,26 @@
-import { Drawer as MuiDrawer, List, ListItem } from '@material-ui/core';
+import {
+  Divider,
+  Drawer as MuiDrawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  SwipeableDrawer,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { To } from 'history';
 import { Link as RouterLink } from 'react-router-dom';
 
 interface DrawerProps {
   open: boolean;
-
   onClose(): void;
-
+  onOpen(): void;
   children: React.ReactNode;
 }
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: 250,
+    width: 256,
   },
   listItem: {
     display: 'flex',
@@ -23,41 +31,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const DrawerItem = ({
-  content,
-  icon,
-  to,
-}: {
-  to: string;
-  content: string;
-  icon?: React.ReactNode;
-}) => {
-  const classes = useStyles();
-
-  return (
-    <ListItem
-      button
-      component={RouterLink}
-      to={to}
-      className={classes.listItem}
-    >
-      {icon || ''}
-      <span className={classes.listItemContent}>{content}</span>
-    </ListItem>
-  );
-};
-export function Drawer({ children, open, onClose }: DrawerProps) {
+export function Drawer({ children, open, onClose, onOpen }: DrawerProps) {
   const classes = useStyles();
   return (
-    <MuiDrawer
+    <SwipeableDrawer
       anchor="left"
       open={open}
       classes={{
         paper: classes.drawer,
       }}
+      onOpen={onOpen}
       onClose={onClose}
     >
+      <Divider />
       <List>{children}</List>
-    </MuiDrawer>
+    </SwipeableDrawer>
   );
 }
