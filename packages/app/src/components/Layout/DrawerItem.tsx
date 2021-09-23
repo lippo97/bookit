@@ -1,14 +1,14 @@
 import {
-  ListItem,
-  ListItemIcon,
-  Typography,
-  makeStyles,
   Box,
   BoxProps,
+  ListItem,
+  ListItemIcon,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
-import { Link as RouterLink } from 'react-router-dom';
 import { To } from 'history';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface DrawerItemLinkProps {
   readonly link: true;

@@ -1,15 +1,5 @@
-import {
-  Divider,
-  Drawer as MuiDrawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  SwipeableDrawer,
-} from '@material-ui/core';
+import { Divider, List, SwipeableDrawer } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { To } from 'history';
-import { Link as RouterLink } from 'react-router-dom';
 
 interface DrawerProps {
   open: boolean;
@@ -18,7 +8,7 @@ interface DrawerProps {
   children: React.ReactNode;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   drawer: {
     width: 256,
   },
@@ -29,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '18px',
     marginLeft: '5px',
   },
-}));
+});
 
 export function Drawer({ children, open, onClose, onOpen }: DrawerProps) {
   const classes = useStyles();

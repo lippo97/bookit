@@ -1,8 +1,6 @@
-import { useState } from 'react';
+import { Box } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
-
-import { useIsLoggedIn } from '@/stores/authentication';
-import { Box, Divider } from '@material-ui/core';
+import { useState } from 'react';
 import { AppBar } from './AppBar';
 import { Drawer } from './Drawer';
 import { DrawerContent } from './DrawerContent';

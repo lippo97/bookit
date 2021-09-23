@@ -1,9 +1,7 @@
-import { makeStyles, Theme, Avatar, Box, Typography } from '@material-ui/core';
-import { styled } from '@material-ui/core/styles';
-
-import { orange, red, pink, blue, green } from '@material-ui/core/colors';
-import { BooleanArraySupportOption } from 'prettier';
 import { useIsLoggedIn } from '@/stores/authentication';
+import { Avatar, Box, Typography } from '@material-ui/core';
+import { blue, green, orange, pink, red } from '@material-ui/core/colors';
+import { styled } from '@material-ui/core/styles';
 
 const Name = styled(Typography)(({ theme }) => ({
   fontSize: '1.1em',

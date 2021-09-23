@@ -1,19 +1,12 @@
-import { useAuth, useIsLoggedIn } from '@/stores/authentication';
-import {
-  Divider,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-} from '@material-ui/core';
-import SettingsIcon from '@material-ui/icons/Settings';
+import { useIsLoggedIn } from '@/stores/authentication';
+import { ListSubheader } from '@material-ui/core';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import LockIcon from '@material-ui/icons/Lock';
-import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SearchIcon from '@material-ui/icons/Search';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { DrawerItem } from './DrawerItem';
 import { DrawerSection } from './DrawerSection';
 
