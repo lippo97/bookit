@@ -1,7 +1,9 @@
-import { useIsLoggedIn } from '@/stores/authentication';
+import { useAuth, useIsLoggedIn } from '@/stores/authentication';
 import { Avatar, Box, Typography } from '@material-ui/core';
 import { blue, green, orange, pink, red } from '@material-ui/core/colors';
 import { styled } from '@material-ui/core/styles';
+
+const colors = [green[500], blue[500], pink[500], orange[500], red[500]];
 
 const Name = styled(Typography)(({ theme }) => ({
   fontSize: '1.1em',
@@ -29,20 +31,25 @@ const Layout = ({
   </Box>
 );
 export const DrawerUserInfo = () => {
-  const colors = [green[500], blue[500], pink[500], orange[500], red[500]];
-  const email = 'mario@rossi.com';
-  const isLoggedIn = useIsLoggedIn();
+  const auth = useAuth((s) => s.auth);
 
-  const n = email.charCodeAt(0) % colors.length;
-
-  if (!isLoggedIn) {
+  if (auth === null) {
     return <Layout avatar={<Avatar>?</Avatar>} name="Not signed in" />;
   }
 
+  const email = auth.account?.email as string;
+  const firstName = auth.account?.firstName;
+  const secondName = auth.account?.secondName;
+  const n = email.charCodeAt(0) % colors.length;
+
   return (
     <Layout
-      avatar={<Avatar style={{ backgroundColor: colors[n] }}>MR</Avatar>}
-      name="Mario Rossi"
+      avatar={
+        <Avatar style={{ backgroundColor: colors[n] }}>{`${firstName
+          ?.charAt(0)
+          .toUpperCase()}${secondName?.charAt(0).toUpperCase()}`}</Avatar>
+      }
+      name={`${firstName} ${secondName}`}
       email={email}
     />
   );
