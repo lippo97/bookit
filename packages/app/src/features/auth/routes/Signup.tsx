@@ -4,12 +4,17 @@ import library2 from '@/assets/library2.jpg';
 import { useMutation } from 'react-query';
 import { ReturnedUser } from '@asw-project/shared/data/authentication/returnedUser';
 import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup';
+import { useNotification } from '@/stores/notifications';
+import { useAuth } from '@/stores/authentication';
+import { SentimentVeryDissatisfied } from '@material-ui/icons';
 import { SignupForm } from '../components/SignupForm';
 import { Layout } from '../components/Layout';
 import { signupWithEmailAndPassword } from '../api/signup';
 
 export function Signup() {
   const navigate = useNavigate();
+  const pushNotification = useNotification((s) => s.pushNotification);
+  const loginWithEmailAndPassword = useAuth((s) => s.loginWithEmailAndPassword);
   const { isLoading, mutate, error } = useMutation<
     ReturnedUser,
     Error,
@@ -31,7 +36,21 @@ export function Signup() {
     mutate(
       { email, password },
       {
-        onSuccess: () => navigate('/'),
+        onSuccess: () =>
+          loginWithEmailAndPassword({ email, password })
+            .then(() => {
+              pushNotification({
+                message: 'Signed in successfully!',
+                severity: 'info',
+              });
+              navigate('/');
+            })
+            .catch(() => {
+              pushNotification({
+                message: 'Something went wrong, retry later.',
+                severity: 'error',
+              });
+            }),
       },
     );
   };

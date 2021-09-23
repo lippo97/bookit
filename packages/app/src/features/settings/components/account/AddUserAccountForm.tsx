@@ -1,4 +1,3 @@
-import { useNotification } from '@/stores/notifications';
 import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/account';
 import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/account';
 import { joiResolver } from '@hookform/resolvers/joi';

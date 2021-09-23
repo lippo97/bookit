@@ -4,12 +4,14 @@ import { useAuth } from '@/stores/authentication';
 import image from '@/assets/library.jpg';
 import { useMutation } from 'react-query';
 import { LoginRequest } from '@asw-project/shared/generatedTypes/authentication/login/request';
+import { useNotification } from '@/stores/notifications';
 import { LoginForm } from '../components/LoginForm';
 import { Layout } from '../components/Layout';
 
 export function Login() {
   const loginWithEmailAndPassword = useAuth((s) => s.loginWithEmailAndPassword);
   const navigate = useNavigate();
+  const pushNotification = useNotification((s) => s.pushNotification);
 
   const { mutate, isLoading, error } = useMutation<
     void,
@@ -32,7 +34,13 @@ export function Login() {
     mutate(
       { email, password },
       {
-        onSuccess: () => navigate('/'),
+        onSuccess: () => {
+          pushNotification({
+            message: 'Logged in successfully!',
+            severity: 'info',
+          });
+          navigate('/');
+        },
       },
     );
   };
