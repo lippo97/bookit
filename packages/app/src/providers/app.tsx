@@ -9,6 +9,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import DayjsUtils from '@date-io/dayjs';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Notifications } from '@/components/Notifications';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export const AppProvider = ({ children }: AppProviderProps) => (
     <CssBaseline />
     <QueryClientProvider client={queryClient}>
       <MuiPickersUtilsProvider utils={DayjsUtils}>
+        <Notifications />
         <Router>{children}</Router>
         {IS_DEVELOPMENT && <ReactQueryDevtools />}
       </MuiPickersUtilsProvider>

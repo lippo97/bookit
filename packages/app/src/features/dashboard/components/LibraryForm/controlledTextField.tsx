@@ -27,7 +27,10 @@ export function controlledTextField<P>({ name, TextFieldProps }: Input<P>) {
   }: Render<P>) => (
     <TextField
       error={!!error}
-      helperText={error?.message?.replace(`"${name}"`, capitalize(name))}
+      helperText={error?.message?.replace(
+        `"${name}"`,
+        TextFieldProps?.label?.toString() ?? capitalize(name),
+      )}
       inputRef={ref}
       {...inputProps}
       {...TextFieldProps}

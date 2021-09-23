@@ -1,5 +1,6 @@
 import { DashboardRoutes } from '@/features/dashboard/routes';
 import { LibrariesRoutes } from '@/features/libraries/routes';
+import { SettingsRoutes } from '@/features/settings/routes';
 import { Navigate } from 'react-router-dom';
 
 export const protectedRoutes = (isLoggedIn: boolean) =>
@@ -12,6 +13,10 @@ export const protectedRoutes = (isLoggedIn: boolean) =>
         {
           path: '/dashboard/*',
           element: <DashboardRoutes />,
+        },
+        {
+          path: '/settings/*',
+          element: <SettingsRoutes />,
         },
       ]
     : [

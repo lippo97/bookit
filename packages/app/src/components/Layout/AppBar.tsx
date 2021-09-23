@@ -6,11 +6,9 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/MenuOutlined';
-import React from 'react';
 
 export interface AppBarProps {
-  readonly title?: string;
-
+  noDrawer?: true;
   onMenuOpen(): void;
 }
 
@@ -34,20 +32,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function AppBar({ title, onMenuOpen }: AppBarProps) {
+export function AppBar({ noDrawer, onMenuOpen }: AppBarProps) {
   const classes = useStyles();
 
   return (
     <MuiAppBar position="static">
       <Toolbar>
-        <IconButton
-          onClick={onMenuOpen}
-          edge="start"
-          color="inherit"
-          className={classes.menuButton}
-        >
-          <MenuIcon />
-        </IconButton>
+        {!noDrawer && (
+          <IconButton
+            onClick={onMenuOpen}
+            edge="start"
+            color="inherit"
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
         <Typography variant="h6" className={classes.title}>
           bookit
         </Typography>

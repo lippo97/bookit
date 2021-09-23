@@ -14,7 +14,7 @@ import { useState } from 'react';
 import Link from '@/components/Link';
 import Copyright from '@/components/Copyright';
 import { Alert } from './Alert';
-import { Button } from './Button';
+import { Button } from '../../../components/Button';
 import { useStyles } from './style';
 import { TextField } from './TextField';
 

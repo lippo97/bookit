@@ -25,7 +25,7 @@ const buildings = [
 ];
 
 export const getBuildings = async (): Promise<WithId<Library>[]> =>
-  Promise.resolve(buildings);
+  Promise.resolve([]);
 // new Promise((resolve, reject) => {
 //   setTimeout(() => {
 //     resolve(buildings);
@@ -34,9 +34,5 @@ export const getBuildings = async (): Promise<WithId<Library>[]> =>
 // });
 
 export const getBuildingById = async (id: string): Promise<WithId<Library>> =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(buildings[0]);
-    }, 2000);
-  });
+  Promise.reject(new Error('Not found'));
 // Promise.resolve(buildings[0]);

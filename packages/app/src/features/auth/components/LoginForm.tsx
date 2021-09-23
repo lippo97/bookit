@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import Copyright from '@/components/Copyright';
 import Link from '@/components/Link';
 import { Alert } from './Alert';
-import { Button } from './Button';
+import { Button } from '../../../components/Button';
 import { useStyles } from './style';
 import { TextField } from './TextField';
 
