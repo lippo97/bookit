@@ -39,7 +39,9 @@ export function Login() {
             message: 'Logged in successfully!',
             severity: 'info',
           });
-          navigate('/');
+          navigate(
+            useAuth.getState().auth?.account ? '/' : '/settings/account/add',
+          );
         },
       },
     );
