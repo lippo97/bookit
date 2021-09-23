@@ -1,8 +1,8 @@
 import { styled, Box, Button as MuiButton } from '@material-ui/core';
 
 interface StepperActionsProps {
-  readonly onBack: () => void;
-  readonly onNext: () => void;
+  readonly onBack?: () => void;
+  readonly onNext?: () => void;
   readonly disabledBack?: boolean;
   readonly disabledNext?: boolean;
   readonly nextButtonText?: string;

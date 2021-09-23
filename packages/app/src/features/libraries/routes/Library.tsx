@@ -5,14 +5,14 @@ import { Container } from '@material-ui/core';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getLibrary } from '../api/getLibraries';
+import { getLibraryById } from '../api/getLibraries';
 import { LibraryData } from '../components/LibraryData';
 import { LibraryHeader } from '../components/LibraryHeader';
 
 export const Library = () => {
   const [isStarred, toggleStarred] = useToggle(false);
   const { id } = useParams();
-  const { data, status } = useQuery(['library', id], () => getLibrary(id));
+  const { data, status } = useQuery(['library', id], () => getLibraryById(id));
 
   return (
     <Layout>

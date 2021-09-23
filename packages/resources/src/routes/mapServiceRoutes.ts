@@ -83,7 +83,7 @@ export function mapServiceRoutes<TConstructor>(
     }
 
     if (isUpdate(service)) {
-      router.put(idPath, (req: Request<WithId>, res, next) => {
+      router.patch(idPath, (req: Request<WithId>, res, next) => {
         const userId = getUserId(req.session);
         const fields = pick(req.body, keys) as any;
         const result = service.update(req.params.id, fields, {

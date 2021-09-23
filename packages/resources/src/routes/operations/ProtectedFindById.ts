@@ -21,15 +21,14 @@ export class ProtectedFindById<T extends HasOwner>
     options?: ProtectedFindByIdOptions,
   ): EitherAsync<Error<FindByIdError>, T & Document> {
     const userId = options?.userId;
-    return super.findById(id).chain((t) => {
-      console.log('compare', options?.userId === t.ownerId?.toString());
-      return EitherAsync.liftEither(
-        userId === undefined || t.ownerId?.toString() !== userId
+    return super.findById(id).chain((document) =>
+      EitherAsync.liftEither(
+        userId === undefined || document.ownerId?.toString() !== userId
           ? Left<Error<UnauthorizedKind>>({
               kind: 'UnauthorizedError',
             } as const)
-          : Right(t),
-      );
-    });
+          : Right(document),
+      ),
+    );
   }
 }
