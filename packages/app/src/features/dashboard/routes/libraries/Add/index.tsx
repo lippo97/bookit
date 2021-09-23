@@ -43,9 +43,12 @@ export const AddLibrary = () => {
     shouldUnregister: false,
   });
 
-  const { mutateAsync } = useMutation<void, Error, CreateLibraryArg, unknown>(
-    createLibrary,
-  );
+  const { mutateAsync } = useMutation<
+    Library, // void
+    Error,
+    CreateLibraryArg,
+    unknown
+  >(createLibrary);
 
   const [timetable, setTimetable] = useState<TimetableT>([]);
 
