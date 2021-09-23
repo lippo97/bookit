@@ -1,5 +1,5 @@
 import { ErrorMap, ExpectedError } from '@asw-project/shared/errors';
-import { ReturnedUser } from '../returnedUser';
+import { ReturnedUser } from '../../../types/returnedUser';
 
 export type LoginErrorKind = 'WrongEmailPassword';
 

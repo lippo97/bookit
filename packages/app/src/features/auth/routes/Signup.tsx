@@ -2,7 +2,6 @@ import { HTTPError } from 'ky';
 import { useNavigate } from 'react-router-dom';
 import library2 from '@/assets/library2.jpg';
 import { useMutation } from 'react-query';
-import { ReturnedUser } from '@asw-project/shared/data/authentication/returnedUser';
 import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup';
 import { useNotification } from '@/stores/notifications';
 import { useAuth } from '@/stores/authentication';
@@ -16,7 +15,7 @@ export function Signup() {
   const pushNotification = useNotification((s) => s.pushNotification);
   const loginWithEmailAndPassword = useAuth((s) => s.loginWithEmailAndPassword);
   const { isLoading, mutate, error } = useMutation<
-    ReturnedUser,
+    void,
     Error,
     SignupRequest,
     unknown

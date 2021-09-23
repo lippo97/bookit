@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { LibraryList } from '../components/LibraryList';
-import { getBuildings } from '../api/getBuildings';
+import { getLibraries } from '../api/getLibraries';
 import { Header } from '../components/Header';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Dashboard = () => {
-  const { data, status, refetch } = useQuery('dashboard', () => getBuildings());
+  const { data, status, refetch } = useQuery('dashboard', () => getLibraries());
   const classes = useStyles();
 
   return (

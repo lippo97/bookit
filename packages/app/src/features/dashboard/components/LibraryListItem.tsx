@@ -11,7 +11,9 @@ import { styled } from '@material-ui/core/styles';
 import BusinessIcon from '@material-ui/icons/Business';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { deleteLibrary } from '../api/getLibraries';
 
 interface LibraryListItemProps {
   readonly data: WithId<Library>;
@@ -30,6 +32,9 @@ const FlexDiv = styled('div')(() => ({
 
 const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
   const navigate = useNavigate();
+  const { mutateAsync } = useMutation<void, Error, void, unknown>(() =>
+    deleteLibrary(_id),
+  );
   return (
     <FlexDiv>
       <Tooltip title="Manage">
@@ -43,7 +48,8 @@ const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
           title={`Delete ${name}?`}
           description={`Are you sure you want to delete ${name}?`}
           id={_id}
-          onConfirm={() => {}}
+          // eslint-disable-next-line no-restricted-globals
+          onConfirm={() => mutateAsync().then(() => location.reload())}
         >
           <DeleteIcon />
         </DialogButton>

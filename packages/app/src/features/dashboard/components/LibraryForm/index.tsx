@@ -1,3 +1,4 @@
+/* eslint-disable no-sparse-arrays */
 import { Timetable as TimetableT } from '@/lib/timetable/types';
 import {
   Checkbox,
@@ -9,8 +10,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { values } from 'lodash';
+import capitalize from 'lodash/capitalize';
 import React, { useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, useWatch } from 'react-hook-form';
 import { FormControlLabel } from '../forms';
 import { TimetableSection } from '../TimetableSection';
 import { controlledTextField } from './controlledTextField';
@@ -35,34 +38,46 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface LibraryFormValue {
-  readonly name: string;
-  readonly street: string;
-  readonly city: string;
+  readonly basicInfo: {
+    readonly name: string;
+    readonly street: string;
+    readonly city: string;
+  };
   readonly isTermAccepted?: boolean;
 }
 
 interface LibraryFormProps {
   readonly formControl: Control<LibraryFormValue>;
   readonly timetable: TimetableT;
+  readonly mode: 'create' | 'edit';
   updateTimetable(timetable: TimetableT): void;
+  onSubmit(): void;
 }
 
 export const LibraryForm = ({
+  mode,
   formControl,
   timetable,
   updateTimetable,
+  onSubmit,
 }: LibraryFormProps) => {
   const classes = useStyles();
   const [step, setStep] = useState(0);
 
   const handleNext = () => setStep((s) => (s + 1) % 3);
   const handleBack = () => setStep((s) => (3 + s - 1) % 3);
-  const MyStepperActions = (
-    props: Omit<
-      React.ComponentProps<typeof StepperActions>,
-      'onBack' | 'onNext'
-    >,
-  ) => <StepperActions onBack={handleBack} onNext={handleNext} {...props} />;
+  const { basicInfo } = useWatch({ control: formControl });
+  const MyStepperActions = ({
+    onBack,
+    onNext,
+    ...props
+  }: React.ComponentProps<typeof StepperActions>) => (
+    <StepperActions
+      onBack={onBack ?? handleBack}
+      onNext={onNext ?? handleNext}
+      {...props}
+    />
+  );
 
   const stepContent: {
     label: string;
@@ -77,9 +92,9 @@ export const LibraryForm = ({
           </Typography>
           <Controller
             control={formControl}
-            name="name"
+            name="basicInfo.name"
             render={controlledTextField({
-              name: 'name',
+              name: 'basicInfo.name',
               TextFieldProps: {
                 required: true,
                 label: 'Name',
@@ -88,9 +103,9 @@ export const LibraryForm = ({
           />
           <Controller
             control={formControl}
-            name="street"
+            name="basicInfo.street"
             render={controlledTextField({
-              name: 'street',
+              name: 'basicInfo.street',
               TextFieldProps: {
                 required: true,
                 label: 'Street',
@@ -99,16 +114,19 @@ export const LibraryForm = ({
           />
           <Controller
             control={formControl}
-            name="city"
+            name="basicInfo.city"
             render={controlledTextField({
-              name: 'city',
+              name: 'basicInfo.city',
               TextFieldProps: {
                 required: true,
                 label: 'City',
               },
             })}
           />
-          <MyStepperActions disabledBack disabledNext={false} />
+          <MyStepperActions
+            disabledBack
+            disabledNext={!values(basicInfo).every((x) => x.length > 0)}
+          />
         </>
       ),
     },
@@ -120,48 +138,52 @@ export const LibraryForm = ({
             timetable={timetable}
             updateTimetable={updateTimetable}
           />
-          <MyStepperActions />
+          <MyStepperActions onNext={mode === 'edit' ? onSubmit : undefined} />
         </>
       ),
     },
-    {
-      label: 'Finalize',
-      content: (
-        <>
-          <Controller
-            control={formControl}
-            name="isTermAccepted"
-            render={({ field: { value, ...rest } }) => (
-              <>
-                <FormControlLabel
-                  control={
-                    <Checkbox color="primary" checked={value} {...rest} />
-                  }
-                  label={
-                    <Typography variant="body2">
-                      I confirm that I have read the{' '}
-                      <Link
-                        href="https://www.termsandcondiitionssample.com/live.php?token=FYehkAO7UIdPZdFxzLtvsL2fI6nIIG8c"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Terms
-                      </Link>
-                      . *
-                    </Typography>
-                  }
-                />
-                <MyStepperActions
-                  nextButtonText="Create"
-                  disabledNext={!value}
-                />
-              </>
-            )}
-          />
-        </>
-      ),
-    },
-  ];
+  ].concat(
+    mode === 'create'
+      ? {
+          label: 'Finalize',
+          content: (
+            <>
+              <Controller
+                control={formControl}
+                name="isTermAccepted"
+                render={({ field: { value, ...rest } }) => (
+                  <>
+                    <FormControlLabel
+                      control={
+                        <Checkbox color="primary" checked={value} {...rest} />
+                      }
+                      label={
+                        <Typography variant="body2">
+                          I confirm that I have read the{' '}
+                          <Link
+                            href="https://www.termsandcondiitionssample.com/live.php?token=FYehkAO7UIdPZdFxzLtvsL2fI6nIIG8c"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Terms
+                          </Link>
+                          . *
+                        </Typography>
+                      }
+                    />
+                    <MyStepperActions
+                      nextButtonText={capitalize(mode)}
+                      disabledNext={!value}
+                      onNext={onSubmit}
+                    />
+                  </>
+                )}
+              />
+            </>
+          ),
+        }
+      : [],
+  );
 
   return (
     <Stepper activeStep={step} orientation="vertical">
