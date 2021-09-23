@@ -2,6 +2,7 @@ import { useNotification } from '@/stores/notifications';
 import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/account';
 import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/account';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { To } from 'history';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -10,14 +11,13 @@ import { handleAccountSubmit } from '../../lib/handleAccountSubmit';
 import { UserForm } from './UserForm';
 
 interface AddUserAccountFormProps {
-  onSubmitSuccess?(): void;
+  onSuccessNavigate?: To;
 }
 
 export const AddUserAccountForm = ({
-  onSubmitSuccess,
+  onSuccessNavigate,
 }: AddUserAccountFormProps) => {
   const navigate = useNavigate();
-  const pushNotification = useNotification((s) => s.pushNotification);
   const { mutateAsync } = useMutation(createUserAccount);
   const { control, handleSubmit } = useForm<UserAccountRequest>({
     resolver: joiResolver(UserAccountRequestSchema),
@@ -33,7 +33,7 @@ export const AddUserAccountForm = ({
     <UserForm
       control={control}
       onSubmit={handleAccountSubmit(handleSubmit, mutateAsync, () =>
-        navigate('/settings/account'),
+        navigate(onSuccessNavigate ?? '/'),
       )}
     />
   );

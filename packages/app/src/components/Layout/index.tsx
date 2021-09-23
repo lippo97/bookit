@@ -9,25 +9,38 @@ import { makeStyles, styled } from '@material-ui/core/styles';
 
 import { useIsLoggedIn } from '@/stores/authentication';
 import { Box } from '@material-ui/core';
-import { AppBar, AppBarProps } from './AppBar';
+import { AppBar } from './AppBar';
 import { Drawer, DrawerItem } from './Drawer';
+
+const extendedBarHeight = 160;
 
 type LayoutProps = {
   noDrawer?: true;
+  extendedAppBar?: true;
   children?: React.ReactNode;
 };
 
 const useStyles = makeStyles(() => ({
   root: {
+    position: 'relative',
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
   },
 }));
 
+const ExtendedAppBar = styled('div')(({ theme }) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  height: extendedBarHeight,
+  backgroundColor: theme.palette.primary.main,
+}));
+
 // https://www.reddit.com/r/google/comments/3rnk35/google_forms_updated_with_material_design_on_the/
 // si potrebbe fare simile a questo da lg in poi
-export function Layout({ children, noDrawer }: LayoutProps) {
+export function Layout({ children, extendedAppBar, noDrawer }: LayoutProps) {
   const classes = useStyles();
   const isLoggedIn = useIsLoggedIn();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -37,7 +50,12 @@ export function Layout({ children, noDrawer }: LayoutProps) {
 
   return (
     <div className={classes.root}>
-      <AppBar noDrawer={noDrawer} onMenuOpen={handleMenuOpen} />
+      {extendedAppBar && <ExtendedAppBar />}
+      <AppBar
+        extendedAppBar={extendedAppBar}
+        noDrawer={noDrawer}
+        onMenuOpen={handleMenuOpen}
+      />
       {!noDrawer && (
         <Drawer open={drawerOpen} onClose={handleClose}>
           <DrawerItem
@@ -79,7 +97,7 @@ export function Layout({ children, noDrawer }: LayoutProps) {
           )}
         </Drawer>
       )}
-      <Box position="relative" flex="1">
+      <Box position="relative" flex="1" paddingBottom={2}>
         {children}
       </Box>
     </div>

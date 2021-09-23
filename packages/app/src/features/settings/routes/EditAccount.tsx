@@ -20,10 +20,10 @@ export const EditAccount = ({}: EditAccountProps) => {
   const type: 'simple' | 'manager' = 'simple';
 
   return (
-    <Layout>
+    <Layout extendedAppBar>
       <Container maxWidth="md">
         <Paper elevation={3}>
-          <Typography variant="h4">Update account information</Typography>
+          <Typography variant="h5">Update account information</Typography>
           {type === 'simple' ? (
             <EditUserAccountForm />
           ) : (

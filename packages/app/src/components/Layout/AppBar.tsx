@@ -1,6 +1,7 @@
 import {
   AppBar as MuiAppBar,
   IconButton,
+  Theme,
   Toolbar,
   Typography,
 } from '@material-ui/core';
@@ -9,10 +10,15 @@ import MenuIcon from '@material-ui/icons/MenuOutlined';
 
 export interface AppBarProps {
   noDrawer?: true;
+  extendedAppBar?: true;
   onMenuOpen(): void;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<
+  Theme,
+  AppBarProps,
+  'menuButton' | 'title' | 'appBar'
+>((theme) => ({
   menuButton: {
     color: 'inherit',
     marginRight: theme.spacing(2),
@@ -23,20 +29,18 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '24px',
     userSelect: 'none',
   },
-  iconButton: {
-    color: 'inherit',
-  },
-  button: {
-    color: 'inherit',
-    textDecoration: 'none',
+  appBar: {
+    boxShadow: (p) => p.extendedAppBar && 'none',
+    borderBottom: 'red',
   },
 }));
 
-export function AppBar({ noDrawer, onMenuOpen }: AppBarProps) {
-  const classes = useStyles();
+export function AppBar(props: AppBarProps) {
+  const { noDrawer, onMenuOpen } = props;
+  const classes = useStyles(props);
 
   return (
-    <MuiAppBar position="static">
+    <MuiAppBar position="static" className={classes.appBar}>
       <Toolbar>
         {!noDrawer && (
           <IconButton

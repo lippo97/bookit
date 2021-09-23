@@ -41,10 +41,10 @@ export const AddAccount = () => {
   const handleTabChange = (_: any, newValue: UserKind) => setValue(newValue);
 
   return (
-    <Layout noDrawer>
+    <Layout extendedAppBar noDrawer>
       <Container maxWidth="md">
         <Paper elevation={3}>
-          <Typography variant="h4">Getting started</Typography>
+          <Typography variant="h5">Getting started</Typography>
           <Typography variant="body1">
             Are you a library manager or a simple account?
           </Typography>

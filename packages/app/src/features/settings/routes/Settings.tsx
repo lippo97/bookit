@@ -9,7 +9,7 @@ const Paper = styled(MuiPaper)(({ theme }) => ({
 }));
 
 export const Settings = () => (
-  <Layout>
+  <Layout extendedAppBar>
     <Container maxWidth="md">
       <Paper>
         <Typography variant="h4">Settings</Typography>
