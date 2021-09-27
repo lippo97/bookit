@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import { Resource } from '@asw-project/resources';
-import { AuthenticationSchema as AuthenticationJoiSchema } from '@asw-project/shared/data/authentication/authentication';
+import { AuthenticationSchema as AuthenticationJoiSchema } from '@asw-project/shared/data/authentication';
 import {
   Authentication,
   Email,
   Password,
-} from '@asw-project/shared/generatedTypes/authentication';
+} from '@asw-project/shared/generatedTypes';
 import { ReturnedUser } from '@asw-project/shared/types/returnedUser';
 import { isTrue } from '@asw-project/shared/util/boolean';
 import bcrypt, { compare } from 'bcrypt';

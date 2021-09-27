@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { accountTypes } from '../types/account';
+import { accountTypes } from '../types/accountTypes';
 
 export const ManagerAccountSchema = Joi.object({
   email: Joi.string().required(),

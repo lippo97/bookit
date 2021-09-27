@@ -1,6 +1,6 @@
 import { ky } from '@/config';
-import { SignupSuccess } from '@asw-project/shared/data/authentication/signup/response';
-import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup/';
+import { SignupSuccess } from '@asw-project/shared/data/requests/signup/response';
+import { SignupRequest } from '@asw-project/shared/src/generatedTypes/requests/signup';
 
 export const signupWithEmailAndPassword = ({
   email,

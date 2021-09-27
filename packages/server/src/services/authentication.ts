@@ -3,17 +3,14 @@ import {
   LoginFail,
   LoginSuccess,
   wrongEmailPassword,
-} from '@asw-project/shared/data/authentication/login/response';
+} from '@asw-project/shared/data/requests/login/response';
 import {
   duplicateIdentifier,
   SignupFail,
   SignupSuccess,
-} from '@asw-project/shared/data/authentication/signup/response';
+} from '@asw-project/shared/data/requests/signup/response';
 import { unexpectedError } from '@asw-project/shared/errors';
-import {
-  Email,
-  Password,
-} from '@asw-project/shared/generatedTypes/authentication';
+import { Email, Password } from '@asw-project/shared/generatedTypes';
 import { always, EitherAsync } from 'purify-ts';
 import { AuthenticationModel } from '../models/Authentication';
 

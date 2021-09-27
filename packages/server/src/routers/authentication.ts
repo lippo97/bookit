@@ -1,5 +1,5 @@
-import { LoginRequestSchema } from '@asw-project/shared/data/authentication/login/request';
-import { SignupRequestSchema } from '@asw-project/shared/data/authentication/signup/request';
+import { LoginRequestSchema } from '@asw-project/shared/data/requests/login/request';
+import { SignupRequestSchema } from '@asw-project/shared/data/requests/signup/request';
 import { Router } from 'express';
 import { validate } from '../middleware/joiValidator';
 import * as authenticationController from '../controllers/authentication';

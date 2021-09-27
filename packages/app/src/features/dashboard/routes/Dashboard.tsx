@@ -1,7 +1,14 @@
 import { Layout } from '@/components/Layout';
 import { Link } from 'react-router-dom';
 import { QueryContent } from '@/components/QueryContent';
-import { Box, Button, Container, Fab, Hidden } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Container,
+  Fab,
+  Hidden,
+  Typography,
+} from '@material-ui/core';
 import { useQuery } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -24,8 +31,9 @@ export const Dashboard = () => {
   return (
     <Layout>
       <Container>
-        <Header title="Dashboard" />
-        <Box mt={1} mb={1}>
+        {/* <Header title="Dashboard" /> */}
+        <Box mt={2} mb={2}>
+          <Typography variant="h4">Dashboard</Typography>
           <QueryContent status={status} data={data} retry={() => refetch()}>
             {(d) => <LibraryList data={d} />}
           </QueryContent>

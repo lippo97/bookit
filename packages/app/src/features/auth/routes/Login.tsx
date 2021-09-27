@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/stores/authentication';
 import image from '@/assets/library.jpg';
 import { useMutation } from 'react-query';
-import { LoginRequest } from '@asw-project/shared/generatedTypes/authentication/login/request';
+import { LoginRequest } from '@asw-project/shared/src/generatedTypes/requests/login/request';
 import { useNotification } from '@/stores/notifications';
 import { LoginForm } from '../components/LoginForm';
 import { Layout } from '../components/Layout';

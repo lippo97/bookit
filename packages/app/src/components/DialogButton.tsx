@@ -10,11 +10,13 @@ import {
 import { useState } from 'react';
 
 interface BaseProps<C extends React.ElementType> {
-  as?: C;
-  id: any;
-  title: string;
-  description: string;
-  onConfirm: () => void;
+  readonly as?: C;
+  readonly id: any;
+  readonly title: string;
+  readonly description: string;
+  readonly isOpen: boolean;
+  setOpen(open: boolean): void;
+  onConfirm(): void;
 }
 
 type DialogButtonProps<C extends React.ElementType> = BaseProps<C> &
@@ -26,12 +28,13 @@ export function DialogButton<C extends React.ElementType>({
   title,
   description,
   onConfirm,
+  isOpen,
+  setOpen,
   ...innerProps
 }: //   ...props
 DialogButtonProps<C>) {
   const Component = as ?? 'button';
 
-  const [isOpen, setOpen] = useState(false);
   const htmlTitle = `alert-dialog-title-${id}`;
   const htmlDesc = `alert-dialog-description-${id}`;
   return (

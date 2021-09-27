@@ -1,5 +1,4 @@
 import { Layout } from '@/components/Layout';
-import { QueryContent } from '@/components/QueryContent';
 import {
   Box,
   Container,

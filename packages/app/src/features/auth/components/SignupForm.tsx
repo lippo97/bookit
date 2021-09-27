@@ -4,7 +4,7 @@ import {
   InputAdornment,
   Typography,
 } from '@material-ui/core';
-import { SignupRequestSchema } from '@asw-project/shared/data/authentication/signup/request';
+import { SignupRequestSchema } from '@asw-project/shared/data/requests/signup/request';
 import PersonAddIcon from '@material-ui/icons/PersonAddOutlined';
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOffOutlined';

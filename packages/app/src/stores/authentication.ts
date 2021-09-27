@@ -1,6 +1,6 @@
 import { IS_DEVELOPMENT } from '@/config';
 import { loginWithEmailAndPassword, logout } from '@/features/auth';
-import { LoginRequest } from '@asw-project/shared/generatedTypes/authentication/login/request';
+import { LoginRequest } from '@asw-project/shared/src/generatedTypes/requests/login/request';
 import { ReturnedUser } from '@asw-project/shared/src/types/returnedUser';
 import flow from 'lodash/fp/flow';
 import identity from 'lodash/fp/identity';

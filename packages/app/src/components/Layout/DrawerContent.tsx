@@ -1,4 +1,4 @@
-import { useIsLoggedIn } from '@/stores/authentication';
+import { useAuth, useIsLoggedIn } from '@/stores/authentication';
 import { ListSubheader } from '@material-ui/core';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ExitToApp from '@material-ui/icons/ExitToApp';
@@ -7,6 +7,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SearchIcon from '@material-ui/icons/Search';
 import SettingsIcon from '@material-ui/icons/Settings';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import { DrawerItem } from './DrawerItem';
 import { DrawerSection } from './DrawerSection';
 
@@ -19,7 +20,7 @@ const Bookmarks = () => (
     <DrawerItem content="Bookmark 4" icon={<BookmarkIcon />} />
   </>
 );
-const SimpleRoutes = () => (
+const UserRoutes = () => (
   <>
     <DrawerSection>
       <DrawerItem
@@ -42,15 +43,27 @@ const SimpleRoutes = () => (
   </>
 );
 
-const ManagerRoutes = () => <></>;
+const ManagerRoutes = () => (
+  <>
+    <DrawerSection>
+      <DrawerItem
+        link
+        content="Dashboard"
+        icon={<DashboardIcon />}
+        to="/dashboard"
+      />
+    </DrawerSection>
+  </>
+);
 
 export const DrawerContent = () => {
   const isLoggedIn = useIsLoggedIn();
-  const type: 'simple' | 'manager' = 'simple' as 'simple' | 'manager';
+  const type = useAuth((s) => s.auth?.account?.type);
+  // const type: 'simple' | 'manager' = 'simple' as 'simple' | 'manager';
   if (isLoggedIn) {
     return (
       <>
-        {type === 'simple' && <SimpleRoutes />}
+        {type === 'user' && <UserRoutes />}
         {type === 'manager' && <ManagerRoutes />}
         <DrawerSection>
           <ListSubheader>Account</ListSubheader>

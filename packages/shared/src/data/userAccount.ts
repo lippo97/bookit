@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { accountTypes } from '../types/account';
+import { accountTypes } from '../types/accountTypes';
 
 export const userAccountFields = {
   email: Joi.string().required(),

@@ -2,7 +2,7 @@ import { HTTPError } from 'ky';
 import { useNavigate } from 'react-router-dom';
 import library2 from '@/assets/library2.jpg';
 import { useMutation } from 'react-query';
-import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup';
+import { SignupRequest } from '@asw-project/shared/src/generatedTypes/requests/signup';
 import { useNotification } from '@/stores/notifications';
 import { useAuth } from '@/stores/authentication';
 import { SentimentVeryDissatisfied } from '@material-ui/icons';

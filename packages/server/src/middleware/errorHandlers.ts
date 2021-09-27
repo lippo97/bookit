@@ -1,5 +1,5 @@
-import { LoginErrorKind } from '@asw-project/shared/data/authentication/login/response';
-import { SignupErrorKind } from '@asw-project/shared/data/authentication/signup/response';
+import { LoginErrorKind } from '@asw-project/shared/data/requests/login/response';
+import { SignupErrorKind } from '@asw-project/shared/data/requests/signup/response';
 import { Error } from '@asw-project/shared/errors';
 import { AllBaseErrors } from '@asw-project/shared/errors/kinds';
 import { NextFunction, Request, Response } from 'express';

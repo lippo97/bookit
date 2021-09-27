@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { UserAccountSchema } from '../userAccount';
-import { ManagerAccountSchema } from '../managerAccount';
+import { UserAccountSchema } from './userAccount';
+import { ManagerAccountSchema } from './managerAccount';
 import { Email, Password } from './common';
 
 const email = Email.required().meta({

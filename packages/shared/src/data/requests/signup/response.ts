@@ -1,6 +1,5 @@
 import { ErrorMap, Error } from '@asw-project/shared/errors';
 import { DuplicateIdentifierKind } from '@asw-project/shared/errors/kinds';
-import { ReturnedUser } from '../../../types/returnedUser';
 
 export type SignupErrorKind = DuplicateIdentifierKind;
 

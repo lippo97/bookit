@@ -1,5 +1,5 @@
-import { LoginRequest } from '@asw-project/shared/generatedTypes/authentication/login';
-import { SignupRequest } from '@asw-project/shared/generatedTypes/authentication/signup';
+import { LoginRequest } from '@asw-project/shared/generatedTypes/requests/login';
+import { SignupRequest } from '@asw-project/shared/generatedTypes/requests/signup';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as authenticationService from '../services/authentication';

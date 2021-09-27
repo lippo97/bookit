@@ -57,6 +57,7 @@ export const Timetable = ({
   const [editingIndex, setEditingIndex] = useState<number>();
   const [editingData, setEditingData] = useState<EditableShift>();
   const [isAdding, setAdding] = useState(false);
+  const [isOpen, setOpen] = useState(false);
 
   const handleEdit = (index: number) => () => {
     setEditingIndex(index);
@@ -239,6 +240,8 @@ export const Timetable = ({
                   description="Are you sure you want to delete the selected shift?"
                   onConfirm={handleDelete(index)}
                   as={IconButton}
+                  isOpen={isOpen}
+                  setOpen={setOpen}
                   aria-label="delete"
                 >
                   <DeleteIcon fontSize="small" color="error" />

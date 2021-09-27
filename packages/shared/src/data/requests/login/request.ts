@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { Email, Password } from '../common';
+import { Email, Password } from '../../common';
 
 const email = Email.required();
 const password = Password.required();
