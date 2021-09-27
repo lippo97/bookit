@@ -262,10 +262,7 @@ export const Timetable = ({
     timetable,
   }: {
     timetable: EditableTimetable;
-  }) => {
-    console.log('rendering ', timetable);
-    return <>{timetable.map(renderShift)}</>;
-  };
+  }) => <>{timetable.map(renderShift)}</>;
 
   const toBeRendered = (timetable as EditableTimetable).concat(
     isAdding && editingData ? editingData : [],

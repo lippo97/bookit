@@ -27,7 +27,7 @@ export const LibraryFormLayout = ({
   title,
   children,
 }: LibraryFormLayoutProps) => (
-  <Layout>
+  <Layout extendedAppBar>
     <Container maxWidth="md">
       <Paper elevation={3}>
         <Box

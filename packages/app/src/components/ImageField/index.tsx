@@ -1,9 +1,9 @@
-import { Box, Button, ButtonProps, Paper, makeStyles } from '@material-ui/core';
-import { CheckBox, SportsRugbySharp } from '@material-ui/icons';
-import { ChangeEvent, ChangeEventHandler } from 'react';
 import imagePlaceholder from '@/assets/image_placeholder.png';
-import clsx from 'clsx';
 import { useNotification } from '@/stores/notifications';
+import { Box, makeStyles, Paper } from '@material-ui/core';
+import PhotoIcon from '@material-ui/icons/Photo';
+import clsx from 'clsx';
+import { ChangeEvent } from 'react';
 
 interface ImageFieldProps {
   readonly alt?: string;
@@ -84,7 +84,12 @@ export const ImageField = ({
   return (
     <Paper elevation={2} className={classes.root}>
       <label htmlFor="image" className={classes.label}>
-        <Box className={clsx(classes.hover, 'hover')}>
+        <Box
+          className={clsx(classes.hover, 'hover')}
+          display="flex"
+          flexDirection="column"
+        >
+          <PhotoIcon fontSize="large" />
           Click here to upload a new image
         </Box>
         <img className={classes.image} src={imageSrc} alt={alt} />
