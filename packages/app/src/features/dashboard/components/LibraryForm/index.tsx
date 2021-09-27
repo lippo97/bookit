@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Hidden,
   Link,
   Step,
   StepContent,
@@ -72,10 +73,12 @@ export const LibraryForm = ({
   onSubmit,
 }: LibraryFormProps) => {
   const classes = useStyles();
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(0);
 
-  const handleNext = () => setStep((s) => (s + 1) % 3);
-  const handleBack = () => setStep((s) => (3 + s - 1) % 3);
+  /* eslint-disable @typescript-eslint/no-use-before-define */
+  const handleNext = () => setStep((s) => (s + 1) % stepContent.length);
+  const handleBack = () => setStep((s) => (3 + s - 1) % stepContent.length);
+  /* eslint-enable @typescript-eslint/no-use-before-define */
   const { basicInfo } = useWatch({ control: formControl });
   const MyStepperActions = ({
     onBack,
@@ -165,13 +168,21 @@ export const LibraryForm = ({
               If you don&apos;t have one right now, don&apos;t worry, you will
               be able to upload one later.
             </Typography>
+            <Hidden mdUp>
+              <Typography variant="body2" className={classes.stepTitle}>
+                Tap on the image below to upload a new one.
+              </Typography>
+            </Hidden>
             <ImageField
               value={image}
               onChange={updateImage}
               initial={initialImage}
             />
           </Box>
-          <MyStepperActions nextButtonText={capitalize(mode)} />
+          <MyStepperActions
+            nextButtonText={capitalize(mode)}
+            onNext={onSubmit}
+          />
         </>
       ),
     },
