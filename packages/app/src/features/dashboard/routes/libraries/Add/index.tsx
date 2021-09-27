@@ -51,6 +51,7 @@ export const AddLibrary = () => {
   >(createLibrary);
 
   const [timetable, setTimetable] = useState<TimetableT>([]);
+  const [image, setImage] = useState<File>();
 
   return (
     <LibraryFormLayout title="Add library">
@@ -59,6 +60,8 @@ export const AddLibrary = () => {
         formControl={control}
         timetable={timetable}
         updateTimetable={setTimetable}
+        image={image}
+        updateImage={setImage}
         onSubmit={handleSubmit(({ basicInfo }) =>
           mutateAsync({
             ...basicInfo,

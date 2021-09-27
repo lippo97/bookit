@@ -43,7 +43,9 @@ export type CreateLibraryArg = Pick<
   // | 'rooms'
   | 'street'
   | 'timetable'
->;
+> & {
+  imageFile?: File;
+};
 
 export type UpdateLibraryArg = CreateLibraryArg;
 

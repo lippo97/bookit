@@ -29,6 +29,8 @@ export const EditLibrary = () => {
     getLibraryById(id),
   );
   const [timetable, setTimetable] = useState<TimetableT>([]);
+  const [image, setImage] = useState<File>();
+  const [initialImage, setInitialImage] = useState<string>();
   const navigate = useNavigate();
 
   const { control, setValue, handleSubmit } = useForm<
@@ -66,6 +68,7 @@ export const EditLibrary = () => {
       setValue('basicInfo.city', data.city);
       setValue('basicInfo.street', data.street);
       setTimetable(convertDbFormatToTimetable(data.timetable));
+      setInitialImage(data.imageFilename);
     }
   }, [status, data]);
 
@@ -78,16 +81,18 @@ export const EditLibrary = () => {
             formControl={control}
             timetable={timetable}
             updateTimetable={setTimetable}
-            onSubmit={handleSubmit(({ basicInfo }) => {
-              console.log('submitting');
-              return mutateAsync({
+            image={image}
+            updateImage={setImage}
+            initialImage={initialImage}
+            onSubmit={handleSubmit(({ basicInfo }) =>
+              mutateAsync({
                 ...basicInfo,
                 timetable: convertTimetableToDbFormat(timetable),
+                imageFile: image,
               }).then(() => {
-                console.log('redirect');
                 navigate('/dashboard');
-              });
-            })}
+              }),
+            )}
           />
         )}
       </QueryContent>
