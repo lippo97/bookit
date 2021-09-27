@@ -72,7 +72,6 @@ export const ImageField = ({
     });
   };
 
-  // const switchValue = (v: Image) => (isString(v) ? v : URL.createObjectURL(v));
   const switchValue = () => {
     if (value !== undefined) return URL.createObjectURL(value);
     if (initial !== undefined) return initial;
