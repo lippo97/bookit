@@ -1,34 +1,18 @@
 /* eslint-disable no-underscore-dangle */
+import { Resource } from '@asw-project/resources';
+import { AuthenticationSchema as AuthenticationJoiSchema } from '@asw-project/shared/data/authentication/authentication';
 import {
-  AccountSchema,
-  AuthenticationSchema as AuthenticationJoiSchema,
-} from '@asw-project/shared/data/authentication/authentication';
-import {
-  Account,
   Authentication,
   Email,
   Password,
 } from '@asw-project/shared/generatedTypes/authentication';
+import { ReturnedUser } from '@asw-project/shared/types/returnedUser';
 import { isTrue } from '@asw-project/shared/util/boolean';
 import bcrypt, { compare } from 'bcrypt';
 import { Document, model, Model, Schema } from 'mongoose';
 import { always, Maybe, MaybeAsync } from 'purify-ts';
-import { Resource } from '@asw-project/resources';
-import {
-  ManagerAccount,
-  UserAccount,
-} from '@asw-project/shared/generatedTypes';
-import { ReturnedUser } from '@asw-project/shared/types/returnedUser';
 
 const SALT_ROUNDS = 10;
-
-export function isUser(account: Account): account is UserAccount {
-  return account.type === 'user';
-}
-
-export function isManager(account: Account): account is ManagerAccount {
-  return !isUser(account);
-}
 
 type AuthenticationDocument = Authentication &
   Document & {

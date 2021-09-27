@@ -1,4 +1,5 @@
 import { useAuth, useIsLoggedIn } from '@/stores/authentication';
+import { isManagerAccount } from '@asw-project/shared/types/account';
 import { Avatar, Box, Typography } from '@material-ui/core';
 import { blue, green, orange, pink, red } from '@material-ui/core/colors';
 import { styled } from '@material-ui/core/styles';
@@ -37,9 +38,19 @@ export const DrawerUserInfo = () => {
     return <Layout avatar={<Avatar>?</Avatar>} name="Not signed in" />;
   }
 
-  const email = auth.account?.email as string;
-  const firstName = auth.account?.firstName;
-  const secondName = auth.account?.secondName;
+  const account = auth.account!;
+
+  if (isManagerAccount(account)) {
+    return (
+      <Layout
+        avatar={<Avatar>{account.businessName.slice(0, 2)}</Avatar>}
+        name={account.businessName}
+        email={account.email}
+      />
+    );
+  }
+
+  const { email, firstName, secondName } = account;
   const n = email.charCodeAt(0) % colors.length;
 
   return (
