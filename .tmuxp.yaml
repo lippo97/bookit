@@ -1,6 +1,14 @@
-session_name: development_servers
+session_name: development_env
 windows:
-  - window_name: main
+  - window_name: compile
+    layout: even-horizontal
     panes:
-      - cd packages/app && yarn serve
-      - cd packages/server && yarn serve:dev
+      - shell_command:
+        - cd packages/app
+        - yarn serve
+      - shell_command:
+        - cd packages/server
+        - yarn serve:dev
+  - window_name: infrastructure
+    panes:
+      - docker-compose up
