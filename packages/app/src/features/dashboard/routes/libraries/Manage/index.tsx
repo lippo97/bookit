@@ -1,25 +1,11 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
 import { getLibraryById } from '@/features/dashboard/api/getLibraries';
-import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
-import { useParams } from 'react-router-dom';
-import {
-  Button,
-  Container,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
-  ListSubheader,
-  makeStyles,
-  Paper,
-  Typography,
-} from '@material-ui/core';
-import { useQuery } from 'react-query';
 import { RoomList } from '@/features/dashboard/components/RoomList';
+import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
+import { Container, makeStyles, Typography } from '@material-ui/core';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   title: {

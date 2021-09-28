@@ -1,21 +1,15 @@
-import { Button } from '@/components/Button';
-import { WithId } from '@asw-project/shared/data/withId';
-import { Link as RouterLink } from 'react-router-dom';
-import EditIcon from '@material-ui/icons/Edit';
-import RoomIcon from '@material-ui/icons/Room';
-import AddIcon from '@material-ui/icons/Add';
 import { Room } from '@asw-project/shared/generatedTypes/room';
 import {
   List,
-  Paper,
-  ListSubheader,
   ListItem,
   ListItemIcon,
   ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
+  ListSubheader,
   makeStyles,
+  Paper,
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import CropFreeIcon from '@material-ui/icons/CropFree';
 import { RoomListItem } from './RoomListItem';
 
 interface RoomListProps {
@@ -46,6 +40,12 @@ export const RoomList = ({ rooms }: RoomListProps) => {
           <AddIcon />
         </ListItemIcon>
         <ListItemText>Add new room</ListItemText>
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <CropFreeIcon />
+        </ListItemIcon>
+        <ListItemText>Check-in</ListItemText>
       </ListItem>
     </List>
   );
