@@ -14,6 +14,7 @@ import {
   convertTimetableToDbFormat,
 } from '@/lib/timetable/conversions';
 import { Timetable as TimetableT } from '@/lib/timetable/types';
+import { useNotification } from '@/stores/notifications';
 import { city, name, street } from '@asw-project/shared/data/library';
 import { Library } from '@asw-project/shared/generatedTypes';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -29,6 +30,9 @@ export const EditLibrary = () => {
     getLibraryById(id),
   );
   const [timetable, setTimetable] = useState<TimetableT>([]);
+  const [image, setImage] = useState<File>();
+  const [initialImage, setInitialImage] = useState<string>();
+  const pushNotification = useNotification((s) => s.pushNotification);
   const navigate = useNavigate();
 
   const { control, setValue, handleSubmit } = useForm<
@@ -66,6 +70,7 @@ export const EditLibrary = () => {
       setValue('basicInfo.city', data.city);
       setValue('basicInfo.street', data.street);
       setTimetable(convertDbFormatToTimetable(data.timetable));
+      setInitialImage(data.imageFilename);
     }
   }, [status, data]);
 
@@ -78,16 +83,30 @@ export const EditLibrary = () => {
             formControl={control}
             timetable={timetable}
             updateTimetable={setTimetable}
-            onSubmit={handleSubmit(({ basicInfo }) => {
-              console.log('submitting');
-              return mutateAsync({
+            image={image}
+            updateImage={setImage}
+            initialImage={initialImage}
+            onSubmit={handleSubmit(({ basicInfo }) =>
+              mutateAsync({
                 ...basicInfo,
                 timetable: convertTimetableToDbFormat(timetable),
-              }).then(() => {
-                console.log('redirect');
-                navigate('/dashboard');
-              });
-            })}
+                imageFile: image,
+              })
+                .then(() => {
+                  pushNotification({
+                    message: 'Updated library successfully.',
+                    severity: 'success',
+                  });
+                  navigate('/dashboard');
+                })
+                .catch((err) => {
+                  console.error(err);
+                  pushNotification({
+                    message: 'Unable to update library, retry later',
+                    severity: 'error',
+                  });
+                }),
+            )}
           />
         )}
       </QueryContent>

@@ -9,6 +9,7 @@ import {
 import { LibraryFormLayout } from '@/features/dashboard/components/LibraryFormLayout';
 import { convertTimetableToDbFormat } from '@/lib/timetable/conversions';
 import { Timetable as TimetableT } from '@/lib/timetable/types';
+import { useNotification } from '@/stores/notifications';
 import { city, name, street } from '@asw-project/shared/data/library';
 import { Library } from '@asw-project/shared/generatedTypes';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -20,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const AddLibrary = () => {
   const navigate = useNavigate();
+  const pushNotification = useNotification((s) => s.pushNotification);
   const { control, handleSubmit } = useForm<LibraryFormValue>({
     mode: 'onChange',
     resolver: joiResolver(
@@ -51,6 +53,7 @@ export const AddLibrary = () => {
   >(createLibrary);
 
   const [timetable, setTimetable] = useState<TimetableT>([]);
+  const [image, setImage] = useState<File>();
 
   return (
     <LibraryFormLayout title="Add library">
@@ -59,11 +62,27 @@ export const AddLibrary = () => {
         formControl={control}
         timetable={timetable}
         updateTimetable={setTimetable}
+        image={image}
+        updateImage={setImage}
         onSubmit={handleSubmit(({ basicInfo }) =>
           mutateAsync({
             ...basicInfo,
             timetable: convertTimetableToDbFormat(timetable),
-          }).then(() => navigate('/dashboard')),
+          })
+            .then(() =>
+              pushNotification({
+                message: 'Created library successfully.',
+                severity: 'success',
+              }),
+            )
+            .then(() => navigate('/dashboard'))
+            .catch((err) => {
+              console.error(err);
+              pushNotification({
+                message: 'Unable to create library, retry later.',
+                severity: 'error',
+              });
+            }),
         )}
       />
     </LibraryFormLayout>

@@ -1,8 +1,12 @@
 /* eslint-disable no-sparse-arrays */
+import { ImageField } from '@/components/ImageField';
 import { Timetable as TimetableT } from '@/lib/timetable/types';
 import { Library } from '@asw-project/shared/generatedTypes/library';
 import {
+  Box,
+  Button,
   Checkbox,
+  Hidden,
   Link,
   Step,
   StepContent,
@@ -44,19 +48,17 @@ export interface LibraryFormValue {
     readonly street: string;
     readonly city: string;
   };
-  /* Pick<
-    Library,
-    'availableServices' | 'city' | 'imageFilename' | 'name' | 'rooms' | 'street'>
-    // | 'timetable' */
-
   readonly isTermAccepted?: boolean;
 }
 
 interface LibraryFormProps {
   readonly formControl: Control<LibraryFormValue>;
-  readonly timetable: TimetableT;
   readonly mode: 'create' | 'edit';
+  readonly timetable: TimetableT;
   updateTimetable(timetable: TimetableT): void;
+  readonly image: File | undefined;
+  readonly initialImage?: string;
+  updateImage(image: File): void;
   onSubmit(): void;
 }
 
@@ -65,13 +67,18 @@ export const LibraryForm = ({
   formControl,
   timetable,
   updateTimetable,
+  image,
+  updateImage,
+  initialImage,
   onSubmit,
 }: LibraryFormProps) => {
   const classes = useStyles();
   const [step, setStep] = useState(0);
 
-  const handleNext = () => setStep((s) => (s + 1) % 3);
-  const handleBack = () => setStep((s) => (3 + s - 1) % 3);
+  /* eslint-disable @typescript-eslint/no-use-before-define */
+  const handleNext = () => setStep((s) => (s + 1) % stepContent.length);
+  const handleBack = () => setStep((s) => (3 + s - 1) % stepContent.length);
+  /* eslint-enable @typescript-eslint/no-use-before-define */
   const { basicInfo } = useWatch({ control: formControl });
   const MyStepperActions = ({
     onBack,
@@ -144,52 +151,42 @@ export const LibraryForm = ({
             timetable={timetable}
             updateTimetable={updateTimetable}
           />
-          <MyStepperActions onNext={mode === 'edit' ? onSubmit : undefined} />
+          <MyStepperActions />
         </>
       ),
     },
-  ].concat(
-    mode === 'create'
-      ? {
-          label: 'Finalize',
-          content: (
-            <>
-              <Controller
-                control={formControl}
-                name="isTermAccepted"
-                render={({ field: { value, ...rest } }) => (
-                  <>
-                    <FormControlLabel
-                      control={
-                        <Checkbox color="primary" checked={value} {...rest} />
-                      }
-                      label={
-                        <Typography variant="body2">
-                          I confirm that I have read the{' '}
-                          <Link
-                            href="https://www.termsandcondiitionssample.com/live.php?token=FYehkAO7UIdPZdFxzLtvsL2fI6nIIG8c"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Terms
-                          </Link>
-                          . *
-                        </Typography>
-                      }
-                    />
-                    <MyStepperActions
-                      nextButtonText={capitalize(mode)}
-                      disabledNext={!value}
-                      onNext={onSubmit}
-                    />
-                  </>
-                )}
-              />
-            </>
-          ),
-        }
-      : [],
-  );
+    {
+      label: 'Image',
+      content: (
+        <>
+          <Box mb={2}>
+            <Typography variant="body2" className={classes.stepTitle}>
+              Provide a picture of your library, so that users will find it more
+              appealing!
+            </Typography>
+            <Typography variant="body2" className={classes.stepTitle}>
+              If you don&apos;t have one right now, don&apos;t worry, you will
+              be able to upload one later.
+            </Typography>
+            <Hidden mdUp>
+              <Typography variant="body2" className={classes.stepTitle}>
+                Tap on the image below to upload a new one.
+              </Typography>
+            </Hidden>
+            <ImageField
+              value={image}
+              onChange={updateImage}
+              initial={initialImage}
+            />
+          </Box>
+          <MyStepperActions
+            nextButtonText={capitalize(mode)}
+            onNext={onSubmit}
+          />
+        </>
+      ),
+    },
+  ];
 
   return (
     <Stepper activeStep={step} orientation="vertical">
