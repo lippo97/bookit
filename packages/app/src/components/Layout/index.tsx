@@ -3,8 +3,8 @@ import { styled } from '@material-ui/core/styles';
 import { useState } from 'react';
 import { AppBar } from './AppBar';
 import { Drawer } from './Drawer';
-import { DrawerContent } from './DrawerContent';
 import { DrawerUserInfo as DrawerAccountInfo } from './DrawerAccountInfo';
+import { DrawerContent } from './DrawerContent';
 
 const extendedBarHeight = 160;
 
