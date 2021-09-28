@@ -1,15 +1,15 @@
 import Joi from 'joi';
 import { UserAccountSchema } from './userAccount';
 import { ManagerAccountSchema } from './managerAccount';
-import { Email, Password } from './common';
+import { Email as CEmail, Password as CPassword } from './common';
 
-const email = Email.required().meta({
+export const email = CEmail.required().meta({
   _mongoose: {
     unique: true,
   },
 });
 
-const password = Password.required();
+export const password = CPassword.min(7).max(64).required();
 
 export const AccountSchema = Joi.alternatives()
   .try(UserAccountSchema, ManagerAccountSchema)
