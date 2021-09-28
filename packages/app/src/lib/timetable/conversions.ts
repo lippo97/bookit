@@ -40,8 +40,10 @@ export const convertDbFormatToTimetable = (
   }: Library['timetable'][0]): Shift => ({
     days: days as any,
     slot: {
-      from: dateToLocalTime(from),
-      to: dateToLocalTime(to),
+      from: dayjsToLocalTime(dayjs(from)),
+      to: dayjsToLocalTime(dayjs(to)),
+      // from: dateToLocalTime(from),
+      // to: dateToLocalTime(to),
     },
   });
   return dbTimetable.map(go);
