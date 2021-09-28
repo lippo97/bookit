@@ -31,7 +31,6 @@ export const Dashboard = () => {
   return (
     <Layout>
       <Container>
-        {/* <Header title="Dashboard" /> */}
         <Box mt={2} mb={2}>
           <Typography variant="h4">Dashboard</Typography>
           <QueryContent status={status} data={data} retry={() => refetch()}>

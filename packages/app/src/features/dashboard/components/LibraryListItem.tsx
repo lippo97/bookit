@@ -1,4 +1,5 @@
 import { DialogButton } from '@/components/DialogButton';
+import { LinkIconButton } from '@/components/LinkIconButton';
 import { useNotification } from '@/stores/notifications';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Library } from '@asw-project/shared/generatedTypes';
@@ -14,7 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { deleteLibrary } from '../api/getLibraries';
 
 interface LibraryListItemProps {
@@ -42,9 +43,13 @@ const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
   return (
     <FlexDiv>
       <Tooltip title="Manage">
-        <IconButton>
+        <LinkIconButton
+          to={`/dashboard/libraries/${_id}/manage`}
+          icon={<BusinessIcon />}
+        />
+        {/* <IconButton>
           <BusinessIcon />
-        </IconButton>
+        </IconButton> */}
       </Tooltip>
       <Tooltip title="Delete">
         <DialogButton
@@ -78,11 +83,10 @@ const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
         </DialogButton>
       </Tooltip>
       <Tooltip title="Edit">
-        <IconButton
-          onClick={() => navigate(`/dashboard/libraries/${_id}/edit`)}
-        >
-          <EditIcon />
-        </IconButton>
+        <LinkIconButton
+          to={`/dashboard/libraries/${_id}/edit`}
+          icon={<EditIcon />}
+        />
       </Tooltip>
     </FlexDiv>
   );

@@ -1,7 +1,9 @@
 import { S3_URL } from '@/config';
+// import placeholderImage from '@/assets/placeholderImage.png';
 
 const libraryBucket = 'library-images';
 
+// export const fallbackImage = placeholderImage;
 export const fallbackImage = 'https://source.unsplash.com/random/800x600';
 
 export function getImageUrl(filename: string): string {

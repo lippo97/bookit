@@ -38,8 +38,8 @@ const useStyles = makeStyles(() => ({
 
 interface LibraryHeaderProps {
   src?: string;
-  isStarred: boolean;
-  onStar: () => void;
+  isStarred?: boolean;
+  onStar?: () => void;
 }
 
 export const LibraryHeader = ({
@@ -56,14 +56,20 @@ export const LibraryHeader = ({
         src={getImageUrlOrFallback(src)}
         alt="The library"
       />
-      <div className={classes.starBg} />
-      <Tooltip title="Bookmark" className={classes.tooltip}>
-        <Fab color="default" aria-label="bookmark" onClick={onStar}>
-          <BookmarkIcon
-            className={isStarred ? classes.starredIcon : classes.unstarredIcon}
-          />
-        </Fab>
-      </Tooltip>
+      {isStarred !== undefined && (
+        <>
+          <div className={classes.starBg} />
+          <Tooltip title="Bookmark" className={classes.tooltip}>
+            <Fab color="default" aria-label="bookmark" onClick={onStar}>
+              <BookmarkIcon
+                className={
+                  isStarred ? classes.starredIcon : classes.unstarredIcon
+                }
+              />
+            </Fab>
+          </Tooltip>
+        </>
+      )}
     </div>
   );
 };
