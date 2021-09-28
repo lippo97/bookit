@@ -11,6 +11,7 @@ import MenuIcon from '@material-ui/icons/MenuOutlined';
 export interface AppBarProps {
   noDrawer?: true;
   extendedAppBar?: true;
+  transparentAppBar?: true;
   onMenuOpen(): void;
 }
 
@@ -30,8 +31,11 @@ const useStyles = makeStyles<
     userSelect: 'none',
   },
   appBar: {
-    boxShadow: (p) => p.extendedAppBar && 'none',
+    boxShadow: (p) => (p.extendedAppBar || p.transparentAppBar) && 'none',
     borderBottom: 'red',
+    background: (p) =>
+      p.transparentAppBar && 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0))',
+    position: (p) => p.transparentAppBar && 'absolute',
   },
 }));
 

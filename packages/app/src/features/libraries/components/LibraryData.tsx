@@ -119,7 +119,7 @@ export const LibraryData = ({
   return (
     <Container>
       <div className={classes.root}>
-        <Typography align="center" variant="h4" className={classes.title}>
+        <Typography align="center" variant="h5" className={classes.title}>
           {name}
         </Typography>
         <Typography align="center" variant="body1" className={classes.info}>

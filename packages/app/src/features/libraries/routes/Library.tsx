@@ -15,21 +15,21 @@ export const Library = () => {
   const { data, status } = useQuery(['library', id], () => getLibraryById(id));
 
   return (
-    <Layout>
-      <Container>
-        <QueryContent status={status} data={data}>
-          {(d) => (
-            <>
-              <LibraryHeader
-                src={d.imageFilename}
-                isStarred={isStarred}
-                onStar={toggleStarred}
-              />
+    <Layout transparentAppBar>
+      <QueryContent status={status} data={data}>
+        {(d) => (
+          <>
+            <LibraryHeader
+              src={d.imageFilename}
+              isStarred={isStarred}
+              onStar={toggleStarred}
+            />
+            <Container>
               <LibraryData data={d} />
-            </>
-          )}
-        </QueryContent>
-      </Container>
+            </Container>
+          </>
+        )}
+      </QueryContent>
     </Layout>
   );
 };

@@ -4,15 +4,24 @@ import { useState } from 'react';
 import { AppBar } from './AppBar';
 import { Drawer } from './Drawer';
 import { DrawerContent } from './DrawerContent';
-import { DrawerUserInfo } from './DrawerUserInfo';
+import { DrawerUserInfo as DrawerAccountInfo } from './DrawerAccountInfo';
 
 const extendedBarHeight = 160;
 
+type TransparentAppBarProps = {
+  transparentAppBar?: true;
+  extendedAppBar?: never;
+};
+
+type ExtendedAppBarProps = {
+  extendedAppBar?: true;
+  transparentAppBar?: never;
+};
+
 type LayoutProps = {
   noDrawer?: true;
-  extendedAppBar?: true;
   children?: React.ReactNode;
-};
+} & (ExtendedAppBarProps | TransparentAppBarProps);
 
 const ExtendedAppBar = styled('div')(({ theme }) => ({
   position: 'absolute',
@@ -25,7 +34,12 @@ const ExtendedAppBar = styled('div')(({ theme }) => ({
 
 // https://www.reddit.com/r/google/comments/3rnk35/google_forms_updated_with_material_design_on_the/
 // si potrebbe fare simile a questo da lg in poi
-export function Layout({ children, extendedAppBar, noDrawer }: LayoutProps) {
+export function Layout({
+  children,
+  extendedAppBar,
+  transparentAppBar,
+  noDrawer,
+}: LayoutProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleMenuOpen = () => setDrawerOpen(true);
@@ -45,11 +59,12 @@ export function Layout({ children, extendedAppBar, noDrawer }: LayoutProps) {
       <AppBar
         extendedAppBar={extendedAppBar}
         noDrawer={noDrawer}
+        transparentAppBar={transparentAppBar}
         onMenuOpen={handleMenuOpen}
       />
       {hasDrawer && (
         <Drawer open={drawerOpen} onClose={handleClose} onOpen={handleMenuOpen}>
-          <DrawerUserInfo />
+          <DrawerAccountInfo />
           <DrawerContent />
         </Drawer>
       )}
