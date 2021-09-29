@@ -1,5 +1,6 @@
 import { UnexpectedError } from '@asw-project/shared/errors';
+import { Account } from '@asw-project/shared/generatedTypes';
 
-export type AccountCreationSuccess = void;
+export type AccountCreationOrUpdateSuccess = Account;
 
-export type AccountCreationFail = UnexpectedError;
+export type AccountCreationOrUpdateFail = UnexpectedError;

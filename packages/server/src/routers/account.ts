@@ -6,26 +6,28 @@ import { validate } from '../middleware/joiValidator';
 
 const router = Router();
 
+router.get('/account', accountController.getAccount);
+
 router.post(
-  '/account/:id',
-  validate(UserAccountSchema),
-  accountController.create,
+  '/account',
+  validate(ManagerAccountSchema),
+  accountController.createAccount,
 );
 router.post(
-  '/account/:id',
-  validate(ManagerAccountSchema),
-  accountController.create,
+  '/account',
+  validate(UserAccountSchema),
+  accountController.createAccount,
 );
 
 router.patch(
-  '/account/:id',
+  '/account',
   validate(UserAccountSchema),
-  accountController.create,
+  accountController.updateAccount,
 );
 router.patch(
-  '/account/:id',
+  '/account',
   validate(ManagerAccountSchema),
-  accountController.create,
+  accountController.updateAccount,
 );
 
 export default router;
