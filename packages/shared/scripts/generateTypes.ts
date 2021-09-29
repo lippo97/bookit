@@ -17,7 +17,10 @@ function convertDir(dir: string, debug: boolean = false) {
     typeOutputDirectory,
     debug,
   });
+
 }
+
+const handleError = (err: any) => console.error(err);
 
 async function main() {
   const targets = [
@@ -34,7 +37,7 @@ async function main() {
 
   console.log(`Found ${targets.length} targets:`);
   targets.forEach((path) => console.log(`- ${path}`));
-  const conversions = targets.map((p) => convertDir(p, true));
+  const conversions = targets.map((p) => convertDir(p, true).catch(handleError));
 
   const aggregateResult = await Promise.all(conversions);
 
