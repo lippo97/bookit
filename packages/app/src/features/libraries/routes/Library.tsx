@@ -2,7 +2,6 @@ import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
 import { useToggle } from '@/hooks/useToggle';
 import { Container } from '@material-ui/core';
-import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getLibraryById } from '../api/getLibraries';
