@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Account } from '@asw-project/shared/generatedTypes/authentication';
 import { isManagerAccount } from '@asw-project/shared/types/account';
 import { pick } from 'lodash';
+import { accountTypes } from '@asw-project/shared/types/accountTypes';
 import * as accountService from '../services/account';
 import { managerAccountKeys } from '../models/ManagerAccount';
 import { userAccountKeys } from '../models/UserAccount';
@@ -13,8 +14,15 @@ function getUserId(session: any): string | undefined {
   return undefined;
 }
 
+function getEmail(session: any): string | undefined {
+  if (session.userId !== undefined) {
+    return session.email;
+  }
+  return undefined;
+}
+
 export async function getAccount(
-  req: Request<any, any, any>,
+  req: Request<any, any, Account>,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
@@ -33,9 +41,18 @@ export async function createAccount(
   next: NextFunction,
 ): Promise<void> {
   const userId = getUserId(req.session);
+
+  const email = getEmail(req.session);
+
   const account = isManagerAccount(req.body)
-    ? (pick(req.body, managerAccountKeys) as any)
-    : (pick(req.body, userAccountKeys) as any);
+    ? (pick(
+        { ...req.body, email, type: accountTypes.manager },
+        managerAccountKeys,
+      ) as any)
+    : (pick(
+        { ...req.body, email, type: accountTypes.user },
+        userAccountKeys,
+      ) as any);
 
   const result = await accountService.createAccount(userId, account);
   result.caseOf({
