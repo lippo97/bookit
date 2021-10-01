@@ -1,4 +1,4 @@
-import { AccountResponse } from '@asw-project/shared/data/requests/account';
+import { AccountResponse } from '@asw-project/shared/data/requests/accountCreation/request';
 import {
   UserAccountRequest,
   AccountRequest,

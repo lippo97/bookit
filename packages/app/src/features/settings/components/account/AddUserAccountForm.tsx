@@ -1,4 +1,4 @@
-import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/account';
+import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/accountCreation/request';
 import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/account';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { To } from 'history';
