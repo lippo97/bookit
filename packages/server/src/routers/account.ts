@@ -1,6 +1,8 @@
 import { Router } from 'express';
-import { UserAccountSchema } from '@asw-project/shared/data/userAccount';
-import { ManagerAccountSchema } from '@asw-project/shared/data/managerAccount';
+import {
+  ManagerAccountRequestSchema,
+  UserAccountRequestSchema,
+} from '@asw-project/shared/data/requests/accountCreation/request';
 import * as accountController from '../controllers/account';
 import { validate } from '../middleware/joiValidator';
 
@@ -9,24 +11,26 @@ const router = Router();
 router.get('/account', accountController.getAccount);
 
 router.post(
-  '/account',
-  validate(ManagerAccountSchema),
-  accountController.createAccount,
-);
-router.post(
-  '/account',
-  validate(UserAccountSchema),
+  '/managerAccount',
+  validate(ManagerAccountRequestSchema),
   accountController.createAccount,
 );
 
 router.patch(
-  '/account',
-  validate(UserAccountSchema),
+  '/managerAccount',
+  validate(ManagerAccountRequestSchema),
   accountController.updateAccount,
 );
+
+router.post(
+  '/userAccount',
+  validate(UserAccountRequestSchema),
+  accountController.createAccount,
+);
+
 router.patch(
-  '/account',
-  validate(ManagerAccountSchema),
+  '/userAccount',
+  validate(UserAccountRequestSchema),
   accountController.updateAccount,
 );
 
