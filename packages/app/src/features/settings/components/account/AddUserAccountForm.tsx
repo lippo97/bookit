@@ -1,5 +1,5 @@
 import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/accountCreation/request';
-import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/account';
+import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { To } from 'history';
 import { useForm } from 'react-hook-form';

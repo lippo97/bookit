@@ -11,12 +11,10 @@ export const ManagerAccountRequestSchema = Joi.object(
   omit(managerAccountFields, 'email', 'type'),
 ).meta({ className: 'ManagerAccountRequest' });
 
-export type AccountResponse = void;
-/*export const AccountRequestSchema = Joi.alternatives()
-  .try(UserAccountRequestSchema)
+export const AccountRequestSchema = Joi.alternatives()
+  .try(ManagerAccountRequestSchema, UserAccountRequestSchema)
   .meta({
     className: 'AccountRequest',
   });
 
-
-*/
+export type AccountResponse = void; //Account

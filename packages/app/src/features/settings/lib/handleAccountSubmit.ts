@@ -1,5 +1,5 @@
 import { useNotification } from '@/stores/notifications';
-import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/account';
+import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
 import { BaseSyntheticEvent } from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
 

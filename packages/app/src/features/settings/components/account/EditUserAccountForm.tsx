@@ -1,6 +1,7 @@
 import { QueryContent } from '@/components/QueryContent';
 import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/accountCreation/request';
-import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/account';
+import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
+import { isUserAccount } from '@asw-project/shared/types/account';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
@@ -23,11 +24,13 @@ export const EditUserAccountForm = ({}: EditUserAccountFormProps) => {
     },
   });
   const { status, data } = useQuery('getUserAccount', getAccount, {
-    onSuccess: ({ firstName, secondName, maleFemale, birthDate }) => {
-      setValue('firstName', firstName);
-      setValue('secondName', secondName);
-      setValue('maleFemale', maleFemale);
-      setValue('birthDate', birthDate);
+    onSuccess: (account) => {
+      if (isUserAccount(account)) {
+        setValue('firstName', account.firstName);
+        setValue('secondName', account.secondName);
+        setValue('maleFemale', account.maleFemale);
+        setValue('birthDate', account.birthDate);
+      }
     },
   });
   const { mutateAsync } = useMutation(updateUserAccount);

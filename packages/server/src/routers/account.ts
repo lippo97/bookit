@@ -13,25 +13,25 @@ router.get('/account', accountController.getAccount);
 router.post(
   '/managerAccount',
   validate(ManagerAccountRequestSchema),
-  accountController.createAccount,
+  accountController.createManagerAccount,
 );
 
 router.patch(
   '/managerAccount',
   validate(ManagerAccountRequestSchema),
-  accountController.updateAccount,
+  accountController.updateManagerAccount,
 );
 
 router.post(
   '/userAccount',
   validate(UserAccountRequestSchema),
-  accountController.createAccount,
+  accountController.createUserAccount,
 );
 
 router.patch(
   '/userAccount',
   validate(UserAccountRequestSchema),
-  accountController.updateAccount,
+  accountController.updateUserAccount,
 );
 
 export default router;

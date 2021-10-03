@@ -1,5 +1,5 @@
 import { controlledTextField } from '@/features/dashboard/components/LibraryForm/controlledTextField';
-import { UserAccountRequest } from '@asw-project/shared/src/generatedTypes/requests/account';
+import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
 import {
   Box,
   FormControl,

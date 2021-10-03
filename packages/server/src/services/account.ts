@@ -1,14 +1,7 @@
-import {
-  AccountCreationOrUpdateFail,
-  AccountCreationOrUpdateSuccess,
-} from '@asw-project/shared/data/requests/accountCreation/response';
+import { AccountCreationOrUpdateFail } from '@asw-project/shared/data/requests/accountCreation/response';
 import { unexpectedError } from '@asw-project/shared/errors';
 
-import { always, EitherAsync, Left } from 'purify-ts';
-import {
-  Account,
-  Authentication,
-} from '@asw-project/shared/generatedTypes/authentication';
+import { EitherAsync } from 'purify-ts';
 import { SimpleFindById, SimpleUpdate } from '@asw-project/resources/routes';
 
 import { ObjectId } from 'mongodb';

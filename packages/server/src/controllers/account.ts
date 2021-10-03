@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { Account } from '@asw-project/shared/generatedTypes/authentication';
+import {
+  UserAccountRequest,
+  ManagerAccountRequest,
+} from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
 import { isManagerAccount } from '@asw-project/shared/types/account';
 import { pick } from 'lodash';
 import { accountTypes } from '@asw-project/shared/types/accountTypes';
@@ -22,7 +25,7 @@ function getEmail(session: any): string | undefined {
 }
 
 export async function getAccount(
-  req: Request<any, any, Account>,
+  req: Request<any, any, any>,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
@@ -35,8 +38,8 @@ export async function getAccount(
   });
 }
 
-export async function createAccount(
-  req: Request<any, any, Account>,
+export async function createUserAccount(
+  req: Request<any, any, UserAccountRequest>,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
@@ -44,15 +47,10 @@ export async function createAccount(
 
   const email = getEmail(req.session);
 
-  const account = isManagerAccount(req.body)
-    ? (pick(
-        { ...req.body, email, type: accountTypes.manager },
-        managerAccountKeys,
-      ) as any)
-    : (pick(
-        { ...req.body, email, type: accountTypes.user },
-        userAccountKeys,
-      ) as any);
+  const account = pick(
+    { ...req.body, email, type: accountTypes.user },
+    userAccountKeys,
+  ) as any;
 
   const result = await accountService.createAccount(userId, account);
   result.caseOf({
@@ -62,4 +60,28 @@ export async function createAccount(
   });
 }
 
-export const updateAccount = createAccount;
+export async function createManagerAccount(
+  req: Request<any, any, ManagerAccountRequest>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  const userId = getUserId(req.session);
+
+  const email = getEmail(req.session);
+
+  const account = pick(
+    { ...req.body, email, type: accountTypes.manager },
+    managerAccountKeys,
+  ) as any;
+
+  const result = await accountService.createAccount(userId, account);
+  result.caseOf({
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    Right: (account) => res.json(account),
+    Left: next,
+  });
+}
+
+export const updateUserAccount = createUserAccount;
+
+export const updateManagerAccount = createManagerAccount;
