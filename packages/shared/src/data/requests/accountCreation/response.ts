@@ -4,3 +4,5 @@ import { UnexpectedError } from '@asw-project/shared/errors';
 // export type AccountCreationOrUpdateSuccess = Account;
 
 export type AccountCreationOrUpdateFail = UnexpectedError;
+
+export type UninitializedAccountKind = 'UninitializedAccountKind';

@@ -1,11 +1,21 @@
-import { AccountCreationOrUpdateFail } from '@asw-project/shared/data/requests/accountCreation/response';
-import { unexpectedError } from '@asw-project/shared/errors';
+import {
+  AccountCreationOrUpdateFail,
+  UninitializedAccountKind,
+} from '@asw-project/shared/data/requests/accountCreation/response';
+import {
+  Error,
+  UnexpectedError,
+  unexpectedError,
+} from '@asw-project/shared/errors';
 
-import { EitherAsync } from 'purify-ts';
+import { EitherAsync, Left, MaybeAsync, Right } from 'purify-ts';
 import { SimpleFindById, SimpleUpdate } from '@asw-project/resources/routes';
 
 import { ObjectId } from 'mongodb';
 import { Account, Authentication } from '@asw-project/shared/generatedTypes';
+import { Error } from 'mongoose';
+import { isTrue } from '@asw-project/shared/util/boolean';
+import { FindByIdError } from '@asw-project/resources/routes/operations/FindById';
 import { AuthenticationModel } from '../models/Authentication';
 
 export function createAccount(
@@ -29,15 +39,25 @@ export function createAccount(
 
 export function getAccount(
   userId: string | undefined,
-): EitherAsync<AccountCreationOrUpdateFail, Account> {
-  return EitherAsync<AccountCreationOrUpdateFail, boolean>(
-    async () => userId !== undefined,
-  )
-   .chain<AccountCreationOrUpdateFail,Authentication>(
-    
-        new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId));
-      
-    )/*.chainLeft((err: any) => unexpectedError(err))
-    .map((obj) => obj.account!)
-    .mapLeft((err: any) => unexpectedError(err));*/
+): EitherAsync<Error<UninitializedAccountKind | FindByIdError>, Account> {
+  return MaybeAsync(() => Promise.resolve(userId === undefined))
+    .filter(isTrue)
+    .void()
+    .toEitherAsync<UnexpectedError>({
+      kind: 'InternalError',
+      body: new Error('Unexpected error in getAccount'),
+    })
+    .chain(() =>
+      new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId)),
+    )
+    .chain(({ account }) => {
+      if (account) {
+        return EitherAsync.liftEither(Right(account));
+      }
+      return EitherAsync.liftEither(
+        Left({
+          kind: 'UninitializedAccountKind',
+        } as const),
+      );
+    });
 }
