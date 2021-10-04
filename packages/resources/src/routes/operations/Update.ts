@@ -10,7 +10,7 @@ import {
   SimpleFindById,
 } from './FindById';
 
-type EditError = DocumentCreationError | FindByIdError;
+export type EditError = DocumentCreationError | FindByIdError;
 type UpdateParam = UpdateWithAggregationPipeline;
 // TODO: investigate this
 // type UpdateParam<T> = UpdateQuery<T> | UpdateWithAggregationPipeline;
