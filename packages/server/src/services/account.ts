@@ -5,6 +5,7 @@ import { EitherAsync } from 'purify-ts';
 import { SimpleFindById, SimpleUpdate } from '@asw-project/resources/routes';
 
 import { ObjectId } from 'mongodb';
+import { Account, Authentication } from '@asw-project/shared/generatedTypes';
 import { AuthenticationModel } from '../models/Authentication';
 
 export function createAccount(
@@ -28,11 +29,15 @@ export function createAccount(
 
 export function getAccount(
   userId: string | undefined,
-): EitherAsync<AccountCreationOrUpdateFail, any> {
-  return EitherAsync(async () => userId !== undefined)
-    .map(() =>
-      new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId)),
-    )
-    .mapLeft((err: any) => unexpectedError(err));
-  // .map((obj) => obj.ifRight((o) => o.account));
+): EitherAsync<AccountCreationOrUpdateFail, Account> {
+  return EitherAsync<AccountCreationOrUpdateFail, boolean>(
+    async () => userId !== undefined,
+  )
+   .chain<AccountCreationOrUpdateFail,Authentication>(
+    
+        new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId));
+      
+    )/*.chainLeft((err: any) => unexpectedError(err))
+    .map((obj) => obj.account!)
+    .mapLeft((err: any) => unexpectedError(err));*/
 }

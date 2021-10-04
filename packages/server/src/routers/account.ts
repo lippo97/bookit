@@ -8,7 +8,7 @@ import { validate } from '../middleware/joiValidator';
 
 const router = Router();
 
-router.get('/account', accountController.getAccount);
+router.get('', accountController.getAccount);
 
 router.post(
   '/managerAccount',

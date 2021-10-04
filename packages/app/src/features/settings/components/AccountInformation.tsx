@@ -11,7 +11,7 @@ function AccountInformation() {
         if (isUserAccount(d)) {
           return (
             <>
-              <p>d.firstName</p>
+              <p>d.firstname</p>
               <p>d.secondName</p>
             </>
           );

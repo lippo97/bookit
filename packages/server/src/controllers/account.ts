@@ -55,7 +55,10 @@ export async function createUserAccount(
   const result = await accountService.createAccount(userId, account);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: (account) => res.json(account),
+    Right: (account) => {
+      req.session.account = account;
+      res.json(account);
+    },
     Left: next,
   });
 }
@@ -77,7 +80,10 @@ export async function createManagerAccount(
   const result = await accountService.createAccount(userId, account);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: (account) => res.json(account),
+    Right: (account) => {
+      req.session.account = account;
+      res.json(account);
+    },
     Left: next,
   });
 }

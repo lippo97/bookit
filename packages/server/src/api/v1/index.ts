@@ -11,7 +11,7 @@ import availableServicesRouter from '../../routers/availableServices';
 const router = Router();
 
 router.use(authenticationRouter);
-router.use(accountRouter);
+router.use('/account', accountRouter);
 router.use('/avalaibleServices', availableServicesRouter);
 router.use('/libraries', libraryRouter);
 router.use('/positions', positionRouter);

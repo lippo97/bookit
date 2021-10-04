@@ -1,4 +1,5 @@
 import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/accountCreation/request';
+import { UserAccount } from '@asw-project/shared/generatedTypes/userAccount';
 import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { To } from 'history';
@@ -17,7 +18,12 @@ export const AddUserAccountForm = ({
   onSuccessNavigate,
 }: AddUserAccountFormProps) => {
   const navigate = useNavigate();
-  const { mutateAsync } = useMutation(createUserAccount);
+  const { mutateAsync } = useMutation<
+    UserAccount,
+    Error,
+    UserAccountRequest,
+    unknown
+  >(createUserAccount);
   const { control, handleSubmit } = useForm<UserAccountRequest>({
     resolver: joiResolver(UserAccountRequestSchema),
     defaultValues: {

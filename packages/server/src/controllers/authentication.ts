@@ -15,9 +15,9 @@ export async function login(
     // eslint-disable-next-line @typescript-eslint/no-shadow
     Right: ({ userId, email, account }) => {
       req.session.userId = userId;
-
       req.session.email = email;
       req.session.account = account;
+
       return res.json({ userId, email, account });
     },
     Left: next,

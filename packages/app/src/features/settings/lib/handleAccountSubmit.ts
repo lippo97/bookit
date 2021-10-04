@@ -1,11 +1,12 @@
 import { useNotification } from '@/stores/notifications';
 import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
+import { UserAccount } from '@asw-project/shared/generatedTypes/userAccount';
 import { BaseSyntheticEvent } from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
 
 export const handleAccountSubmit = (
   handleSubmit: UseFormHandleSubmit<UserAccountRequest>,
-  mutateAsync: (data: UserAccountRequest) => Promise<void>,
+  mutateAsync: (data: UserAccountRequest) => Promise<UserAccount>,
   onSuccess?: () => void | Promise<void>,
 ): ((e?: BaseSyntheticEvent<any, Event>) => Promise<void>) => {
   const { pushNotification } = useNotification.getState();

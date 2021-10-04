@@ -1,5 +1,6 @@
 import { QueryContent } from '@/components/QueryContent';
 import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/accountCreation/request';
+import { UserAccount } from '@asw-project/shared/generatedTypes';
 import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
 import { isUserAccount } from '@asw-project/shared/types/account';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -25,6 +26,7 @@ export const EditUserAccountForm = ({}: EditUserAccountFormProps) => {
   });
   const { status, data } = useQuery('getUserAccount', getAccount, {
     onSuccess: (account) => {
+      console.log('account is:', account);
       if (isUserAccount(account)) {
         setValue('firstName', account.firstName);
         setValue('secondName', account.secondName);
@@ -33,7 +35,12 @@ export const EditUserAccountForm = ({}: EditUserAccountFormProps) => {
       }
     },
   });
-  const { mutateAsync } = useMutation(updateUserAccount);
+  const { mutateAsync } = useMutation<
+    UserAccount,
+    Error,
+    UserAccountRequest,
+    unknown
+  >(updateUserAccount);
 
   return (
     <QueryContent status={status} data={data}>

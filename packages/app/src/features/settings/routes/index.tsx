@@ -8,9 +8,10 @@ export const SettingsRoutes = () => (
   <Routes>
     {/* These are just temporary */}
     <Route path="/" element={<Settings />} />
-    <Route path="/account/add" element={<AddAccount />} />
-    <Route path="/account/edit" element={<EditAccount />} />
-    {/* These are just temporary */}
-    <Route path="/account/edit" element={<Account />} />
+    <Route path="/account">
+      <Route path="add" element={<AddAccount />} />
+      <Route path="edit" element={<EditAccount />} />
+      <Route path="edit" element={<Account />} />
+    </Route>
   </Routes>
 );
