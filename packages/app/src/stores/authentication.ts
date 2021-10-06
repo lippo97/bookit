@@ -1,10 +1,11 @@
 import { IS_DEVELOPMENT } from '@/config';
 import { loginWithEmailAndPassword, logout } from '@/features/auth';
+import { Account } from '@asw-project/shared/generatedTypes';
 import { LoginRequest } from '@asw-project/shared/src/generatedTypes/requests/login/request';
 import { ReturnedUser } from '@asw-project/shared/src/types/returnedUser';
 import flow from 'lodash/fp/flow';
 import identity from 'lodash/fp/identity';
-import create from 'zustand';
+import create, { GetState } from 'zustand';
 import {
   devtools,
   NamedSet,
@@ -18,9 +19,13 @@ type AuthState = {
   auth: Authentication;
   loginWithEmailAndPassword: (dto: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
+  updateAccount: (account: Account) => Promise<void>;
 };
 
-const authState: (set: NamedSet<AuthState>) => AuthState = (set) => ({
+const authState: (
+  set: NamedSet<AuthState>,
+  get: GetState<AuthState>,
+) => AuthState = (set, get) => ({
   auth: null,
   loginWithEmailAndPassword: async (dto: LoginRequest) => {
     const auth = await loginWithEmailAndPassword(dto);
@@ -33,6 +38,17 @@ const authState: (set: NamedSet<AuthState>) => AuthState = (set) => ({
         auth: null,
       })),
     );
+  },
+  updateAccount: async (account) => {
+    const { auth } = get();
+    if (auth === null) return;
+
+    set({
+      auth: {
+        ...auth,
+        account,
+      },
+    });
   },
 });
 

@@ -6,7 +6,7 @@ import { To } from 'history';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { createUserAccount } from '../../api/account';
+import { updateUserAccount } from '../../api/account';
 import { handleAccountSubmit } from '../../lib/handleAccountSubmit';
 import { UserForm } from './UserForm';
 
@@ -18,12 +18,9 @@ export const AddUserAccountForm = ({
   onSuccessNavigate,
 }: AddUserAccountFormProps) => {
   const navigate = useNavigate();
-  const { mutateAsync } = useMutation<
-    UserAccount,
-    Error,
-    UserAccountRequest,
-    unknown
-  >(createUserAccount);
+  const { mutateAsync } = useMutation<void, Error, UserAccountRequest, unknown>(
+    updateUserAccount,
+  );
   const { control, handleSubmit } = useForm<UserAccountRequest>({
     resolver: joiResolver(UserAccountRequestSchema),
     defaultValues: {
