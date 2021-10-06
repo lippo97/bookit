@@ -3,7 +3,6 @@ import {
   UserAccountRequest,
   ManagerAccountRequest,
 } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
-import { isManagerAccount } from '@asw-project/shared/types/account';
 import { pick } from 'lodash';
 import { accountTypes } from '@asw-project/shared/types/accountTypes';
 import * as accountService from '../services/account';
@@ -38,7 +37,7 @@ export async function getAccount(
   });
 }
 
-export async function createUserAccount(
+export async function updateUserAccount(
   req: Request<any, any, UserAccountRequest>,
   res: Response,
   next: NextFunction,
@@ -52,7 +51,7 @@ export async function createUserAccount(
     userAccountKeys,
   ) as any;
 
-  const result = await accountService.createAccount(userId, account);
+  const result = await accountService.updateAccount(userId, account);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
     Right: (account) => {
@@ -63,7 +62,7 @@ export async function createUserAccount(
   });
 }
 
-export async function createManagerAccount(
+export async function updateManagerAccount(
   req: Request<any, any, ManagerAccountRequest>,
   res: Response,
   next: NextFunction,
@@ -77,7 +76,7 @@ export async function createManagerAccount(
     managerAccountKeys,
   ) as any;
 
-  const result = await accountService.createAccount(userId, account);
+  const result = await accountService.updateAccount(userId, account);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
     Right: (account) => {
@@ -87,7 +86,3 @@ export async function createManagerAccount(
     Left: next,
   });
 }
-
-export const updateUserAccount = createUserAccount;
-
-export const updateManagerAccount = createManagerAccount;

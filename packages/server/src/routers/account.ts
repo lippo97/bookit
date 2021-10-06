@@ -13,22 +13,10 @@ router.get('', accountController.getAccount);
 router.post(
   '/managerAccount',
   validate(ManagerAccountRequestSchema),
-  accountController.createManagerAccount,
-);
-
-router.patch(
-  '/managerAccount',
-  validate(ManagerAccountRequestSchema),
   accountController.updateManagerAccount,
 );
 
 router.post(
-  '/userAccount',
-  validate(UserAccountRequestSchema),
-  accountController.createUserAccount,
-);
-
-router.patch(
   '/userAccount',
   validate(UserAccountRequestSchema),
   accountController.updateUserAccount,

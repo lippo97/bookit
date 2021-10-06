@@ -11,7 +11,7 @@ import { FindByIdError } from '@asw-project/resources/routes/operations/FindById
 import { EditError } from '@asw-project/resources/routes/operations/Update';
 import { AuthenticationModel } from '../models/Authentication';
 
-export function createAccount(
+export function updateAccount(
   userId: string | undefined,
   accountInfo: any,
 ): EitherAsync<Error<EditError>, Account> {
