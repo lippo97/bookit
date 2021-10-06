@@ -5,7 +5,6 @@ import { useMutation } from 'react-query';
 import { SignupRequest } from '@asw-project/shared/src/generatedTypes/requests/signup';
 import { useNotification } from '@/stores/notifications';
 import { useAuth } from '@/stores/authentication';
-import { SentimentVeryDissatisfied } from '@material-ui/icons';
 import { SignupForm } from '../components/SignupForm';
 import { Layout } from '../components/Layout';
 import { signupWithEmailAndPassword } from '../api/signup';
@@ -31,7 +30,7 @@ export function Signup() {
     return ['Whoops! Something went wrong. Try to reload the page'];
   };
 
-  const handleSubmit = (email: string, password: string) => {
+  const handleSubmit = (email: string, password: string) =>
     mutate(
       { email, password },
       {
@@ -44,7 +43,8 @@ export function Signup() {
               });
               navigate('/');
             })
-            .catch(() => {
+            .catch((err) => {
+              console.error(err);
               pushNotification({
                 message: 'Something went wrong, retry later.',
                 severity: 'error',
@@ -52,7 +52,6 @@ export function Signup() {
             }),
       },
     );
-  };
 
   return (
     <Layout image={library2}>

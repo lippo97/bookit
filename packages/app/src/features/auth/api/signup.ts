@@ -13,4 +13,5 @@ export const signupWithEmailAndPassword = ({
         password,
       },
     })
-    .json<SignupSuccess>();
+    // .void()
+    .then(() => {});
