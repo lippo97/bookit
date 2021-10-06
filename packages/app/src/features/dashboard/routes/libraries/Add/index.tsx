@@ -68,6 +68,7 @@ export const AddLibrary = () => {
           mutateAsync({
             ...basicInfo,
             timetable: convertTimetableToDbFormat(timetable),
+            imageFile: image,
           })
             .then(() =>
               pushNotification({

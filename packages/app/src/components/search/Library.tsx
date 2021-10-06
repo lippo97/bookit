@@ -21,9 +21,9 @@ const useStyles = makeStyles({
   },
 });
 
-function Library({ data: { _id, name, street, imageFilename } }: LibraryProps) {
+function Library({ data: { _id, name, street, imageFileName } }: LibraryProps) {
   const classes = useStyles();
-  const image = getImageUrlOrFallback(imageFilename);
+  const image = getImageUrlOrFallback(imageFileName);
   return (
     <Card>
       <CardActionArea component={RouterLink} to={`places/${_id}`}>

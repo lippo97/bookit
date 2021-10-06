@@ -18,7 +18,7 @@ const ownerId = Joi.string()
     },
   });
 
-const imageFilename = Joi.string();
+const imageFileName = Joi.string();
 //
 const timeRange = Joi.object().keys({
   from: Joi.number().required(),
@@ -62,7 +62,7 @@ export const LibrarySchema = Joi.object({
   timetable,
   availableServices,
   rooms,
-  imageFilename,
+  imageFileName,
 }).meta({
   className: 'Library',
 });

@@ -23,7 +23,7 @@ export const ManageLibrary = () => {
       <QueryContent data={data} status={status}>
         {(d) => (
           <>
-            <LibraryHeader src={d.imageFilename} />
+            <LibraryHeader src={d.imageFileName} />
             <Container>
               <Typography variant="h6" className={classes.title}>
                 {d.name}

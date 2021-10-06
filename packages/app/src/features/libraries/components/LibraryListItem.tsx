@@ -22,10 +22,10 @@ const useStyles = makeStyles({
 });
 
 export function LibraryListItem({
-  data: { _id, name, street, imageFilename },
+  data: { _id, name, street, imageFileName },
 }: LibraryProps) {
   const classes = useStyles();
-  const image = getImageUrlOrFallback(imageFilename);
+  const image = getImageUrlOrFallback(imageFileName);
 
   return (
     <Card>

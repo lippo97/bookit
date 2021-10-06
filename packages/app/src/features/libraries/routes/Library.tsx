@@ -19,7 +19,7 @@ export const Library = () => {
         {(d) => (
           <>
             <LibraryHeader
-              src={d.imageFilename}
+              src={d.imageFileName}
               isStarred={isStarred}
               onStar={toggleStarred}
             />

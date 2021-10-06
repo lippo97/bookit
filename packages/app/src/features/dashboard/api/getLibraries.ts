@@ -35,10 +35,13 @@ import { Library } from '@asw-project/shared/generatedTypes';
     imageFilename: '61311a76140b1f7443dfa38c.jpg',
   },
 ]; */
+type FormDataImageResult = {
+  key: string;
+};
 export type CreateLibraryArg = Pick<
   Library,
   | 'city'
-  // | 'imageFilename'
+  | 'imageFileName'
   | 'name'
   // | 'rooms'
   | 'street'
@@ -47,6 +50,18 @@ export type CreateLibraryArg = Pick<
   imageFile?: File;
 };
 
+async function updateLibraryImage(
+  imageFile: File,
+): Promise<FormDataImageResult> {
+  const formData = new FormData();
+  formData.append('imageFile', imageFile);
+
+  return ky
+    .post('libraries/libraryImageUpload', {
+      body: formData,
+    })
+    .json();
+}
 export type UpdateLibraryArg = CreateLibraryArg;
 
 export async function getLibraryById(
@@ -66,7 +81,14 @@ export async function getLibraries(): Promise<WithId<Library>[]> {
 export async function createLibrary(
   data: CreateLibraryArg,
 ): Promise<WithId<Library>> {
-  return ky.post('libraries', { json: data }).json<WithId<Library>>();
+  let newData = data;
+  if (data.imageFile) {
+    const res = await updateLibraryImage(data.imageFile);
+    newData = data as Omit<typeof data, 'imageFile'>;
+    newData.imageFileName = res.key;
+  }
+
+  return ky.post('libraries', { json: newData }).json<WithId<Library>>();
 }
 export const updateLibrary =
   (libraryId: string) =>

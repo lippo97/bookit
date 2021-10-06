@@ -70,7 +70,7 @@ export const EditLibrary = () => {
       setValue('basicInfo.city', data.city);
       setValue('basicInfo.street', data.street);
       setTimetable(convertDbFormatToTimetable(data.timetable));
-      setInitialImage(data.imageFilename);
+      setInitialImage(data.imageFileName);
     }
   }, [status, data]);
 
