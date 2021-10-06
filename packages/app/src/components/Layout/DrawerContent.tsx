@@ -24,7 +24,6 @@ const UserRoutes = () => (
   <>
     <DrawerSection>
       <DrawerItem
-        selected
         link
         content="Search library"
         icon={<SearchIcon />}

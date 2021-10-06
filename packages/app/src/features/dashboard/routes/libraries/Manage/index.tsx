@@ -1,29 +1,16 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
 import { getLibraryById } from '@/features/dashboard/api/getLibraries';
+import { RoomList } from '@/features/dashboard/components/RoomList';
 import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
-import {
-  Container,
-  IconButton,
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { Container, makeStyles, Typography } from '@material-ui/core';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    marginTop: theme.spacing(2),
+    margin: theme.spacing(2, 0),
     fontWeight: 'bold',
-  },
-  list: {
-    backgroundColor: theme.palette.background.paper,
   },
 }));
 
@@ -38,28 +25,10 @@ export const ManageLibrary = () => {
           <>
             <LibraryHeader src={d.imageFilename} />
             <Container>
-              <Typography variant="h5" className={classes.title}>
+              <Typography variant="h6" className={classes.title}>
                 {d.name}
               </Typography>
-              <List className={classes.list}>
-                <ListItem>
-                  <ListItemText>Stanza 1</ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton>
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-                <ListItem>
-                  <ListItemText>Stanza 2</ListItemText>
-                </ListItem>
-                <ListItem>
-                  <ListItemText>Stanza 3</ListItemText>
-                </ListItem>
-              </List>
+              <RoomList rooms={d.rooms} />
             </Container>
           </>
         )}

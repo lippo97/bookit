@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import { To } from 'history';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 interface DrawerItemLinkProps {
   readonly link: true;
@@ -23,7 +23,6 @@ interface DrawerItemNoLinkProps {
 interface CommonProps {
   readonly content: string;
   readonly icon?: React.ReactNode;
-  readonly selected?: boolean;
 }
 
 type DrawerItemProps = (DrawerItemLinkProps | DrawerItemNoLinkProps) &
@@ -51,14 +50,11 @@ const Wrapper = (props: BoxProps) => (
   <Box mr={0.5} ml={0.5} p={0.5} {...props} />
 );
 
-export const DrawerItem = ({
-  content,
-  link,
-  icon,
-  selected,
-  to,
-}: DrawerItemProps) => {
+export const DrawerItem = ({ content, link, icon, to }: DrawerItemProps) => {
   const classes = useStyles();
+  const { pathname } = useLocation();
+
+  const selected = to === pathname;
 
   return (
     <Wrapper>
