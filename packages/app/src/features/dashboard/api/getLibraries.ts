@@ -92,12 +92,19 @@ export async function createLibrary(
 }
 export const updateLibrary =
   (libraryId: string) =>
-  (data: UpdateLibraryArg): Promise<WithId<Library>> =>
-    ky
+  async (data: UpdateLibraryArg): Promise<WithId<Library>> => {
+    let newData = data;
+    if (data.imageFile) {
+      const res = await updateLibraryImage(data.imageFile);
+      newData = data as Omit<typeof data, 'imageFile'>;
+      newData.imageFileName = res.key;
+    }
+    return ky
       .patch(`libraries/${libraryId}`, {
         json: data,
       })
       .json<WithId<Library>>();
+  };
 
 export async function deleteLibrary(
   libraryId: string,
