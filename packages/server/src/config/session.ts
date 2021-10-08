@@ -1,7 +1,11 @@
 import redis from 'redis';
 import connect from 'connect-redis';
 import session, { SessionOptions } from 'express-session';
-import { COOKIE_SECRET, IS_HTTPS as HTTPS_ENABLED, IS_PRODUCTION } from './constants';
+import {
+  COOKIE_SECRET,
+  IS_HTTPS as HTTPS_ENABLED,
+  IS_PRODUCTION,
+} from './constants';
 import redisOptions from './redis';
 
 let RedisStore;
@@ -12,10 +16,6 @@ if (IS_PRODUCTION) {
   RedisStore = connect(session);
   client = redis.createClient(redisOptions);
   store = new RedisStore({ client });
-
-  client.set('pippo', 'true');
-  client.set('pluto', 'false');
-  client.set('dolan', 'maybe');
 }
 
 const sessionOptions: SessionOptions = {

@@ -35,12 +35,9 @@ export const EditUserAccountForm = ({}: EditUserAccountFormProps) => {
       }
     },
   });
-  const { mutateAsync } = useMutation<
-    UserAccount,
-    Error,
-    UserAccountRequest,
-    unknown
-  >(updateUserAccount);
+  const { mutateAsync } = useMutation<void, Error, UserAccountRequest, unknown>(
+    updateUserAccount,
+  );
 
   return (
     <QueryContent status={status} data={data}>

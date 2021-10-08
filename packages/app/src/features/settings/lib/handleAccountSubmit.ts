@@ -6,7 +6,7 @@ import { UseFormHandleSubmit } from 'react-hook-form';
 
 export const handleAccountSubmit = (
   handleSubmit: UseFormHandleSubmit<UserAccountRequest>,
-  mutateAsync: (data: UserAccountRequest) => Promise<UserAccount>,
+  mutateAsync: (data: UserAccountRequest) => Promise<void>,
   onSuccess?: () => void | Promise<void>,
 ): ((e?: BaseSyntheticEvent<any, Event>) => Promise<void>) => {
   const { pushNotification } = useNotification.getState();

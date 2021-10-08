@@ -33,7 +33,7 @@ export function updateAccount(
     )
     .chain((res) => {
       if (res) {
-        return EitherAsync.liftEither(Right(newAccount));
+        return EitherAsync.liftEither(Right(newAccount.account));
       }
       return EitherAsync.liftEither(
         Left({

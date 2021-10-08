@@ -8,26 +8,25 @@ import {
   ManagerAccount,
   UserAccount,
 } from '@asw-project/shared/generatedTypes';
+import { useAuth } from '@/stores/authentication';
 
 export const getAccount = (): Promise<Account> =>
   ky.get('account').json<Account>();
 
-export const createUserAccount = (
-  data: UserAccountRequest,
-): Promise<UserAccount> =>
-  ky.post('account/userAccount', { json: data }).json();
-
-export const updateUserAccount = (
-  data: UserAccountRequest,
-): Promise<UserAccount> =>
-  ky.patch('account/userAccount', { json: data }).json();
-
-export const createManagerAccount = (
-  data: ManagerAccountRequest,
-): Promise<ManagerAccount> =>
-  ky.post('account/managerAccount', { json: data }).json();
+export const updateUserAccount = (data: UserAccountRequest): Promise<void> => {
+  const { updateAccount } = useAuth.getState();
+  return ky
+    .post('account/userAccount', { json: data })
+    .json<UserAccount>()
+    .then(updateAccount);
+};
 
 export const updateManagerAccount = (
   data: ManagerAccountRequest,
-): Promise<ManagerAccount> =>
-  ky.patch('account/managerAccount', { json: data }).json();
+): Promise<void> => {
+  const { updateAccount } = useAuth.getState();
+  return ky
+    .post('account/managerAccount', { json: data })
+    .json<ManagerAccount>()
+    .then(updateAccount);
+};
