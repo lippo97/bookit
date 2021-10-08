@@ -57,7 +57,7 @@ async function updateLibraryImage(
   formData.append('imageFile', imageFile);
 
   return ky
-    .post('libraries/libraryImageUpload', {
+    .post('libraries/libraryImage', {
       body: formData,
     })
     .json();
