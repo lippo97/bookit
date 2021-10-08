@@ -1,6 +1,7 @@
 import { QueryContent } from '@/components/QueryContent';
 import {
   getLibraryById,
+  getLibraryImage,
   updateLibrary,
   UpdateLibraryArg,
 } from '@/features/dashboard/api/getLibraries';
@@ -25,13 +26,20 @@ import { useMutation, useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export const EditLibrary = () => {
-  const { id } = useParams();
-  const { data, status } = useQuery(['edit library', id], () =>
-    getLibraryById(id),
-  );
-  const [timetable, setTimetable] = useState<TimetableT>([]);
   const [image, setImage] = useState<File>();
-  const [initialImage, setInitialImage] = useState<string>();
+  const [initialImage, setInitialImage] = useState<File>();
+  const [timetable, setTimetable] = useState<TimetableT>([]);
+  const { id } = useParams();
+  const { data, status } = useQuery(['edit library', id], async () => {
+    const library = await getLibraryById(id);
+    if (library.imageFileName) {
+      getLibraryImage(library.imageFileName).then((imageFile) => {
+        if (imageFile) setInitialImage(imageFile);
+      });
+    }
+    return library;
+  });
+
   const pushNotification = useNotification((s) => s.pushNotification);
   const navigate = useNavigate();
 
@@ -70,7 +78,6 @@ export const EditLibrary = () => {
       setValue('basicInfo.city', data.city);
       setValue('basicInfo.street', data.street);
       setTimetable(convertDbFormatToTimetable(data.timetable));
-      setInitialImage(data.imageFileName);
     }
   }, [status, data]);
 

@@ -8,7 +8,7 @@ import { ChangeEvent } from 'react';
 interface ImageFieldProps {
   readonly alt?: string;
   readonly value: File | undefined;
-  readonly initial?: string;
+  readonly initial?: File;
   onChange(file: File): void;
 }
 
@@ -74,7 +74,7 @@ export const ImageField = ({
 
   const switchValue = () => {
     if (value !== undefined) return URL.createObjectURL(value);
-    if (initial !== undefined) return initial;
+    if (initial !== undefined) return URL.createObjectURL(initial);
     return imagePlaceholder;
   };
 

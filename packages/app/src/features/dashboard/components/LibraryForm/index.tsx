@@ -1,13 +1,9 @@
 /* eslint-disable no-sparse-arrays */
 import { ImageField } from '@/components/ImageField';
 import { Timetable as TimetableT } from '@/lib/timetable/types';
-import { Library } from '@asw-project/shared/generatedTypes/library';
 import {
   Box,
-  Button,
-  Checkbox,
   Hidden,
-  Link,
   Step,
   StepContent,
   StepLabel,
@@ -19,7 +15,6 @@ import { values } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import React, { useState } from 'react';
 import { Control, Controller, useWatch } from 'react-hook-form';
-import { FormControlLabel } from '../forms';
 import { TimetableSection } from '../TimetableSection';
 import { controlledTextField } from './controlledTextField';
 import { StepperActions } from './StepperActions';
@@ -57,7 +52,7 @@ interface LibraryFormProps {
   readonly timetable: TimetableT;
   updateTimetable(timetable: TimetableT): void;
   readonly image: File | undefined;
-  readonly initialImage?: string;
+  readonly initialImage?: File;
   updateImage(image: File): void;
   onSubmit(): void;
 }

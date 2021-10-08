@@ -2,7 +2,6 @@ import { ky } from '@/config/ky';
 import { useAuth } from '@/stores/authentication';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Library } from '@asw-project/shared/generatedTypes';
-
 // TO DELETE
 
 /* const buildings = [
@@ -62,6 +61,16 @@ async function updateLibraryImage(
     })
     .json();
 }
+export async function getLibraryImage(
+  imageFileName: string,
+): Promise<File | undefined> {
+  const blob = await ky.get(`libraries/libraryImage/${imageFileName}`).blob();
+  if (blob) {
+    return new File([blob], imageFileName);
+  }
+  return undefined;
+}
+
 export type UpdateLibraryArg = CreateLibraryArg;
 
 export async function getLibraryById(
