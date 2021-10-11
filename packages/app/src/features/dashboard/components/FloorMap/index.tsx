@@ -1,12 +1,15 @@
 import { Layout } from '@/components/Layout';
-import { Box, Button, ButtonGroup, Paper, Typography } from '@material-ui/core';
+import { Tuple } from '@asw-project/shared/util/tuples';
 import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import { useEffect, useState } from 'react';
+import { Content } from './Content';
+import { Sidebar } from './Sidebar';
+import { Toolbar } from './Toolbar';
+import { Seat, SparseMatrix } from './types';
 
 interface FloorMapProps {}
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     position: 'absolute',
     top: 0,
@@ -21,69 +24,51 @@ const useStyles = makeStyles((theme) => ({
     "content  sidebar"
     `,
   },
-  toolbar: {
-    gridArea: 'toolbar',
-    height: '60px',
-    background: theme.palette.background.paper,
-    padding: theme.spacing(1.5),
-  },
-  sidebar: {
-    gridArea: 'sidebar',
-    width: '256px',
-    height: '100%',
-    padding: theme.spacing(1.5),
-    zIndex: theme.zIndex.drawer,
-  },
-  content: {
-    gridArea: 'content',
-    background: theme.palette.background.default,
-  },
-}));
+});
 
 export const FloorMap = ({}: FloorMapProps) => {
   const classes = useStyles();
+  const [seats, setSeats] = useState<SparseMatrix<Seat>>([[], [], []]);
+  const [size, setSize] = useState<Tuple<number, number>>([15, 7]);
+
+  /* eslint-disable no-sparse-arrays */
+  useEffect(() => {
+    setSeats([
+      [],
+      [
+        ,
+        {
+          id: 1,
+          services: ['Wi-Fi'],
+        },
+        {
+          id: 2,
+          services: ['Wi-Fi'],
+        },
+        {
+          id: 3,
+          services: ['Wi-Fi'],
+        },
+      ],
+      [
+        ,
+        {
+          id: 4,
+          services: ['Wi-Fi'],
+        },
+      ],
+      [],
+      [],
+      [],
+    ]);
+  }, [setSeats]);
 
   return (
     <Layout>
       <div className={classes.root}>
-        <Paper elevation={2} square className={classes.toolbar}>
-          <Box display="flex" justifyContent="space-between">
-            <ButtonGroup
-              variant="outlined"
-              color="default"
-              aria-label="editing tools"
-            >
-              <Button>
-                <AddIcon />
-              </Button>
-              <Button>Two</Button>
-              <Button>
-                <RemoveIcon />
-              </Button>
-              <Button>Three</Button>
-            </ButtonGroup>
-            <Box>
-              <Button variant="outlined" color="default">
-                Cancel
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                style={{ marginLeft: '8px' }}
-              >
-                Save
-              </Button>
-            </Box>
-          </Box>
-        </Paper>
-        <Paper square elevation={3} className={classes.sidebar}>
-          <Typography variant="h6">Details</Typography>
-          <Typography variant="subtitle1">Selected seats:</Typography>
-        </Paper>
-        <div className={classes.content}>
-          <p>content</p>
-          <p>contentone</p>
-        </div>
+        <Toolbar />
+        <Sidebar />
+        <Content seats={seats} size={size} />
       </div>
     </Layout>
   );

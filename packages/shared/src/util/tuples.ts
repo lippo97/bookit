@@ -1,4 +1,4 @@
-type Tuple<A, B> = [A, B];
+export type Tuple<A, B> = [A, B];
 
 export const fst = <A>([a]: Tuple<A, any>) => a;
 
