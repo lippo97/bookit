@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     width: '256px',
     height: '100%',
     padding: theme.spacing(1.5),
+    zIndex: theme.zIndex.drawer,
   },
   content: {
     gridArea: 'content',
@@ -75,7 +76,7 @@ export const FloorMap = ({}: FloorMapProps) => {
             </Box>
           </Box>
         </Paper>
-        <Paper square elevation={2} className={classes.sidebar}>
+        <Paper square elevation={3} className={classes.sidebar}>
           <Typography variant="h6">Details</Typography>
           <Typography variant="subtitle1">Selected seats:</Typography>
         </Paper>
