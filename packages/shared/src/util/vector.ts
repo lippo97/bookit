@@ -44,3 +44,7 @@ export function mul(v: Vector2, a: number): Vector2 {
 export function div(v: Vector2, a: number): Vector2 {
   return operationByScalar(v, a, (x) => x / a);
 }
+
+export function equals([vX, vY]: Vector2, [wX, wY]: Vector2): boolean {
+  return vX === wX && vY === wY;
+}

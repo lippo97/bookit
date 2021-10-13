@@ -11,13 +11,14 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
     background: theme.palette.background.paper,
     padding: theme.spacing(1.5),
+    zIndex: 1,
   },
 }));
 
 export const Toolbar = ({}: ToolbarProps) => {
   const classes = useStyles();
   return (
-    <Paper elevation={2} square className={classes.toolbar}>
+    <Paper elevation={1} square className={classes.toolbar}>
       <Box display="flex" justifyContent="space-between">
         <ButtonGroup
           variant="outlined"
