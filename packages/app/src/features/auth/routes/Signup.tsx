@@ -41,7 +41,7 @@ export function Signup() {
                 message: 'Signed in successfully!',
                 severity: 'info',
               });
-              navigate('/');
+              navigate('/settings/account/add');
             })
             .catch((err) => {
               console.error(err);
