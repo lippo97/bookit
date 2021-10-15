@@ -1,7 +1,7 @@
 import { Tooltip, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
-import { getImageUrlOrFallback } from '@/lib/images';
+import { getLibraryImageUrlOrFallback } from '@/lib/images';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -53,7 +53,7 @@ export const LibraryHeader = ({
     <div className={classes.root}>
       <img
         className={classes.image}
-        src={getImageUrlOrFallback(src)}
+        src={getLibraryImageUrlOrFallback(src)}
         alt="The library"
       />
       {isStarred !== undefined && (

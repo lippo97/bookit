@@ -52,7 +52,7 @@ interface LibraryFormProps {
   readonly timetable: TimetableT;
   updateTimetable(timetable: TimetableT): void;
   readonly image: File | undefined;
-  readonly initialImage?: File;
+  readonly initialImage?: string;
   updateImage(image: File): void;
   onSubmit(): void;
 }

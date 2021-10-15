@@ -1,7 +1,6 @@
 import { QueryContent } from '@/components/QueryContent';
 import {
   getLibraryById,
-  getLibraryImage,
   updateLibrary,
   UpdateLibraryArg,
 } from '@/features/dashboard/api/getLibraries';
@@ -10,6 +9,7 @@ import {
   LibraryFormValue,
 } from '@/features/dashboard/components/LibraryForm';
 import { LibraryFormLayout } from '@/features/dashboard/components/LibraryFormLayout';
+import { getLibraryImageUrlOrFallback } from '@/lib/images';
 import {
   convertDbFormatToTimetable,
   convertTimetableToDbFormat,
@@ -27,16 +27,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 export const EditLibrary = () => {
   const [image, setImage] = useState<File>();
-  const [initialImage, setInitialImage] = useState<File>();
+  const [initialImage, setInitialImage] = useState<string>();
   const [timetable, setTimetable] = useState<TimetableT>([]);
   const { id } = useParams();
   const { data, status } = useQuery(['edit library', id], async () => {
     const library = await getLibraryById(id);
-    if (library.imageFileName) {
-      getLibraryImage(library.imageFileName).then((imageFile) => {
-        if (imageFile) setInitialImage(imageFile);
-      });
-    }
+    setInitialImage(getLibraryImageUrlOrFallback(library.imageFileName));
+
     return library;
   });
 

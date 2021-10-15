@@ -1,3 +1,4 @@
+import { S3_URL } from '@/config';
 import { ky } from '@/config/ky';
 import { useAuth } from '@/stores/authentication';
 import { WithId } from '@asw-project/shared/data/withId';
@@ -61,7 +62,8 @@ async function updateLibraryImage(
     })
     .json();
 }
-export async function getLibraryImage(
+
+/* export async function getLibraryImage(
   imageFileName: string,
 ): Promise<File | undefined> {
   const blob = await ky.get(`libraries/libraryImage/${imageFileName}`).blob();
@@ -69,7 +71,7 @@ export async function getLibraryImage(
     return new File([blob], imageFileName);
   }
   return undefined;
-}
+} */
 
 export type UpdateLibraryArg = CreateLibraryArg;
 

@@ -18,7 +18,7 @@ export const accountImagesUpload = multer({
 }); */
 
 const libraryImagesBucketName = 'library-images';
-multer();
+
 export const libraryImageUpload = multer({
   storage: multers3({
     s3,
@@ -32,7 +32,7 @@ export const libraryImageUpload = multer({
   }),
 });
 
-function libraryImageS3Getter(imageFileName: string) {
+/* function libraryImageS3Getter(imageFileName: string) {
   return s3
     .getObject({
       Bucket: libraryImagesBucketName,
@@ -50,3 +50,4 @@ export async function libraryImageGetter(
   }
   return undefined;
 }
+*/
