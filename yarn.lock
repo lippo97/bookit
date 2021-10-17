@@ -7582,6 +7582,13 @@ jmespath@0.15.0:
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
   integrity sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=
 
+joi-oid@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/joi-oid/-/joi-oid-1.1.2.tgz#b21ec4044bb29a5d69dae525cb19cd3c877738d1"
+  integrity sha512-OM639X8cRWcM6lPqtLGIh6/MdxYhv5GjP0ntjm22ZvQ1G5pBOKohGqAXvbvhNjIJ25pcSfAkpldKlgN4euCLzA==
+  dependencies:
+    joi "^17.3.0"
+
 joi-to-typescript@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/joi-to-typescript/-/joi-to-typescript-2.1.0.tgz#6e52b0ea4e25453d7576ddbd75c912fb89b8bda3"

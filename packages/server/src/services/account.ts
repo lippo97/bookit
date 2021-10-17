@@ -63,7 +63,7 @@ export function getAccount(
       }
       return EitherAsync.liftEither(
         Left({
-          kind: 'UninitializedAccountKind',
+          kind: 'UninitializedAccountError',
         } as const),
       );
     });

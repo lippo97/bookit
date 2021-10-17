@@ -1,4 +1,5 @@
-import Joi from 'joi';
+const Joi = require('joi-oid');
+
 import { UserAccountSchema } from './userAccount';
 import { ManagerAccountSchema } from './managerAccount';
 import { Email as CEmail, Password as CPassword } from './common';
@@ -17,10 +18,20 @@ export const AccountSchema = Joi.alternatives()
     className: 'Account',
   });
 
+export const FavoriteLibrariesSchema = Joi.array()
+
+  .items(Joi.string())
+  .meta({
+    _mongoose: {
+      type: 'ObjectId',
+      ref: 'Library',
+    },
+  });
 const schema = {
   email,
   password,
   account: AccountSchema,
+  favoriteLibraries: FavoriteLibrariesSchema,
 };
 
 export const AuthenticationSchema = Joi.object(schema).meta({
