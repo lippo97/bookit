@@ -28,7 +28,7 @@ export const Sidebar = ({ seats, selected }: SidebarProps) => {
       {selected.map(([x, y]) => {
         const seat = seats[x][y];
         if (seat) {
-          return <div key={[x, y]}>{seat.id}</div>;
+          return <div key={[x, y].toString()}>{seat.id}</div>;
         }
         return <></>;
       })}
