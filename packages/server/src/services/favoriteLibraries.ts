@@ -3,22 +3,35 @@ import { Error, ExpectedError } from '@asw-project/shared/errors';
 import { UnauthorizedKind } from '@asw-project/shared/errors/kinds';
 
 import { EitherAsync, Left, MaybeAsync, Right } from 'purify-ts';
-import { SimpleFindById } from '@asw-project/resources/routes';
+import {
+  FindAll,
+  SimpleFindById,
+  SimpleUpdate,
+} from '@asw-project/resources/routes';
 
 import { ObjectId } from 'mongodb';
 import { isTrue } from '@asw-project/shared/util/boolean';
 import { FindByIdError } from '@asw-project/resources/routes/operations/FindById';
-import { Library } from '@asw-project/shared/generatedTypes';
+import { Account, Library } from '@asw-project/shared/generatedTypes';
+import { QueryOptions } from 'mongoose';
+import { EditError } from '@asw-project/resources/routes/operations/Update';
+import { isUserAccount } from '@asw-project/shared/types/account';
 import { AuthenticationModel } from '../models/Authentication';
-import { LibraryService } from './libraries';
+import { LibraryModel } from '../models/Library';
 
 export function getFavoriteLibraries(
   userId: string | undefined,
+  account: Account | undefined,
+  options?: Pick<QueryOptions, 'skip' | 'limit'>,
 ): EitherAsync<
   Error<FavoriteLibrariesNotAvailableKind | FindByIdError>,
   Library[]
 > {
-  return MaybeAsync(() => Promise.resolve(userId !== undefined))
+  return MaybeAsync(() =>
+    Promise.resolve(
+      userId !== undefined && account !== undefined && isUserAccount(account),
+    ),
+  )
     .filter(isTrue)
     .void()
     .toEitherAsync<ExpectedError<UnauthorizedKind>>({
@@ -28,7 +41,11 @@ export function getFavoriteLibraries(
       new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId)),
     )
     .chain((res) =>
-      new LibraryService().findAll({ _id: { $in: res.favoriteLibraries } }),
+      new FindAll(LibraryModel).findAll(
+        { _id: { $in: res.favoriteLibraries } },
+        undefined,
+        options,
+      ),
     )
 
     .chain((libs) => {
@@ -45,34 +62,72 @@ export function getFavoriteLibraries(
     });
 }
 
-/* export async function getFavoriteLibraries(
+function operationOnFavoriteLibrary(
   userId: string | undefined,
-): EitherAsync<
-  Error<FavoriteLibrariesNotAvalaibleKind | FindByIdError>,
-  string[]
-> {
-  return MaybeAsync(() => Promise.resolve(userId !== undefined))
-  .filter(isTrue)
-  .void()
-  .toEitherAsync<UnexpectedError>({
-    kind: 'InternalError',
-    body: new Error('Unexpected error in createAccount'),
-  })
-  .chain(() =>
-    new SimpleUpdate(AuthenticationModel).update(
-      new ObjectId(userId),
-      newAccount,
+  account: Account | undefined,
+  libraryId: string,
+  op: (array: string[]) => string[],
+): EitherAsync<Error<EditError>, string[]> {
+  let updatedFavoriteLibraries: any = {};
+  return MaybeAsync(() =>
+    Promise.resolve(
+      userId !== undefined && account !== undefined && isUserAccount(account),
     ),
   )
-  .chain((res) => {
-    if (res) {
-      return EitherAsync.liftEither(Right(newAccount.account));
-    }
-    return EitherAsync.liftEither(
-      Left({
-        kind: 'InternalError',
-        body: new Error('Operation failed on account'),
-      }),
-    );
-  });
-} */
+    .filter(isTrue)
+    .void()
+    .toEitherAsync<ExpectedError<UnauthorizedKind>>({
+      kind: 'UnauthorizedError',
+    })
+    .chain(() =>
+      new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId)),
+    )
+    .chain((info) => {
+      let favoriteLibraries: string[] = [];
+      if (info && info.favoriteLibraries) {
+        favoriteLibraries = info.favoriteLibraries;
+      }
+      favoriteLibraries = op(favoriteLibraries);
+
+      updatedFavoriteLibraries = {
+        favoriteLibraries,
+      };
+
+      return new SimpleUpdate(AuthenticationModel).update(
+        new ObjectId(userId),
+
+        [{ $set: updatedFavoriteLibraries }],
+      );
+    })
+    .chain((res) => {
+      if (res) {
+        return EitherAsync.liftEither(Right(updatedFavoriteLibraries));
+      }
+      return EitherAsync.liftEither(
+        Left({
+          kind: 'InternalError',
+          body: new Error('Operation failed on favorite library'),
+        }),
+      );
+    });
+}
+
+export function addFavoriteLibrary(
+  userId: string | undefined,
+  account: Account | undefined,
+  libraryId: string,
+): EitherAsync<Error<EditError>, string[]> {
+  return operationOnFavoriteLibrary(userId, account, libraryId, (array) =>
+    array.find((e) => e === libraryId) ? array : [...array, libraryId],
+  );
+}
+
+export function deleteFavoriteLibrary(
+  userId: string | undefined,
+  account: Account | undefined,
+  libraryId: string,
+): EitherAsync<Error<EditError>, string[]> {
+  return operationOnFavoriteLibrary(userId, account, libraryId, (array) =>
+    array.filter((lib) => lib !== libraryId),
+  );
+}

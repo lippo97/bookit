@@ -1,5 +1,4 @@
-import { response, Router } from 'express';
-// import availableServiceRouter from '../../routers/avalaibleServices';
+import { Router } from 'express';
 import libraryRouter from '../../routers/libraries';
 import positionRouter from '../../routers/positions';
 import roomRouter from '../../routers/rooms';
@@ -12,6 +11,7 @@ import favoriteLibrariesRouter from '../../routers/favoriteLibraries';
 const router = Router();
 
 router.use(authenticationRouter);
+
 router.use('/account', accountRouter);
 router.use('/account', favoriteLibrariesRouter);
 router.use('/availableServices', availableServicesRouter);

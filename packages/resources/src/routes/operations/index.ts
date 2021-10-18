@@ -4,6 +4,7 @@ export { SimpleFindById } from './FindById';
 export { Remove } from './Remove';
 export { Update } from './Update';
 export { SimpleUpdate } from './Update';
+export { SimpleRemove } from './Remove';
 export { ProtectedFindById } from './ProtectedFindById';
 export { ProtectedRemove } from './ProtectedRemove';
 export { ProtectedUpdate } from './ProtectedUpdate';
