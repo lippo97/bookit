@@ -11,7 +11,7 @@ export const SettingsRoutes = () => (
     <Route path="/account">
       <Route path="add" element={<AddAccount />} />
       <Route path="edit" element={<EditAccount />} />
-      <Route path="edit" element={<Account />} />
+      <Route path="manage" element={<Account />} />
     </Route>
   </Routes>
 );

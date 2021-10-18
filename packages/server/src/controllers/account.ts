@@ -22,6 +22,28 @@ function getEmail(session: any): string | undefined {
   }
   return undefined;
 }
+async function operationOnAccount(
+  req: Request<any, any, UserAccountRequest | ManagerAccountRequest>,
+  res: Response,
+  next: NextFunction,
+  accountOp: (
+    req: Request<any, any, UserAccountRequest | ManagerAccountRequest>,
+  ) => any,
+): Promise<void> {
+  const userId = getUserId(req.session);
+
+  const account = accountOp(req);
+
+  const result = await accountService.updateAccount(userId, account);
+  result.caseOf({
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    Right: (account) => {
+      req.session.account = account;
+      res.json(account);
+    },
+    Left: next,
+  });
+}
 
 export async function getAccount(
   req: Request<any, any, any>,
@@ -42,23 +64,12 @@ export async function updateUserAccount(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const userId = getUserId(req.session);
-
-  const email = getEmail(req.session);
-
-  const account = pick(
-    { ...req.body, email, type: accountTypes.user },
-    userAccountKeys,
-  ) as any;
-
-  const result = await accountService.updateAccount(userId, account);
-  result.caseOf({
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: (account) => {
-      req.session.account = account;
-      res.json(account);
-    },
-    Left: next,
+  operationOnAccount(req, res, next, (r) => {
+    const email = getEmail(r.session);
+    return pick(
+      { ...r.body, email, type: accountTypes.user },
+      userAccountKeys,
+    ) as any;
   });
 }
 
@@ -67,22 +78,11 @@ export async function updateManagerAccount(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const userId = getUserId(req.session);
-
-  const email = getEmail(req.session);
-
-  const account = pick(
-    { ...req.body, email, type: accountTypes.manager },
-    managerAccountKeys,
-  ) as any;
-
-  const result = await accountService.updateAccount(userId, account);
-  result.caseOf({
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: (account) => {
-      req.session.account = account;
-      res.json(account);
-    },
-    Left: next,
+  operationOnAccount(req, res, next, (r) => {
+    const email = getEmail(r.session);
+    return pick(
+      { ...r.body, email, type: accountTypes.manager },
+      managerAccountKeys,
+    ) as any;
   });
 }
