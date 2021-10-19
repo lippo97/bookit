@@ -20,6 +20,7 @@ type AuthState = {
   loginWithEmailAndPassword: (dto: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
   updateAccount: (account: Account) => Promise<void>;
+  updateFavoriteLibraries: (favoriteLibraries: string[]) => Promise<void>;
 };
 
 const authState: (
@@ -47,6 +48,17 @@ const authState: (
       auth: {
         ...auth,
         account,
+      },
+    });
+  },
+  updateFavoriteLibraries: async (favoriteLibraries) => {
+    const { auth } = get();
+    if (auth === null) return;
+
+    set({
+      auth: {
+        ...auth,
+        favoriteLibraries,
       },
     });
   },

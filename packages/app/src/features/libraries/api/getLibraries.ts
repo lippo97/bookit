@@ -20,3 +20,12 @@ export async function getLibraries(query: string): Promise<WithId<Library>[]> {
     })
     .json<WithId<Library>[]>();
 }
+
+export async function changeFavorite(
+  isNowFavorite: boolean,
+  libraryId: string,
+) {
+  return isNowFavorite
+    ? ky.delete(`account/favorite/${libraryId}`).json<string[]>()
+    : ky.post('account/favorite', { json: { libraryId } }).json<string[]>();
+}
