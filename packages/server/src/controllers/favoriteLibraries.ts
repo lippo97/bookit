@@ -65,7 +65,10 @@ export async function addFavoriteLibrary(
       );
       result.caseOf({
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        Right: (favlib: any) => res.json(favlib),
+        Right: (favlib: any) => {
+          req.session.favoriteLibraries = favlib;
+          res.json(favlib);
+        },
         Left: next,
       });
     } else res.sendStatus(405);
@@ -91,7 +94,10 @@ export async function deleteFavoriteLibrary(
       );
       result.caseOf({
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        Right: (favlib: any) => res.json(favlib),
+        Right: (favlib: any) => {
+          req.session.favoriteLibraries = favlib;
+          res.json(favlib);
+        },
         Left: next,
       });
     } else res.sendStatus(405);

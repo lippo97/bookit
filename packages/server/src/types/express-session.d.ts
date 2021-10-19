@@ -6,5 +6,6 @@ declare module 'express-session' {
     userId: string;
     email: string;
     account?: Account;
+    favoriteLibraries?: string[];
   }
 }

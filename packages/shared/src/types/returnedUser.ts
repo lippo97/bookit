@@ -4,4 +4,5 @@ export type ReturnedUser = {
   userId: any;
   email: string;
   account?: Account;
+  favoriteLibraries?: string[];
 };

@@ -13,12 +13,13 @@ export async function login(
   const result = await authenticationService.login(email, password);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: ({ userId, email, account }) => {
+    Right: ({ userId, email, account, favoriteLibraries }) => {
       req.session.userId = userId;
       req.session.email = email;
       req.session.account = account;
+      req.session.favoriteLibraries = favoriteLibraries;
 
-      return res.json({ userId, email, account });
+      return res.json({ userId, email, account, favoriteLibraries });
     },
     Left: next,
   });
