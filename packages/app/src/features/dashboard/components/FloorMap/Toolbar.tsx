@@ -2,6 +2,7 @@ import { Box, Button, ButtonGroup, Paper, useTheme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { useSeats } from '../../stores/seats';
 
 interface ToolbarProps {}
 
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const Toolbar = ({}: ToolbarProps) => {
   const classes = useStyles();
+  const clearSelection = useSeats((s) => s.clearSelection);
   return (
     <Paper elevation={1} square className={classes.toolbar}>
       <Box display="flex" justifyContent="space-between">
@@ -28,7 +30,7 @@ export const Toolbar = ({}: ToolbarProps) => {
           <Button>
             <AddIcon />
           </Button>
-          <Button>Two</Button>
+          <Button onClick={clearSelection}>Clear selection</Button>
           <Button>
             <RemoveIcon />
           </Button>

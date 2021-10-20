@@ -29,13 +29,16 @@ const useStyles = makeStyles({
     marginLeft: '-1px',
     marginBottom: '-1px',
     border: selected ? '2px dotted #111' : '1px solid #999',
+    zIndex: selected ? 1 : 0,
   }),
 });
 
 export const Seat = ({ id }: SeatProps) => {
   const {moving, position, selected} = useSeats((s) => s.seatById[id]);
-  const select = useSeats((s) => s.select);
-  const startMoving = useSeats((s) => s.startMoving)
+  const replaceSelection = useSeats((s) => s.replaceSelection);
+  const updateSelection = useSeats((s) => s.updateSelection);
+  const startMoving = useSeats((s) => s.startMoving);
+  const stopMoving = useSeats((s) => s.stopMoving);
   const move = useSeats((s) => s.move);
 
   const scaledPosition = V2.mul(position, boxSize);
@@ -45,20 +48,26 @@ export const Seat = ({ id }: SeatProps) => {
   return (
     <DraggableCore
       grid={[boxSize, boxSize]}
-      onStart={() => {
+      onStart={(e) => {
         if (!selected) {
-          select(id);
+          if (e.ctrlKey) {
+            updateSelection(id)
+          } else {
+            replaceSelection(id);
+          }
         }
         startMoving();
       }}
-      // onStop={() => stopMoving(id)}
+      onStop={() => stopMoving()}
       onDrag={(_, { deltaX, deltaY }) => {
         const delta = V2.div([deltaX, deltaY], boxSize);
         move(delta);
       }}
     >
       <div
-    className={classes.box}>{id}</div>
+    className={classes.box}
+    onClick={(e) => e.stopPropagation()}
+      >{id}</div>
     </DraggableCore>
   );
 };
