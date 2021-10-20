@@ -15,19 +15,16 @@ import { LibraryHeader } from '../components/LibraryHeader';
 
 export const Library = () => {
   const { id } = useParams();
-  const favlib = useAuth.getState().auth?.favoriteLibraries;
+  const updateFavorite = useAuth((s) => s.updateFavoriteLibraries);
+  const favlib = useAuth((s) => s.auth?.favoriteLibraries);
 
-  // strange way to make filter working on string array[]
-  const isFavoriteInitial = favlib
-    ? (Object.entries(favlib)[0][1] as any).filter((e: string) => e === id)
-        .length > 0
-    : false;
+  const isFavoriteInitial = favlib ? favlib.includes(id) : false;
 
   const [isStarred, toggleStarred] = useToggle(isFavoriteInitial);
 
   const changeFavorite = () => {
     changeFavoriteAPI(isStarred, id).then((fl) => {
-      useAuth.getState().updateFavoriteLibraries(fl);
+      updateFavorite(fl.favoriteLibraries);
       toggleStarred();
     });
   };

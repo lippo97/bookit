@@ -20,8 +20,7 @@ const Paper = styled(MuiPaper)(({ theme }) => ({
 }));
 
 export const EditAccount = ({}: EditAccountProps) => {
-  const account = useAuth.getState().auth?.account;
-
+  const account = useAuth((s) => s.auth?.account);
   // const type: 'simple' | 'manager' = 'simple';
   if (account) {
     return (
