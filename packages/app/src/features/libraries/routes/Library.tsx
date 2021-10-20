@@ -23,8 +23,8 @@ export const Library = () => {
   const [isStarred, toggleStarred] = useToggle(isFavoriteInitial);
 
   const changeFavorite = () => {
-    changeFavoriteAPI(isStarred, id).then((fl) => {
-      updateFavorite(fl.favoriteLibraries);
+    changeFavoriteAPI(isStarred, id).then(({ favoriteLibraries }) => {
+      updateFavorite(favoriteLibraries);
       toggleStarred();
     });
   };
