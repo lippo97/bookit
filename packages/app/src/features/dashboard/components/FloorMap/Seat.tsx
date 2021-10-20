@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     position: 'absolute',
     width: `${boxSize+1}px`,
     height: `${boxSize+1}px`,
-    top: `${scaledPosition[1]}px`,
+    top: `${scaledPosition[1]-1}px`,
     left: `${scaledPosition[0]}px`,
     background: moving ? '#ffffffaa' : '#ffffff',
     display: 'inline-block',

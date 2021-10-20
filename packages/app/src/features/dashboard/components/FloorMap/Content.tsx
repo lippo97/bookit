@@ -6,6 +6,7 @@ import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { Seat } from './Seat';
 import { boxSize } from './constants';
+import Grid from './Grid';
 
 interface ContentProps {}
 
@@ -30,11 +31,13 @@ export const Content = () => {
 
   const seatIds = useSeats((s) => s.seatIds);
   const clearSelection = useSeats((s) => s.clearSelection);
-  const setSize = useSeats(s => s.setSize);
+  const setSize = useSeats((s) => s.setSize);
   const size = useEditor((s) => s.size);
   const boxRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {setSize([10, 5])}, [setSize]);
+  useEffect(() => {
+    setSize([10, 5]);
+  }, [setSize]);
 
   return (
     <div className={classes.content} ref={boxRef}>
@@ -45,6 +48,17 @@ export const Content = () => {
         bgcolor="#fafae2"
         onClick={clearSelection}
       >
+        <div
+        style={{
+          height: '100%',
+          backgroundSize: '50px 50px',
+          backgroundImage: "linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)",
+          backgroundRepeat: 'repeat',
+          margin: '-1px 0 0 -1px',
+          borderBottom: '1px solid grey',
+        }}
+        >
+        </div>
         {seatIds.map((id) => (
           <Seat id={id} key={id} />
         ))}
