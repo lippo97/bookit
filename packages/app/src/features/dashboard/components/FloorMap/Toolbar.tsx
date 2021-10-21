@@ -12,7 +12,7 @@ import SeatIcon from '@material-ui/icons/EventSeat';
 import RemoveIcon from '@material-ui/icons/Remove';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
-import ClearAllIcon from '@material-ui/icons/ClearAll';
+// import ClearAllIcon from '@material-ui/icons/ClearAll';
 import PanToolIcon from '@material-ui/icons/PanTool';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
 import { ButtonSection } from './ButtonSection';
 import { useEditor } from '../../stores/editor';
+import ClearAllIcon from '@/assets/clear_selection.svg';
 
 interface ToolbarProps {}
 

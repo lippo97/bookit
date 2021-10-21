@@ -38,11 +38,11 @@ type SeatState = {
   selectedSnapshot: SeatMap;
   size: Vector2;
   addSeat(id: SeatId, seat: Omit<Seat, 'moving' | 'selected'>): boolean;
-  removeSeat(id: SeatId | SeatId[]): void;
+  removeSeat(id: SeatId | readonly SeatId[]): void;
   selectAll(): void;
   clearSelection(): void;
-  updateSelection(id: SeatId | SeatId[]): void;
-  replaceSelection(id: SeatId | SeatId[]): void;
+  updateSelection(id: SeatId | readonly SeatId[]): void;
+  replaceSelection(id: SeatId | readonly SeatId[]): void;
   startMoving(): void;
   move(delta: Vector2): void;
   stopMoving(): void;

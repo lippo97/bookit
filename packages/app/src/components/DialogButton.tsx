@@ -15,6 +15,7 @@ interface BaseProps<C extends React.ElementType> {
   readonly title: string;
   readonly description: string;
   readonly isOpen: boolean;
+  readonly autoClose?: boolean;
   setOpen(open: boolean): void;
   onConfirm(): void;
 }
@@ -30,6 +31,7 @@ export function DialogButton<C extends React.ElementType>({
   onConfirm,
   isOpen,
   setOpen,
+  autoClose,
   ...innerProps
 }: //   ...props
 DialogButtonProps<C>) {
@@ -54,7 +56,10 @@ DialogButtonProps<C>) {
           <Button onClick={() => setOpen(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={onConfirm} color="primary" autoFocus>
+      <Button onClick={() => {
+        onConfirm();
+        autoClose && setOpen(false);
+      }} color="primary" autoFocus>
             Delete
           </Button>
         </DialogActions>
