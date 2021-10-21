@@ -11,9 +11,9 @@ import favoriteLibrariesRouter from '../../routers/favoriteLibraries';
 const router = Router();
 
 router.use(authenticationRouter);
+router.use(favoriteLibrariesRouter);
 
 router.use('/account', accountRouter);
-router.use('/account', favoriteLibrariesRouter);
 router.use('/availableServices', availableServicesRouter);
 router.use('/libraries', libraryRouter);
 router.use('/positions', positionRouter);

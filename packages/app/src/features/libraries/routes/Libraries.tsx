@@ -3,7 +3,7 @@ import { useQueryParams } from '@/hooks';
 import { Container } from '@material-ui/core';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { getLibraries } from '../api/getLibraries';
+import { getLibraries } from '../api/libraries';
 import { LibraryHeader } from '../components/Header';
 import { LibraryList } from '../components/LibraryList';
 

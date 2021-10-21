@@ -8,6 +8,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SearchIcon from '@material-ui/icons/Search';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import Star from '@material-ui/icons/Star';
 import { DrawerItem } from './DrawerItem';
 import { DrawerSection } from './DrawerSection';
 
@@ -35,6 +36,7 @@ const UserRoutes = () => (
         icon={<LibraryBooks />}
         to="/bookings"
       />
+      <DrawerItem link content="My favorites" icon={<Star />} to="/favorites" />
     </DrawerSection>
     <DrawerSection>
       <Bookmarks />

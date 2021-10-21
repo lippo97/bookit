@@ -3,13 +3,12 @@ import { QueryContent } from '@/components/QueryContent';
 import { useToggle } from '@/hooks/useToggle';
 import { useAuth } from '@/stores/authentication';
 import { Container } from '@material-ui/core';
-import { string } from 'joi';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import {
   getLibraryById,
   changeFavorite as changeFavoriteAPI,
-} from '../api/getLibraries';
+} from '../api/libraries';
 import { LibraryData } from '../components/LibraryData';
 import { LibraryHeader } from '../components/LibraryHeader';
 

@@ -26,7 +26,7 @@ function Library({ data: { _id, name, street, imageFileName } }: LibraryProps) {
   const image = getLibraryImageUrlOrFallback(imageFileName);
   return (
     <Card>
-      <CardActionArea component={RouterLink} to={`places/${_id}`}>
+      <CardActionArea component={RouterLink} to={`${_id}`}>
         <CardMedia
           image={image}
           title="Presentation image"

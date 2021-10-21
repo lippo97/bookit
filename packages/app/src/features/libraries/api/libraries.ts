@@ -26,10 +26,8 @@ export async function changeFavorite(
   libraryId: string,
 ) {
   return isNowFavorite
-    ? ky
-        .delete(`account/favorite/${libraryId}`)
-        .json<{ favoriteLibraries: string[] }>()
+    ? ky.delete(`favorite/${libraryId}`).json<{ favoriteLibraries: string[] }>()
     : ky
-        .post('account/favorite', { json: { libraryId } })
+        .post('favorite', { json: { libraryId } })
         .json<{ favoriteLibraries: string[] }>();
 }
