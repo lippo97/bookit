@@ -1,6 +1,6 @@
 import { Tooltip, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
+import StarIcon from '@material-ui/icons/Star';
 import { getLibraryImageUrlOrFallback } from '@/lib/images';
 
 const useStyles = makeStyles(() => ({
@@ -59,9 +59,9 @@ export const LibraryHeader = ({
       {isStarred !== undefined && (
         <>
           <div className={classes.starBg} />
-          <Tooltip title="Bookmark" className={classes.tooltip}>
-            <Fab color="default" aria-label="bookmark" onClick={onStar}>
-              <BookmarkIcon
+          <Tooltip title="Favorite" className={classes.tooltip}>
+            <Fab color="default" aria-label="favorite" onClick={onStar}>
+              <StarIcon
                 className={
                   isStarred ? classes.starredIcon : classes.unstarredIcon
                 }
