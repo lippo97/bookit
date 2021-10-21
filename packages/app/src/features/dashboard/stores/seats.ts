@@ -2,20 +2,22 @@
 import { IS_DEVELOPMENT } from '@/config';
 import { log } from '@/stores/_log';
 import { myDevtools } from '@/stores/_myDevtools';
-import { Vector2 } from '@asw-project/shared/util/vector';
 import * as V2 from '@asw-project/shared/util/vector';
+import { Vector2 } from '@asw-project/shared/util/vector';
+import flatMap from 'lodash/flatMap';
+import { includes } from 'lodash/fp';
+import eq from 'lodash/fp/eq';
 import flow from 'lodash/fp/flow';
 import identity from 'lodash/fp/identity';
+import negate from 'lodash/fp/negate';
+import map from 'lodash/map';
 import mapValues from 'lodash/mapValues';
+import partition from 'lodash/partition';
 import pickBy from 'lodash/pickBy';
+import values from 'lodash/values';
+import zipWith from 'lodash/zipWith';
 import create, { GetState } from 'zustand';
 import { NamedSet } from 'zustand/middleware';
-import partition from 'lodash/partition';
-import flatMap from 'lodash/flatMap';
-import map from 'lodash/map';
-import values from 'lodash/values';
-// import lt from 'lodash/fp/lt';
-import zipWith from 'lodash/zipWith';
 
 type SeatId = string;
 
@@ -34,13 +36,16 @@ type SeatState = {
   selectedIds: readonly SeatId[];
   seatById: SeatMap;
   selectedSnapshot: SeatMap;
+  size: Vector2;
+  addSeat(id: SeatId, seat: Omit<Seat, 'moving' | 'selected'>): boolean;
+  removeSeat(id: SeatId | SeatId[]): void;
+  selectAll(): void;
   clearSelection(): void;
   updateSelection(id: SeatId | SeatId[]): void;
   replaceSelection(id: SeatId | SeatId[]): void;
   startMoving(): void;
   move(delta: Vector2): void;
   stopMoving(): void;
-  size: Vector2;
   setSize(size: Vector2): void;
 };
 
@@ -76,6 +81,11 @@ const updatePosition =
     position: f(seat.position),
   });
 
+const hasPosition =
+  (position2: V2.Vector2) =>
+  ({ position }: Seat): boolean =>
+    V2.equals(position, position2);
+
 const seatState = (
   set: NamedSet<SeatState>,
   get: GetState<SeatState>,
@@ -109,6 +119,38 @@ const seatState = (
       moving: false,
       selected: false,
     },
+  },
+  addSeat: (id, seat) => {
+    const { seatIds, seatById } = get();
+    if (
+      seatIds.includes(id) ||
+      values(seatById).some(hasPosition(seat.position))
+    ) {
+      return false;
+    }
+    set({
+      seatIds: [...seatIds, id],
+      seatById: {
+        ...seatById,
+        [id]: { ...seat, moving: false, selected: false },
+      },
+    });
+    return true;
+  },
+  removeSeat: (ids) => {
+    const actualIds = typeof ids === 'string' ? [ids] : ids;
+    const { seatById, seatIds: oldSeatIds } = get();
+    const seatIds = oldSeatIds.filter((id) => !actualIds.includes(id));
+    set({
+      seatIds,
+      seatById: pickBy(seatById, (_, k) => seatIds.includes(k)),
+    });
+  },
+  selectAll: () => {
+    set({
+      selectedIds: get().seatIds,
+      seatById: mapValues(get().seatById, setAt<Seat>()('selected', true)),
+    });
   },
   clearSelection: () => {
     set({

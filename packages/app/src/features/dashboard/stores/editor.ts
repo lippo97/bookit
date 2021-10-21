@@ -1,20 +1,19 @@
 import create, { GetState } from 'zustand';
 import { NamedSet } from 'zustand/middleware';
-import { Vector2 } from '@asw-project/shared/util/vector'
+
+export type Tool = 'select' | 'add' | 'remove';
 
 type EditorState = {
-    size: Vector2,
-    tool: 'example' | 'field' | 'todo' | 'yet',
-    setSize(updated: Vector2): void;
-}
+  selectedTool: Tool;
+  setSelectedTool(tool: Tool): void;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const editorState = (set: NamedSet<EditorState>, get: GetState<EditorState>):  EditorState => ({
-    size: [10, 5],
-    tool: 'field',
-    setSize: (updated) => ({
-        size: updated
-    })
-})
+const editorState = (set: NamedSet<EditorState>): EditorState => ({
+  selectedTool: 'select',
+  setSelectedTool: (selectedTool) => {
+    set({ selectedTool });
+  },
+});
 
-export const useEditor = create<EditorState>(editorState)
+export const useEditor = create<EditorState>(editorState);
