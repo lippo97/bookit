@@ -2,7 +2,14 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  OutlinedInput,
   Paper,
+  Slider,
+  TextField,
   Typography,
   useTheme,
 } from '@material-ui/core';
@@ -12,15 +19,16 @@ import SeatIcon from '@material-ui/icons/EventSeat';
 import RemoveIcon from '@material-ui/icons/Remove';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
-// import ClearAllIcon from '@material-ui/icons/ClearAll';
+import ClearAllIcon from '@/assets/clear_selection.svg';
 import PanToolIcon from '@material-ui/icons/PanTool';
+import ZoomOutIcon from '@material-ui/icons/ZoomOut';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
 import { ButtonSection } from './ButtonSection';
 import { useEditor } from '../../stores/editor';
-import ClearAllIcon from '@/assets/clear_selection.svg';
+import { maxScale, minScale, scaleStep } from './constants';
 
 interface ToolbarProps {}
 
@@ -56,6 +64,10 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: 0,
     },
   },
+  zoomSection: {
+    width: '240px',
+    justifyContent: 'space-between',
+  },
 }));
 
 export const Toolbar = ({}: ToolbarProps) => {
@@ -64,14 +76,15 @@ export const Toolbar = ({}: ToolbarProps) => {
   const selectAll = useSeats((s) => s.selectAll);
   const [sizeX, sizeY] = useSeats((s) => s.size);
 
-  const selectedTool = useEditor(s => s.selectedTool)
-  const setSelectedTool = useEditor(s => s.setSelectedTool)
-  // const [selectedTool, setSelectedTool] = useState(0);
+  const selectedTool = useEditor((s) => s.selectedTool);
+  const setSelectedTool = useEditor((s) => s.setSelectedTool);
+  const scale = useEditor((s) => s.scale);
+  const setScale = useEditor((s) => s.setScale);
 
   return (
     <Paper elevation={1} square className={classes.toolbar}>
       <Box display="flex" justifyContent="space-between" alignItems="end">
-        <Box display="flex" alignItems="end">
+        <Box display="flex">
           <ButtonSection name="Tool">
             <ToggleButtonGroup
               value={selectedTool}
@@ -116,6 +129,31 @@ export const Toolbar = ({}: ToolbarProps) => {
             <Button variant="outlined" className={classes.button}>
               {sizeX} ⨉ {sizeY}
             </Button>
+          </ButtonSection>
+          <ButtonSection name="Zoom" className={classes.zoomSection}>
+            <IconButton
+              onClick={() => setScale(Math.max(minScale, scale - scaleStep))}
+            >
+              <ZoomOutIcon />
+            </IconButton>
+            <Box flex={1} marginLeft={1} marginRight={1} marginTop={1}>
+              <Slider
+                value={scale}
+                min={minScale}
+                step={scaleStep}
+                max={maxScale}
+                valueLabelFormat={(n) => `${n * 100}%`}
+                valueLabelDisplay="auto"
+                onChange={(_, updated) =>
+                  typeof updated === 'number' && setScale(updated)
+                }
+              />
+            </Box>
+            <IconButton
+              onClick={() => setScale(Math.min(maxScale, scale + scaleStep))}
+            >
+              <ZoomInIcon />
+            </IconButton>
           </ButtonSection>
         </Box>
         <Box>

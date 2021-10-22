@@ -7,7 +7,7 @@ import {
   MouseEventHandler,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 export const Content = () => {
   const classes = useStyles();
 
+  const scale = useEditor((s) => s.scale);
   const selectedTool = useEditor((s) => s.selectedTool);
   const seatIds = useSeats((s) => s.seatIds);
   const addSeat = useSeats((s) => s.addSeat);
@@ -57,7 +58,7 @@ export const Content = () => {
     if (rect === undefined) return undefined;
     const { top, left } = rect;
     const point = V2.sub([clientX, clientY], [left, top]);
-    return V2.div(point, boxSize * 1.01).map(Math.floor) as V2.Vector2;
+    return V2.div(point, boxSize * 1.01 * scale).map(Math.floor) as V2.Vector2;
   };
 
   const handleClick: MouseEventHandler<HTMLElement> = (e) => {
@@ -66,7 +67,6 @@ export const Content = () => {
     }
     if (selectedTool === 'add') {
       const position = scaleClick(e);
-
       if (position === undefined) return;
       if (addSeat(counter.toString(), { position })) {
         setCounter((c) => c + 1);
@@ -80,44 +80,42 @@ export const Content = () => {
           const position = scaleClick({ clientX, clientY });
           if (position === undefined) return;
           setHover(position);
-          // const rect = boxRef.current?.getBoundingClientRect();
-          // if (rect === undefined) return;
-          // const { top, left } = rect;
-          // const point = V2.sub([clientX, clientY], [left, top]);
-          // setHover(V2.div(point, boxSize * 1.01).map(Math.floor) as V2.Vector2);
         }
       : undefined;
 
   const handleMouseLeave: MouseEventHandler<HTMLElement> = () => setHover(null);
 
+  const transform = `scale(${scale})`;
+
   return (
     <div className={classes.content}>
-      <Box
-        position="relative"
-        width={size[0] * boxSize}
-        height={size[1] * boxSize + 1}
-        bgcolor="#fafae2"
-        onClick={handleClick}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div
-          ref={boxRef}
-          style={{
-            height: '100%',
-            backgroundSize: '50px 50px',
-            backgroundImage:
-              'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
-            backgroundRepeat: 'repeat',
-            margin: '-1px 0 0 -1px',
-            borderBottom: '1px solid grey',
-          }}
-        />
-        {seatIds.map((id) => (
-          <Seat id={id} key={id} />
-        ))}
-        {hover && <Hover position={hover} />}
-      </Box>
+        <Box
+          position="relative"
+          width={size[0] * boxSize}
+          height={size[1] * boxSize + 1}
+          bgcolor="#fafae2"
+          onClick={handleClick}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{ transform }}
+        >
+          <div
+            ref={boxRef}
+            style={{
+              height: '100%',
+              backgroundSize: '50px 50px',
+              backgroundImage:
+                'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
+              backgroundRepeat: 'repeat',
+              margin: '-1px 0 0 -1px',
+              borderBottom: '1px solid grey',
+            }}
+          />
+          {seatIds.map((id) => (
+            <Seat id={id} key={id} />
+          ))}
+          {hover && <Hover position={hover} />}
+        </Box>
     </div>
   );
 };

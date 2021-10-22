@@ -43,6 +43,7 @@ const useStyles = makeStyles({
 
 export const Seat = ({ id }: SeatProps) => {
   const selectedTool = useEditor((s) => s.selectedTool);
+  const scale = useEditor((s) => s.scale);
   const { moving, position, selected } = useSeats((s) => s.seatById[id]);
   const replaceSelection = useSeats((s) => s.replaceSelection);
   const updateSelection = useSeats((s) => s.updateSelection);
@@ -82,7 +83,7 @@ export const Seat = ({ id }: SeatProps) => {
       : {};
 
   return (
-    <DraggableCore grid={[boxSize, boxSize]} {...draggableProps}>
+    <DraggableCore grid={[boxSize, boxSize]} scale={scale} {...draggableProps}>
       <div
         className={classes.box}
         onClick={(e) => {
