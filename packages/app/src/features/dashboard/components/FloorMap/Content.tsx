@@ -1,28 +1,29 @@
 /* eslint-disable consistent-return */
 import * as V2 from '@asw-project/shared/util/vector';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   MouseEvent,
   MouseEventHandler,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
 import { Hover } from './Hover';
 import { Seat } from './Seat';
+import usePanZoom from 'use-pan-and-zoom';
 
 const useStyles = makeStyles((theme) => ({
   content: {
     gridArea: 'content',
     background: theme.palette.background.default,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // overflow: 'hidden',
+    // display: 'flex',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    overflow: 'hidden',
   },
   canvas: {
     display: 'flex',
@@ -35,6 +36,7 @@ export const Content = () => {
   const classes = useStyles();
 
   const scale = useEditor((s) => s.scale);
+  const setScale = useEditor((s) => s.setScale);
   const selectedTool = useEditor((s) => s.selectedTool);
   const seatIds = useSeats((s) => s.seatIds);
   const addSeat = useSeats((s) => s.addSeat);
@@ -85,37 +87,68 @@ export const Content = () => {
 
   const handleMouseLeave: MouseEventHandler<HTMLElement> = () => setHover(null);
 
-  const transform = `scale(${scale})`;
+  const aaa = useEditor.subscribe(s => s.scale)
+
+  const { transform, setContainer, panZoomHandlers, zoom: panZoomScale, setZoom: setPanZoomScale } = usePanZoom({
+    requireCtrlToZoom: true,
+    minX: 0,
+    minY: 0,
+  });
+
+  const updateScale = useRef<boolean>(false);
+  const updatePanZoom = useRef<boolean>(false);
+  useEffect(() => {
+    console.log('cambia panZoom')
+    if (updatePanZoom.current) {
+      updateScale.current = true;
+      setScale(panZoomScale)
+    }
+    updatePanZoom.current = false;
+  }, [panZoomScale]);
+
+  useEffect(() => {
+    console.log('cambia scale')
+    if (updateScale.current) {
+      updatePanZoom.current = true;
+      setPanZoomScale(scale)
+    }
+    updateScale.current = false;
+  }, [scale]);
 
   return (
-    <div className={classes.content}>
-        <Box
-          position="relative"
-          width={size[0] * boxSize}
-          height={size[1] * boxSize + 1}
-          bgcolor="#fafae2"
-          onClick={handleClick}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{ transform }}
-        >
-          <div
-            ref={boxRef}
-            style={{
-              height: '100%',
-              backgroundSize: '50px 50px',
-              backgroundImage:
-                'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
-              backgroundRepeat: 'repeat',
-              margin: '-1px 0 0 -1px',
-              borderBottom: '1px solid grey',
-            }}
-          />
-          {seatIds.map((id) => (
-            <Seat id={id} key={id} />
-          ))}
-          {hover && <Hover position={hover} />}
-        </Box>
+    <div
+      className={classes.content}
+      ref={(el) => setContainer(el)}
+      style={{ touchAction: 'none' }}
+      {...panZoomHandlers}
+    >
+      <Box
+        position="relative"
+        width={size[0] * boxSize}
+        height={size[1] * boxSize + 1}
+        bgcolor="#fafae2"
+        onClick={handleClick}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ transform, transformOrigin: 'top left' }}
+      >
+        <div
+          ref={boxRef}
+          style={{
+            height: '100%',
+            backgroundSize: '50px 50px',
+            backgroundImage:
+              'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
+            backgroundRepeat: 'repeat',
+            margin: '-1px 0 0 -1px',
+            borderBottom: '1px solid grey',
+          }}
+        />
+        {seatIds.map((id) => (
+          <Seat id={id} key={id} />
+        ))}
+        {hover && <Hover position={hover} />}
+      </Box>
     </div>
   );
 };

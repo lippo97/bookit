@@ -12308,6 +12308,11 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+use-pan-and-zoom@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/use-pan-and-zoom/-/use-pan-and-zoom-0.6.2.tgz#0880e66255e5d84523e7f8b4b7dd28492d744849"
+  integrity sha512-GVUrlMwRawD/G/GhgJCvv31sDSJYVVsKRRy+m3qDYqzoTomf4ir2/RkzvbCoxGpcDGew9d3dMLutE9mcSxko4g==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.npmjs.org/use/-/use-3.1.1.tgz"
