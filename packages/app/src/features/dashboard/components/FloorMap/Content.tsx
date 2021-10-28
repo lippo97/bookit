@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import * as V2 from '@asw-project/shared/util/vector';
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   MouseEvent,
@@ -14,15 +14,11 @@ import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
 import { Hover } from './Hover';
 import { Seat } from './Seat';
-import usePanZoom from 'use-pan-and-zoom';
 
 const useStyles = makeStyles((theme) => ({
   content: {
     gridArea: 'content',
     background: theme.palette.background.default,
-    // display: 'flex',
-    // alignItems: 'center',
-    // justifyContent: 'center',
     overflow: 'hidden',
   },
   canvas: {
@@ -36,7 +32,6 @@ export const Content = () => {
   const classes = useStyles();
 
   const scale = useEditor((s) => s.scale);
-  const setScale = useEditor((s) => s.setScale);
   const selectedTool = useEditor((s) => s.selectedTool);
   const seatIds = useSeats((s) => s.seatIds);
   const addSeat = useSeats((s) => s.addSeat);
@@ -87,40 +82,11 @@ export const Content = () => {
 
   const handleMouseLeave: MouseEventHandler<HTMLElement> = () => setHover(null);
 
-  const aaa = useEditor.subscribe(s => s.scale)
-
-  const { transform, setContainer, panZoomHandlers, zoom: panZoomScale, setZoom: setPanZoomScale } = usePanZoom({
-    requireCtrlToZoom: true,
-    minX: 0,
-    minY: 0,
-  });
-
-  const updateScale = useRef<boolean>(false);
-  const updatePanZoom = useRef<boolean>(false);
-  useEffect(() => {
-    console.log('cambia panZoom')
-    if (updatePanZoom.current) {
-      updateScale.current = true;
-      setScale(panZoomScale)
-    }
-    updatePanZoom.current = false;
-  }, [panZoomScale]);
-
-  useEffect(() => {
-    console.log('cambia scale')
-    if (updateScale.current) {
-      updatePanZoom.current = true;
-      setPanZoomScale(scale)
-    }
-    updateScale.current = false;
-  }, [scale]);
+  const transform = `scale(${scale}) translate(10px, 10px)`;
 
   return (
     <div
       className={classes.content}
-      ref={(el) => setContainer(el)}
-      style={{ touchAction: 'none' }}
-      {...panZoomHandlers}
     >
       <Box
         position="relative"

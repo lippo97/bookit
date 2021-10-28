@@ -21,10 +21,17 @@ import { NamedSet } from 'zustand/middleware';
 
 type SeatId = string;
 
+export const properties = ['Ethernet', 'Wi-Fi', 'Computer', 'Power supply', 'Printer'] as const;
+
+type Property = typeof properties[number]
+
 type Seat = {
   position: Vector2;
   moving: boolean;
   selected: boolean;
+  properties: {
+    [k in Property]?: boolean;
+  };
 };
 
 type SeatMap = {
@@ -37,7 +44,10 @@ type SeatState = {
   seatById: SeatMap;
   selectedSnapshot: SeatMap;
   size: Vector2;
-  addSeat(id: SeatId, seat: Omit<Seat, 'moving' | 'selected'>): boolean;
+  addSeat(
+    id: SeatId,
+    seat: Omit<Seat, 'properties' | 'moving' | 'selected'>,
+  ): boolean;
   removeSeat(id: SeatId | readonly SeatId[]): void;
   selectAll(): void;
   clearSelection(): void;
@@ -98,26 +108,43 @@ const seatState = (
       position: [0, 0],
       moving: false,
       selected: true,
+      properties: {
+        Computer: true,
+        'Wi-Fi': true,
+        'Power supply': true,
+      },
     },
     b: {
       position: [1, 0],
       moving: false,
       selected: true,
+      properties: {
+        'Wi-Fi': true,
+      },
     },
     c: {
       position: [2, 1],
       moving: false,
       selected: false,
+      properties: {
+        'Wi-Fi': true,
+      },
     },
     d: {
       position: [2, 2],
       moving: false,
       selected: false,
+      properties: {
+        'Wi-Fi': true,
+      },
     },
     e: {
       position: [2, 3],
       moving: false,
       selected: false,
+      properties: {
+        'Wi-Fi': true,
+      },
     },
   },
   addSeat: (id, seat) => {
@@ -132,17 +159,23 @@ const seatState = (
       seatIds: [...seatIds, id],
       seatById: {
         ...seatById,
-        [id]: { ...seat, moving: false, selected: false },
+        [id]: { ...seat, moving: false, selected: false, properties: {} },
       },
     });
     return true;
   },
   removeSeat: (ids) => {
     const actualIds = typeof ids === 'string' ? [ids] : ids;
-    const { seatById, seatIds: oldSeatIds } = get();
+    const {
+      seatById,
+      seatIds: oldSeatIds,
+      selectedIds: oldSelectedIds,
+    } = get();
     const seatIds = oldSeatIds.filter((id) => !actualIds.includes(id));
+    const selectedIds = oldSelectedIds.filter((id) => !actualIds.includes(id));
     set({
       seatIds,
+      selectedIds,
       seatById: pickBy(seatById, (_, k) => seatIds.includes(k)),
     });
   },
