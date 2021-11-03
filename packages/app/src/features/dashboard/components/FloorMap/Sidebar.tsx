@@ -1,39 +1,18 @@
 import { DialogButton } from '@/components/DialogButton';
-import { Chip, Paper, Typography, Button } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  Chip,
+  Grid,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import keys from 'lodash/keys';
-import groupBy from 'lodash/groupBy';
 import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
-import { entries, reduce } from 'lodash';
+import { aggregate } from './utils';
 
 interface SidebarProps {}
-
-type PropertyMap = {
-  [k in string]?: boolean;
-}
-
-const merge = (acc: PropertyMap, curr: PropertyMap): PropertyMap => {
-  const updates = {} as PropertyMap;
-  entries(curr).forEach(([k, v]) => {
-    updates[k] = v && (acc[k] ?? false);
-  });
-  return {
-    ...acc,
-    ...updates,
-  };
-}
-
-function ensureField<T extends object>(t: T): (field: string, _default: any) => T {
-  return (field, _default) => ({
-    [field]: _default,
-    ...t,
-  });
-}
-
-
-const aggregate = (properties: PropertyMap[]): PropertyMap =>
-  reduce(properties, (acc, v) => merge(acc, v), {});
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {
@@ -55,10 +34,8 @@ export const Sidebar = () => {
   const clearSelection = useSeats((s) => s.clearSelection);
   const [isDialogOpen, setDialogOpen] = useState(false);
 
-  const res = aggregate(selectedSeats.map(({seat}) => seat.properties));
+  const res = aggregate(selectedSeats.map(({ seat }) => seat.properties));
   console.log(res);
-  console.log(ensureField(res)('k', 330))
-  console.log(ensureField(ensureField(res)('k', 330))('Wi-Fi', true))
   return (
     <Paper square elevation={3} className={classes.sidebar}>
       <Typography variant="h6">Details</Typography>
@@ -67,38 +44,47 @@ export const Sidebar = () => {
         <Chip label={id} style={{ marginRight: 5 }} />
       ))}
       {selectedIds.length > 0 && (
-        <>
-          <ul style={{ marginTop: '16px', padding: '0 16px' }}>
-            <li>Some fake</li>
-            <li>information</li>
-            <li>just to fill some space</li>
-            <li>oooo</li>
-          </ul>
-          <DialogButton
-            title="Delete selected seat(s)?"
-            description={`Are you sure you want to delete the following seats?
+        <Grid container>
+          {Object.entries(res).map(([k, v]) => (
+            <>
+              <Grid item xs={10}>
+                {k}
+              </Grid>
+              <Grid item xs={2}>
+                <Checkbox
+                  indeterminate={v === 'indeterminate'}
+                  checked={v === true}
+                />
+              </Grid>
+            </>
+          ))}
+          <Grid item xs={12}>
+            <DialogButton
+              title="Delete selected seat(s)?"
+              description={`Are you sure you want to delete the following seats?
 ${selectedIds.join(', ')}`}
-            isOpen={isDialogOpen}
-            setOpen={setDialogOpen}
-            id="delete-selected"
-            autoClose
-            onConfirm={() => removeSeat(selectedIds)}
-            as={Button}
-            fullWidth
-            variant="outlined"
-            color="secondary"
-          >
-            Delete selected
-          </DialogButton>
-          <Button
-            fullWidth
-            onClick={clearSelection}
-            variant="outlined"
-            style={{ marginTop: '8px' }}
-          >
-            Clear selection
-          </Button>
-        </>
+              isOpen={isDialogOpen}
+              setOpen={setDialogOpen}
+              id="delete-selected"
+              autoClose
+              onConfirm={() => removeSeat(selectedIds)}
+              as={Button}
+              fullWidth
+              variant="outlined"
+              color="secondary"
+            >
+              Delete selected
+            </DialogButton>
+            <Button
+              fullWidth
+              onClick={clearSelection}
+              variant="outlined"
+              style={{ marginTop: '8px' }}
+            >
+              Clear selection
+            </Button>
+          </Grid>
+        </Grid>
       )}
     </Paper>
   );

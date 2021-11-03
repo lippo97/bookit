@@ -5,11 +5,8 @@ import { myDevtools } from '@/stores/_myDevtools';
 import * as V2 from '@asw-project/shared/util/vector';
 import { Vector2 } from '@asw-project/shared/util/vector';
 import flatMap from 'lodash/flatMap';
-import { includes } from 'lodash/fp';
-import eq from 'lodash/fp/eq';
 import flow from 'lodash/fp/flow';
 import identity from 'lodash/fp/identity';
-import negate from 'lodash/fp/negate';
 import map from 'lodash/map';
 import mapValues from 'lodash/mapValues';
 import partition from 'lodash/partition';
@@ -18,12 +15,9 @@ import values from 'lodash/values';
 import zipWith from 'lodash/zipWith';
 import create, { GetState } from 'zustand';
 import { NamedSet } from 'zustand/middleware';
+import { Property } from '../types/Property';
 
 type SeatId = string;
-
-export const properties = ['Ethernet', 'Wi-Fi', 'Computer', 'Power supply', 'Printer'] as const;
-
-type Property = typeof properties[number]
 
 type Seat = {
   position: Vector2;
