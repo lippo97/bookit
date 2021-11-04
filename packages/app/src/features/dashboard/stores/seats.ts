@@ -97,56 +97,14 @@ const seatState = (
   get: GetState<SeatState>,
 ): SeatState => ({
   selectedSnapshot: {},
-  seatIds: ['a', 'b', 'c', 'd', 'e'],
-  selectedIds: ['a', 'b'],
-  seatById: {
-    a: {
-      position: [0, 0],
-      moving: false,
-      selected: true,
-      properties: {
-        Computer: true,
-        'Wi-Fi': true,
-        'Power supply': true,
-      },
-    },
-    b: {
-      position: [1, 0],
-      moving: false,
-      selected: true,
-      properties: {
-        'Wi-Fi': true,
-      },
-    },
-    c: {
-      position: [2, 1],
-      moving: false,
-      selected: false,
-      properties: {
-        'Wi-Fi': true,
-      },
-    },
-    d: {
-      position: [2, 2],
-      moving: false,
-      selected: false,
-      properties: {
-        'Wi-Fi': true,
-      },
-    },
-    e: {
-      position: [2, 3],
-      moving: false,
-      selected: false,
-      properties: {
-        'Wi-Fi': true,
-      },
-    },
-  },
+  seatIds: [],
+  selectedIds: [],
+  seatById: {},
   initialize: (seats) => {
     set({
       seatById: seats,
       seatIds: Object.keys(seats),
+      selectedIds: [],
     })
   },
   addSeat: (id, seat) => {

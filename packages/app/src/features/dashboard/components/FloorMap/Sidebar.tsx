@@ -1,19 +1,12 @@
 import { DialogButton } from '@/components/DialogButton';
-import {
-  Button,
-  Checkbox,
-  Chip,
-  Grid,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Box, Button, Chip, Grid, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import sortBy from 'lodash/sortBy';
 import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
+import { NormalizedPropertyMap, Property } from '../../types/Property';
 import { MyCheckbox } from './MyCheckbox';
 import { aggregate, AggregateRowResult } from './utils';
-import sortBy from 'lodash/sortBy';
-import { NormalizedPropertyMap, Property } from '../../types/Property';
 
 interface SidebarProps {}
 
@@ -32,17 +25,17 @@ const renderProperties = (
   setSelectionProperty: (p: Property, value: boolean) => void,
 ) =>
   Object.entries(aggregated).map(([k, v]) => (
-    <>
-      <Grid item xs={10}>
-        {k}
-      </Grid>
-      <Grid item xs={2}>
+    <Grid item xs={12}>
+      <Box display="flex">
+        <Box flex={1}>
+          <Typography variant="body2">{k}</Typography>
+        </Box>
         <MyCheckbox
           checked={v}
           onChange={(e) => setSelectionProperty(k as any, e.target.checked)}
         />
-      </Grid>
-    </>
+      </Box>
+    </Grid>
   ));
 
 export const Sidebar = () => {

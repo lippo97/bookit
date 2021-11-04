@@ -55,7 +55,7 @@ export const Content = () => {
     if (rect === undefined) return undefined;
     const { top, left } = rect;
     const point = V2.sub([clientX, clientY], [left, top]);
-    return V2.div(point, boxSize * 1.01 * scale).map(Math.floor) as V2.Vector2;
+    return V2.div(point, boxSize * 1.01 * scale).map(Math.floor) as unknown as V2.Vector2;
   };
 
   const handleClick: MouseEventHandler<HTMLElement> = (e) => {
