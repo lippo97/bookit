@@ -1,14 +1,14 @@
 import { Layout } from '@/components/Layout';
-import * as V2 from '@asw-project/shared/util/vector';
-import { Vector2 } from '@asw-project/shared/util/vector';
 import { makeStyles } from '@material-ui/core/styles';
-import { useState } from 'react';
-import { useSeats } from '../../stores/seats';
+import { useEffect } from 'react';
+import { SeatMap, useSeats } from '../../stores/seats';
 import { Content } from './Content';
 import { Sidebar } from './Sidebar';
 import { Toolbar } from './Toolbar';
 
-interface FloorMapProps {}
+interface FloorMapProps {
+  readonly initialSeats?: SeatMap;
+}
 
 const useStyles = makeStyles({
   root: {
@@ -27,12 +27,15 @@ const useStyles = makeStyles({
   },
 });
 
-export const FloorMap = ({}: FloorMapProps) => {
+export const FloorMap = ({initialSeats}: FloorMapProps) => {
   const classes = useStyles();
-  const [size, setSize] = useState<Vector2>([10, 5]);
-  const [selected, setSelected] = useState<readonly Vector2[]>([]);
+  const initialize = useSeats((s) => s.initialize)
 
-  const handleSelect = (x: number, y: number) => setSelected([V2.make(x, y)]);
+  useEffect(() => {
+    if (initialSeats !== undefined) {
+      initialize(initialSeats);
+    }
+  } , [initialSeats])
 
   return (
     <Layout>

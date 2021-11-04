@@ -28,7 +28,7 @@ type Seat = {
   };
 };
 
-type SeatMap = {
+export type SeatMap = {
   [k: string]: Seat;
 };
 
@@ -38,6 +38,7 @@ type SeatState = {
   seatById: SeatMap;
   selectedSnapshot: SeatMap;
   size: Vector2;
+  initialize(initialSeats: SeatMap): void;
   addSeat(
     id: SeatId,
     seat: Omit<Seat, 'properties' | 'moving' | 'selected'>,
@@ -141,6 +142,12 @@ const seatState = (
         'Wi-Fi': true,
       },
     },
+  },
+  initialize: (seats) => {
+    set({
+      seatById: seats,
+      seatIds: Object.keys(seats),
+    })
   },
   addSeat: (id, seat) => {
     const { seatIds, seatById } = get();

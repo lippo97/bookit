@@ -11,7 +11,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
 import { MyCheckbox } from './MyCheckbox';
-import { aggregate } from './utils';
+import { aggregate, AggregateRowResult } from './utils';
+import sortBy from 'lodash/sortBy';
+import { NormalizedPropertyMap, Property } from '../../types/Property';
 
 interface SidebarProps {}
 
@@ -25,6 +27,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const renderProperties = (
+  aggregated: NormalizedPropertyMap<AggregateRowResult>,
+  setSelectionProperty: (p: Property, value: boolean) => void,
+) =>
+  Object.entries(aggregated).map(([k, v]) => (
+    <>
+      <Grid item xs={10}>
+        {k}
+      </Grid>
+      <Grid item xs={2}>
+        <MyCheckbox
+          checked={v}
+          onChange={(e) => setSelectionProperty(k as any, e.target.checked)}
+        />
+      </Grid>
+    </>
+  ));
+
 export const Sidebar = () => {
   const classes = useStyles();
   const selectedIds = useSeats((s) => s.selectedIds);
@@ -37,26 +57,16 @@ export const Sidebar = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const res = aggregate(selectedSeats.map(({ seat }) => seat.properties));
-  console.log(res);
   return (
     <Paper square elevation={3} className={classes.sidebar}>
       <Typography variant="h6">Details</Typography>
       <Typography variant="subtitle1">Selected seats:</Typography>
-      {selectedSeats.map(({ id }) => (
+      {sortBy(selectedSeats, 'id').map(({ id }) => (
         <Chip label={id} style={{ marginRight: 5 }} />
       ))}
       {selectedIds.length > 0 && (
         <Grid container>
-          {Object.entries(res).map(([k, v]) => (
-            <>
-              <Grid item xs={10}>
-                {k}
-              </Grid>
-              <Grid item xs={2}>
-                <MyCheckbox checked={v} onChange={(e) => setSelectionProperty(k as any, e.target.checked)} />
-              </Grid>
-            </>
-          ))}
+          {renderProperties(res, setSelectionProperty)}
           <Grid item xs={12}>
             <DialogButton
               title="Delete selected seat(s)?"
