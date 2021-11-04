@@ -10,6 +10,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
+import { MyCheckbox } from './MyCheckbox';
 import { aggregate } from './utils';
 
 interface SidebarProps {}
@@ -31,6 +32,7 @@ export const Sidebar = () => {
     selectedIds.map((id) => ({ id, seat: s.seatById[id] })),
   );
   const removeSeat = useSeats((s) => s.removeSeat);
+  const setSelectionProperty = useSeats((s) => s.setSelectionProperty);
   const clearSelection = useSeats((s) => s.clearSelection);
   const [isDialogOpen, setDialogOpen] = useState(false);
 
@@ -51,10 +53,7 @@ export const Sidebar = () => {
                 {k}
               </Grid>
               <Grid item xs={2}>
-                <Checkbox
-                  indeterminate={v === 'indeterminate'}
-                  checked={v === true}
-                />
+                <MyCheckbox checked={v} onChange={(e) => setSelectionProperty(k as any, e.target.checked)} />
               </Grid>
             </>
           ))}

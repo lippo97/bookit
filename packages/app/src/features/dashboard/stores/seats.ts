@@ -47,6 +47,7 @@ type SeatState = {
   clearSelection(): void;
   updateSelection(id: SeatId | readonly SeatId[]): void;
   replaceSelection(id: SeatId | readonly SeatId[]): void;
+  setSelectionProperty(property: Property, value: boolean): void;
   startMoving(): void;
   move(delta: Vector2): void;
   stopMoving(): void;
@@ -231,6 +232,28 @@ const seatState = (
         ...newSelections,
       },
     });
+  },
+  setSelectionProperty: (property, value) => {
+    const { seatById, selectedIds } = get();
+    const updatedSelection = mapValues(
+      pickBy(seatById, (_, k) => selectedIds.includes(k)),
+      // unfortunately we didn't use lenses in this project
+      (s) => ({
+        ...s,
+        properties: {
+          ...s.properties,
+          [property]: value,
+        }
+      })
+    );
+
+    set({
+      seatById: {
+        ...seatById,
+        ...updatedSelection,
+      }
+    })
+
   },
   move: (delta) => {
     console.log(`move([${delta.toString()}])`);
