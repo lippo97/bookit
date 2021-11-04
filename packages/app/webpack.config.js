@@ -37,16 +37,6 @@ module.exports = {
         options: {
           configFile: path.join('.', 'tsconfig.json'),
           projectReferences: true,
-          // This seem not to work
-          // getCustomTransformers: () => ({
-          // before: [
-          // tsImportPluginFactory({
-          //   libraryName: '@material-ui/core',
-          //   libraryDirectory: '',
-          //   camel2DashComponentName: false,
-          // }),
-          //   ],
-          // }),
         },
       },
       {
