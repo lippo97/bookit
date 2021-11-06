@@ -1,33 +1,19 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputBase,
-  OutlinedInput,
-  Paper,
-  Slider,
-  TextField,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import SeatIcon from '@material-ui/icons/EventSeat';
-import RemoveIcon from '@material-ui/icons/Remove';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SelectAllIcon from '@material-ui/icons/SelectAll';
 import ClearAllIcon from '@/assets/clear_selection.svg';
+import { Box, Button, IconButton, Paper, Slider } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SeatIcon from '@material-ui/icons/EventSeat';
 import PanToolIcon from '@material-ui/icons/PanTool';
-import ZoomOutIcon from '@material-ui/icons/ZoomOut';
+import SelectAllIcon from '@material-ui/icons/SelectAll';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import SaveIcon from '@material-ui/icons/Save';
+import BackIcon from '@material-ui/icons/ArrowBack';
+import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { ButtonSection } from './ButtonSection';
-import { useEditor } from '../../stores/editor';
 import { maxScale, minScale, scaleStep } from './constants';
 
 interface ToolbarProps {}
@@ -85,6 +71,14 @@ export const Toolbar = ({}: ToolbarProps) => {
     <Paper elevation={1} square className={classes.toolbar}>
       <Box display="flex" justifyContent="space-between" alignItems="end">
         <Box display="flex">
+          <ButtonSection name="File">
+            <Button variant="outlined" className={classes.actionButton}>
+              <BackIcon />
+            </Button>
+            <Button variant="outlined" className={classes.actionButton}>
+              <SaveIcon />
+            </Button>
+          </ButtonSection>
           <ButtonSection name="Tool">
             <ToggleButtonGroup
               value={selectedTool}
@@ -155,14 +149,6 @@ export const Toolbar = ({}: ToolbarProps) => {
               <ZoomInIcon />
             </IconButton>
           </ButtonSection>
-        </Box>
-        <Box>
-          <Button variant="outlined" color="default" className={classes.button}>
-            Cancel
-          </Button>
-          <Button variant="outlined" color="primary" className={classes.button}>
-            Save
-          </Button>
         </Box>
       </Box>
     </Paper>

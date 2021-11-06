@@ -12,7 +12,7 @@ type EditorState = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const editorState = (set: NamedSet<EditorState>): EditorState => ({
-  scale: 1.5,
+  scale: 1,
   selectedTool: 'select',
   setScale: (scale) => {
     set({ scale });
