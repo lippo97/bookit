@@ -14,6 +14,7 @@ import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
 import { Hover } from './Hover';
 import { Seat } from './Seat';
+import usePanZoom from 'use-pan-and-zoom';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -32,6 +33,7 @@ export const Content = () => {
   const classes = useStyles();
 
   const scale = useEditor((s) => s.scale);
+  const setScale = useEditor((s) => s.setScale);
   const selectedTool = useEditor((s) => s.selectedTool);
   const seatIds = useSeats((s) => s.seatIds);
   const addSeat = useSeats((s) => s.addSeat);
@@ -84,37 +86,53 @@ export const Content = () => {
 
   const handleMouseLeave: MouseEventHandler<HTMLElement> = () => setHover(null);
 
-  const transform = `scale(${scale}) translate(10px, 10px)`;
+  const { transform, setContainer, panZoomHandlers, zoom } = usePanZoom({
+    requireCtrlToZoom: true,
+    // minX: 0,
+    // minY: 0,
+    preventClickOnPan: true,
+  });
+
+  useEffect(() => {
+    setScale(zoom);
+  }, [zoom]);
 
   return (
-    <div className={classes.content}>
-      <Box
-        position="relative"
-        width={size[0] * boxSize}
-        height={size[1] * boxSize + 1}
-        bgcolor="#fafae2"
-        onClick={handleClick}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{ transform, transformOrigin: 'top left' }}
-      >
-        <div
-          ref={boxRef}
-          style={{
-            height: '100%',
-            backgroundSize: '50px 50px',
-            backgroundImage:
-              'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
-            backgroundRepeat: 'repeat',
-            margin: '-1px 0 0 -1px',
-            borderBottom: '1px solid grey',
-          }}
-        />
-        {seatIds.map((id) => (
-          <Seat id={id} key={id} />
-        ))}
-        {hover && <Hover position={hover} />}
-      </Box>
+    <div
+      className={classes.content}
+      ref={(el) => setContainer(el)}
+      style={{ touchAction: 'none' }}
+      {...panZoomHandlers}
+    >
+      <div style={{ transform, transformOrigin: 'top left' }}>
+        <span>Room name - 10 × 5</span>
+        <Box
+          position="relative"
+          width={size[0] * boxSize}
+          height={size[1] * boxSize + 1}
+          bgcolor="#fafae2"
+          onClick={handleClick}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div
+            ref={boxRef}
+            style={{
+              height: '100%',
+              backgroundSize: '50px 50px',
+              backgroundImage:
+                'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
+              backgroundRepeat: 'repeat',
+              margin: '-1px 0 0 -1px',
+              borderBottom: '1px solid grey',
+            }}
+          />
+          {seatIds.map((id) => (
+            <Seat id={id} key={id} />
+          ))}
+          {hover && <Hover position={hover} />}
+        </Box>
+      </div>
     </div>
   );
 };

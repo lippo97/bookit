@@ -1,5 +1,5 @@
 import { DialogButton } from '@/components/DialogButton';
-import { Box, Button, Chip, Grid, Paper, Typography } from '@material-ui/core';
+import { Box, Button, Chip, Grid, Paper, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import sortBy from 'lodash/sortBy';
 import { useState } from 'react';
@@ -10,14 +10,27 @@ import { aggregate, AggregateRowResult } from './utils';
 
 interface SidebarProps {}
 
-const useStyles = makeStyles((theme) => ({
-  sidebar: {
-    gridArea: 'sidebar',
-    width: '256px',
+const sidebarWidth = 256;
+
+type StyleProps = {
+  open: boolean
+}
+
+const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
+  sidebar: ({ open }) => ({
+    // gridArea: 'sidebar',
+    // gridArea: 'content',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    transition: 'translate 0.3s',
+    translate: `${open ? 0 : sidebarWidth}px`,
+    width: `${sidebarWidth}px`,
     height: '100%',
     padding: theme.spacing(1.5),
     zIndex: theme.zIndex.drawer,
-  },
+  }),
 }));
 
 const renderProperties = (
@@ -39,7 +52,6 @@ const renderProperties = (
   ));
 
 export const Sidebar = () => {
-  const classes = useStyles();
   const selectedIds = useSeats((s) => s.selectedIds);
   const selectedSeats = useSeats((s) =>
     selectedIds.map((id) => ({ id, seat: s.seatById[id] })),
@@ -48,6 +60,7 @@ export const Sidebar = () => {
   const setSelectionProperty = useSeats((s) => s.setSelectionProperty);
   const clearSelection = useSeats((s) => s.clearSelection);
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const classes = useStyles({ open: selectedIds.length > 0 });
 
   const res = aggregate(selectedSeats.map(({ seat }) => seat.properties));
   return (

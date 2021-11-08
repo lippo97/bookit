@@ -2,6 +2,7 @@ import * as V2 from '@asw-project/shared/util/vector';
 import { Vector2 } from '@asw-project/shared/util/vector';
 import { makeStyles } from '@material-ui/core';
 import shadows from '@material-ui/core/styles/shadows';
+import clsx from 'clsx';
 import { DraggableCore, DraggableEvent } from 'react-draggable';
 import { Tool, useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
@@ -33,7 +34,7 @@ const useStyles = makeStyles({
     width: `${boxSize + 1}px`,
     height: `${boxSize + 1}px`,
     top: `${scaledPosition[1]}px`,
-    left: `${scaledPosition[0] -1 }px`,
+    left: `${scaledPosition[0] - 1}px`,
     background: moving ? '#ffffffaa' : '#ffffff',
     border: selected ? '2px dotted #111' : '1px solid #999',
     zIndex: selected ? 1 : 0,
@@ -55,6 +56,14 @@ export const Seat = ({ id }: SeatProps) => {
   const scaledPosition = V2.mul(position, boxSize);
   const classes = useStyles({ moving, scaledPosition, selected, selectedTool });
 
+  const useEditorMock = () => ({
+    getState() {
+      return {
+        isPanning: true,
+      };
+    },
+  });
+
   /*
    * Unfortunately down below it's gonna be a mess of FSM logic.
    */
@@ -69,14 +78,17 @@ export const Seat = ({ id }: SeatProps) => {
                 replaceSelection(id);
               }
             }
+            console.log('dragstart')
+            e.stopPropagation();
             startMoving();
           },
           onStop: () => stopMoving(),
           onDrag: (
-            _: any,
+            e: DraggableEvent,
             { deltaX, deltaY }: { deltaX: number; deltaY: number },
           ) => {
             const delta = V2.div([deltaX, deltaY], boxSize);
+            e.stopPropagation();
             move(delta);
           },
         }
@@ -85,7 +97,7 @@ export const Seat = ({ id }: SeatProps) => {
   return (
     <DraggableCore grid={[boxSize, boxSize]} scale={scale} {...draggableProps}>
       <div
-        className={classes.box}
+        className={clsx(classes.box, 'box')}
         onClick={(e) => {
           e.stopPropagation();
           if (selectedTool === 'remove') {

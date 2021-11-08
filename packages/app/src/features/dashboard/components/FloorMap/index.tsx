@@ -24,6 +24,7 @@ const useStyles = makeStyles({
     "toolbar  sidebar"
     "content  sidebar"
     `,
+    overflow: 'hidden'
   },
 });
 

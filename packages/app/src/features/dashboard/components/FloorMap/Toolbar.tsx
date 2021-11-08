@@ -1,20 +1,17 @@
 import ClearAllIcon from '@/assets/clear_selection.svg';
-import { Box, Button, IconButton, Paper, Slider } from '@material-ui/core';
+import { Box, Button, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import BackIcon from '@material-ui/icons/ArrowBack';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SeatIcon from '@material-ui/icons/EventSeat';
 import PanToolIcon from '@material-ui/icons/PanTool';
-import SelectAllIcon from '@material-ui/icons/SelectAll';
-import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import SaveIcon from '@material-ui/icons/Save';
-import BackIcon from '@material-ui/icons/ArrowBack';
-import ZoomOutIcon from '@material-ui/icons/ZoomOut';
+import SelectAllIcon from '@material-ui/icons/SelectAll';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { ButtonSection } from './ButtonSection';
-import { maxScale, minScale, scaleStep } from './constants';
 
 interface ToolbarProps {}
 
@@ -120,34 +117,9 @@ export const Toolbar = ({}: ToolbarProps) => {
             </Button>
           </ButtonSection>
           <ButtonSection name="Size">
-            <Button variant="outlined" className={classes.button}>
-              {sizeX} ⨉ {sizeY}
+            <Button variant="outlined" className={classes.button} style={{ fontSize: '18px' }}>
+              {sizeX} × {sizeY}
             </Button>
-          </ButtonSection>
-          <ButtonSection name="Zoom" className={classes.zoomSection}>
-            <IconButton
-              onClick={() => setScale(Math.max(minScale, scale - scaleStep))}
-            >
-              <ZoomOutIcon />
-            </IconButton>
-            <Box flex={1} marginLeft={1} marginRight={1} marginTop={1}>
-              <Slider
-                value={scale}
-                min={minScale}
-                step={scaleStep}
-                max={maxScale}
-                valueLabelFormat={(n) => `${n * 100}%`}
-                valueLabelDisplay="auto"
-                onChange={(_, updated) =>
-                  typeof updated === 'number' && setScale(updated)
-                }
-              />
-            </Box>
-            <IconButton
-              onClick={() => setScale(Math.min(maxScale, scale + scaleStep))}
-            >
-              <ZoomInIcon />
-            </IconButton>
           </ButtonSection>
         </Box>
       </Box>
