@@ -1,12 +1,40 @@
 import * as V2 from '@asw-project/shared/util/vector';
 import { Vector2 } from '@asw-project/shared/util/vector';
-import { makeStyles } from '@material-ui/core';
-import shadows from '@material-ui/core/styles/shadows';
+import { Box, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import { DraggableCore, DraggableEvent } from 'react-draggable';
 import { Tool, useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
+import WifiIcon from '@material-ui/icons/Wifi';
+import ComputerIcon from '@material-ui/icons/Computer';
+import SettingsInputHdmiIcon from '@material-ui/icons/SettingsInputHdmi';
+import PrintIcon from '@material-ui/icons/Print';
+import PowerIcon from '@material-ui/icons/Power';
+import { Property } from '../../types/Property';
+import { CSSProperties } from 'react';
+
+// eslint-disable-next-line consistent-return
+const iconForProperty = (
+  property: Property,
+  style?: CSSProperties,
+): React.ReactNode => {
+  switch (property) {
+    case 'Wi-Fi':
+      return <WifiIcon style={style} />;
+    case 'Computer':
+      return <ComputerIcon style={style} />;
+    case 'Power supply':
+      return <PowerIcon style={style} />;
+    case 'Ethernet':
+      return <SettingsInputHdmiIcon style={style} />;
+    case 'Printer':
+      return <PrintIcon style={style} />;
+  }
+};
+
+const iconForPropertyCurried = (style: CSSProperties) => (property: Property) =>
+  iconForProperty(property, style);
 
 interface SeatProps {
   readonly id: string;
@@ -45,7 +73,9 @@ const useStyles = makeStyles({
 export const Seat = ({ id }: SeatProps) => {
   const selectedTool = useEditor((s) => s.selectedTool);
   const scale = useEditor((s) => s.scale);
-  const { moving, position, selected } = useSeats((s) => s.seatById[id]);
+  const { moving, position, selected, properties } = useSeats(
+    (s) => s.seatById[id],
+  );
   const replaceSelection = useSeats((s) => s.replaceSelection);
   const updateSelection = useSeats((s) => s.updateSelection);
   const removeSeat = useSeats((s) => s.removeSeat);
@@ -56,14 +86,6 @@ export const Seat = ({ id }: SeatProps) => {
   const scaledPosition = V2.mul(position, boxSize);
   const classes = useStyles({ moving, scaledPosition, selected, selectedTool });
 
-  const useEditorMock = () => ({
-    getState() {
-      return {
-        isPanning: true,
-      };
-    },
-  });
-
   /*
    * Unfortunately down below it's gonna be a mess of FSM logic.
    */
@@ -71,6 +93,7 @@ export const Seat = ({ id }: SeatProps) => {
     selectedTool === 'select'
       ? {
           onStart: (e: DraggableEvent) => {
+            e.stopPropagation();
             if (!selected) {
               if (e.ctrlKey) {
                 updateSelection(id);
@@ -78,8 +101,6 @@ export const Seat = ({ id }: SeatProps) => {
                 replaceSelection(id);
               }
             }
-            console.log('dragstart')
-            e.stopPropagation();
             startMoving();
           },
           onStop: () => stopMoving(),
@@ -87,8 +108,8 @@ export const Seat = ({ id }: SeatProps) => {
             e: DraggableEvent,
             { deltaX, deltaY }: { deltaX: number; deltaY: number },
           ) => {
-            const delta = V2.div([deltaX, deltaY], boxSize);
             e.stopPropagation();
+            const delta = V2.div([deltaX, deltaY], boxSize);
             move(delta);
           },
         }
@@ -105,7 +126,28 @@ export const Seat = ({ id }: SeatProps) => {
           }
         }}
       >
-        {id}
+        <Box display="flex" flexDirection="column" height="100%" p="1px">
+          <span style={{ fontWeight: 'bold' }}>{id}</span>
+          <Box
+            display="flex"
+            flexDirection="row"
+            flexWrap="wrap"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+            flex={1}
+          >
+            {Object.entries(properties)
+              .filter(([_, v]) => v)
+              .map(([k]) => k as Property)
+              .map(
+                iconForPropertyCurried({
+                  height: 12,
+                  width: 12,
+                  marginLeft: 2,
+                }),
+              )}
+          </Box>
+        </Box>
       </div>
     </DraggableCore>
   );

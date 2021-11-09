@@ -19,7 +19,6 @@ import WifiIcon from '@material-ui/icons/Wifi';
 import ComputerIcon from '@material-ui/icons/Computer';
 import SettingsInputHdmiIcon from '@material-ui/icons/SettingsInputHdmi';
 import PrintIcon from '@material-ui/icons/Print';
-import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import PowerIcon from '@material-ui/icons/Power';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 

@@ -135,7 +135,7 @@ export const Content = () => {
           width: size[0] * boxSize,
         }}
       >
-        <span style={{ color: 'rgba(0,0,0,0.87)', fontSize: 12 }}>
+        <span style={{ color: 'rgba(0,0,0,0.87)', fontSize: 12, userSelect: 'none'}}>
           Room name ({size[0]} × {size[1]})
         </span>
         <Resizable
@@ -152,8 +152,8 @@ export const Content = () => {
           onResizeStop={(e) => {
             e.stopPropagation();
           }}
-          draggableOpts={{ grid: [50, 50], scale }}
-          handle={<MyHandle />}
+          draggableOpts={{ grid: [50, 50], scale,  }}
+          handle={selectedTool === 'select' ? <MyHandle /> : <></>}
         >
           <Box
             position="relative"
