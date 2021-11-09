@@ -9,7 +9,7 @@ const initialSeats = {
   a: {
     position: [0, 0] as const,
     moving: false,
-    selected: true,
+    selected: false,
     properties: {
       Computer: true,
       'Wi-Fi': true,
@@ -19,7 +19,7 @@ const initialSeats = {
   b: {
     position: [1, 0] as const,
     moving: false,
-    selected: true,
+    selected: false,
     properties: {
       'Wi-Fi': true,
     },
