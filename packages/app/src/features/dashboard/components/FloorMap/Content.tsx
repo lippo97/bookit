@@ -105,7 +105,7 @@ export const Content = () => {
       {...panZoomHandlers}
     >
       <div style={{ transform, transformOrigin: 'top left' }}>
-        <span>Room name - 10 × 5</span>
+        <span style={{ color: 'rgba(0,0,0,0.87)', fontSize: 12 }}>Room name - 10 × 5</span>
         <Box
           position="relative"
           width={size[0] * boxSize}
