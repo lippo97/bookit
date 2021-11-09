@@ -105,7 +105,7 @@ const seatState = (
       seatById: seats,
       seatIds: Object.keys(seats),
       selectedIds: [],
-    })
+    });
   },
   addSeat: (id, seat) => {
     const { seatIds, seatById } = get();
@@ -208,17 +208,16 @@ const seatState = (
         properties: {
           ...s.properties,
           [property]: value,
-        }
-      })
+        },
+      }),
     );
 
     set({
       seatById: {
         ...seatById,
         ...updatedSelection,
-      }
-    })
-
+      },
+    });
   },
   move: (delta) => {
     console.log(`move([${delta.toString()}])`);
@@ -266,10 +265,17 @@ const seatState = (
     }
   },
   size: [0, 0],
-  setSize: (size) =>
+  setSize: (size) => {
+    const { seatById } = get();
+    const [x, y] = size;
+
+    // Prevent inconsistent state
+    if (values(seatById).some(({ position: [sX, sY] }) => sX >= x || sY >= y)) return;
+
     set({
       size,
-    }),
+    });
+  },
 });
 
 const middlewares = flow(

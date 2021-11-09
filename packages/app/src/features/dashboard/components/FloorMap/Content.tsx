@@ -8,13 +8,17 @@ import {
   useEffect,
   useRef,
   useState,
+  forwardRef,
 } from 'react';
+import usePanZoom from 'use-pan-and-zoom';
+import { Resizable } from 'react-resizable';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
 import { Hover } from './Hover';
 import { Seat } from './Seat';
-import usePanZoom from 'use-pan-and-zoom';
+import clsx from 'clsx';
+import 'react-resizable/css/styles.css';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -28,6 +32,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
 }));
+
+const MyHandle = forwardRef<HTMLDivElement>((props, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={clsx('react-resizable-handle', 'react-resizable-handle-se')}
+      {...props}
+    />
+  );
+});
 
 export const Content = () => {
   const classes = useStyles();
@@ -86,16 +100,26 @@ export const Content = () => {
 
   const handleMouseLeave: MouseEventHandler<HTMLElement> = () => setHover(null);
 
-  const { transform, setContainer, panZoomHandlers, zoom } = usePanZoom({
-    requireCtrlToZoom: true,
-    // minX: 0,
-    // minY: 0,
-    preventClickOnPan: true,
-  });
+  const { transform, setContainer, panZoomHandlers, zoom, setPan, container } =
+    usePanZoom({
+      enableZoom: selectedTool === 'select',
+      enablePan: selectedTool === 'select',
+      zoomSensitivity: 0.002,
+      requireCtrlToZoom: true,
+      preventClickOnPan: true,
+    });
 
   useEffect(() => {
     setScale(zoom);
   }, [zoom]);
+
+  useEffect(() => {
+    if (container === null) return;
+    const { width, height } = container.getBoundingClientRect();
+    const x = (width - size[0] * boxSize) / 2;
+    const y = (height - size[1] * boxSize) / 2;
+    setPan({ x, y });
+  }, [container]);
 
   return (
     <div
@@ -104,34 +128,60 @@ export const Content = () => {
       style={{ touchAction: 'none' }}
       {...panZoomHandlers}
     >
-      <div style={{ transform, transformOrigin: 'top left' }}>
-        <span style={{ color: 'rgba(0,0,0,0.87)', fontSize: 12 }}>Room name - 10 × 5</span>
-        <Box
-          position="relative"
-          width={size[0] * boxSize}
+      <div
+        style={{
+          transform,
+          transformOrigin: 'top left',
+          width: size[0] * boxSize,
+        }}
+      >
+        <span style={{ color: 'rgba(0,0,0,0.87)', fontSize: 12 }}>
+          Room name ({size[0]} × {size[1]})
+        </span>
+        <Resizable
           height={size[1] * boxSize + 1}
-          bgcolor="#fafae2"
-          onClick={handleClick}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          width={size[0] * boxSize}
+          onResize={(e, { size: { width, height } }) => {
+            const updated = V2.div([width, height - 1] as V2.Vector2, boxSize);
+            setSize(updated);
+            e.stopPropagation();
+          }}
+          onResizeStart={(e) => {
+            e.stopPropagation();
+          }}
+          onResizeStop={(e) => {
+            e.stopPropagation();
+          }}
+          draggableOpts={{ grid: [50, 50], scale }}
+          handle={<MyHandle />}
         >
-          <div
-            ref={boxRef}
-            style={{
-              height: '100%',
-              backgroundSize: '50px 50px',
-              backgroundImage:
-                'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
-              backgroundRepeat: 'repeat',
-              margin: '-1px 0 0 -1px',
-              borderBottom: '1px solid grey',
-            }}
-          />
-          {seatIds.map((id) => (
-            <Seat id={id} key={id} />
-          ))}
-          {hover && <Hover position={hover} />}
-        </Box>
+          <Box
+            position="relative"
+            width={size[0] * boxSize}
+            height={size[1] * boxSize + 1}
+            bgcolor="#fafae2"
+            onClick={handleClick}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div
+              ref={boxRef}
+              style={{
+                height: '100%',
+                backgroundSize: '50px 50px',
+                backgroundImage:
+                  'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
+                backgroundRepeat: 'repeat',
+                margin: '-1px 0 0 -1px',
+                borderBottom: '1px solid grey',
+              }}
+            />
+            {seatIds.map((id) => (
+              <Seat id={id} key={id} />
+            ))}
+            {hover && <Hover position={hover} />}
+          </Box>
+        </Resizable>
       </div>
     </div>
   );
