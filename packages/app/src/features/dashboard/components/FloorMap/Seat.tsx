@@ -6,35 +6,15 @@ import { DraggableCore, DraggableEvent } from 'react-draggable';
 import { Tool, useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
-import WifiIcon from '@material-ui/icons/Wifi';
-import ComputerIcon from '@material-ui/icons/Computer';
-import SettingsInputHdmiIcon from '@material-ui/icons/SettingsInputHdmi';
-import PrintIcon from '@material-ui/icons/Print';
-import PowerIcon from '@material-ui/icons/Power';
 import { Property } from '../../types/Property';
-import { CSSProperties } from 'react';
+import { iconForProperty } from '../../utils/iconForProperty';
 
 // eslint-disable-next-line consistent-return
-const iconForProperty = (
-  property: Property,
-  style?: CSSProperties,
-): React.ReactNode => {
-  switch (property) {
-    case 'Wi-Fi':
-      return <WifiIcon style={style} />;
-    case 'Computer':
-      return <ComputerIcon style={style} />;
-    case 'Power supply':
-      return <PowerIcon style={style} />;
-    case 'Ethernet':
-      return <SettingsInputHdmiIcon style={style} />;
-    case 'Printer':
-      return <PrintIcon style={style} />;
-  }
-};
 
-const iconForPropertyCurried = (style: CSSProperties) => (property: Property) =>
-  iconForProperty(property, style);
+const iconForPropertyCurried =
+  (style: Parameters<typeof iconForProperty>[1]) =>
+  (property: Parameters<typeof iconForProperty>[0]) =>
+    iconForProperty(property, style);
 
 interface SeatProps {
   readonly id: string;
@@ -94,12 +74,10 @@ export const Seat = ({ id }: SeatProps) => {
       ? {
           onStart: (e: DraggableEvent) => {
             e.stopPropagation();
-            if (!selected) {
-              if (e.ctrlKey) {
-                updateSelection(id);
-              } else {
-                replaceSelection(id);
-              }
+            if (e.ctrlKey || e.type === 'touchstart') {
+              updateSelection(id);
+            } else {
+              replaceSelection(id);
             }
             startMoving();
           },

@@ -153,18 +153,26 @@ const seatState = (
   },
   updateSelection: (ids) => {
     const actualIds = typeof ids === 'string' ? [ids] : ids;
-    const { selectedIds, seatById } = get();
-    const toBeSelected = actualIds.filter((id) => !selectedIds.includes(id));
+    const { selectedIds, seatById, seatIds } = get();
+    const toBeUpdated = actualIds.filter((id) => seatIds.includes(id));
+
+    const [toBeSelected, toBeUnselected] = partition(toBeUpdated, (el) =>
+      !selectedIds.includes(el),
+    );
+
     const newSelections = mapValues(
-      pickBy(seatById, (_, k) => toBeSelected.includes(k)),
+      pickBy(seatById, (_, k) => toBeUpdated.includes(k)),
       (s) => ({
         ...s,
-        selected: true,
+        selected: !s.selected,
       }),
     );
 
     set({
-      selectedIds: [...selectedIds, ...toBeSelected],
+      selectedIds: [
+        ...selectedIds.filter((id) => !toBeUnselected.includes(id)),
+        ...toBeSelected,
+      ],
       seatById: {
         ...seatById,
         ...newSelections,
@@ -270,7 +278,8 @@ const seatState = (
     const [x, y] = size;
 
     // Prevent inconsistent state
-    if (values(seatById).some(({ position: [sX, sY] }) => sX >= x || sY >= y)) return;
+    if (values(seatById).some(({ position: [sX, sY] }) => sX >= x || sY >= y))
+      return;
 
     set({
       size,

@@ -1,5 +1,6 @@
 import ClearAllIcon from '@/assets/clear_selection.svg';
-import { Box, Button, Paper } from '@material-ui/core';
+import { useMobile } from '@/hooks/useMobile';
+import { Box, Button, Paper, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -12,8 +13,6 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { ButtonSection } from './ButtonSection';
-
-interface ToolbarProps {}
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -53,16 +52,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Toolbar = ({}: ToolbarProps) => {
-  const classes = useStyles();
+export const Toolbar = () => {
   const clearSelection = useSeats((s) => s.clearSelection);
   const selectAll = useSeats((s) => s.selectAll);
   const [sizeX, sizeY] = useSeats((s) => s.size);
+  const classes = useStyles();
 
   const selectedTool = useEditor((s) => s.selectedTool);
   const setSelectedTool = useEditor((s) => s.setSelectedTool);
-  const scale = useEditor((s) => s.scale);
-  const setScale = useEditor((s) => s.setScale);
 
   return (
     <Paper elevation={1} square className={classes.toolbar}>
@@ -117,7 +114,11 @@ export const Toolbar = ({}: ToolbarProps) => {
             </Button>
           </ButtonSection>
           <ButtonSection name="Size">
-            <Button variant="outlined" className={classes.button} style={{ fontSize: '18px' }}>
+            <Button
+              variant="outlined"
+              className={classes.button}
+              style={{ fontSize: '18px' }}
+            >
               {sizeX} × {sizeY}
             </Button>
           </ButtonSection>

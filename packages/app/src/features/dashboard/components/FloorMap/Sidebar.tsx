@@ -1,26 +1,23 @@
 import { DialogButton } from '@/components/DialogButton';
+import { useMobile } from '@/hooks/useMobile';
 import {
   Box,
   Button,
   Chip,
   Grid,
+  Hidden,
   Paper,
   Theme,
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import sortBy from 'lodash/sortBy';
-import { useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import { useSeats } from '../../stores/seats';
 import { NormalizedPropertyMap, Property } from '../../types/Property';
+import { iconForProperty } from '../../utils/iconForProperty';
 import { MyCheckbox } from './MyCheckbox';
 import { aggregate, AggregateRowResult } from './utils';
-import WifiIcon from '@material-ui/icons/Wifi';
-import ComputerIcon from '@material-ui/icons/Computer';
-import SettingsInputHdmiIcon from '@material-ui/icons/SettingsInputHdmi';
-import PrintIcon from '@material-ui/icons/Print';
-import PowerIcon from '@material-ui/icons/Power';
-import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 
 interface SidebarProps {}
 
@@ -28,41 +25,43 @@ const sidebarWidth = 256;
 
 type StyleProps = {
   open: boolean;
+  isMobile: boolean;
+  sidebarRef: MutableRefObject<HTMLDivElement | null>;
 };
 
 const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
-  sidebar: ({ open }) => ({
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    transition: 'translate 0.3s',
-    translate: `${open ? 0 : sidebarWidth}px`,
-    width: `${sidebarWidth}px`,
-    height: '100%',
-    padding: theme.spacing(1.5),
-    zIndex: theme.zIndex.drawer,
-    '& > *': {
-      marginBottom: theme.spacing(2),
+  sidebar: ({ open, isMobile, sidebarRef }) => ({
+    ...{
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      transition: 'translate 0.3s',
+      padding: theme.spacing(1.5),
+      zIndex: theme.zIndex.drawer,
+      '& > *': {
+        marginBottom: theme.spacing(2),
+      },
     },
+    ...(isMobile
+      ? {
+          left: 0,
+          width: '100%',
+          translate: `0 ${
+            !open && sidebarRef.current
+              ? sidebarRef.current.getBoundingClientRect().height
+              : 0
+          }px`,
+          borderRadius: theme.spacing(1),
+          paddingTop: theme.spacing(2.5),
+        }
+      : {
+          top: 0,
+          height: '100%',
+          width: `${sidebarWidth}px`,
+          translate: `${open ? 0 : sidebarWidth}px`,
+        }),
   }),
 }));
-
-// eslint-disable-next-line consistent-return
-const iconForProperty = (property: Property): React.ReactNode => {
-  switch (property) {
-    case 'Wi-Fi':
-      return <WifiIcon />;
-    case 'Computer':
-      return <ComputerIcon />;
-    case 'Power supply':
-      return <PowerIcon />;
-    case 'Ethernet':
-      return <SettingsInputHdmiIcon />;
-    case 'Printer':
-      return <PrintIcon />;
-  }
-};
 
 const renderProperties = (
   aggregated: NormalizedPropertyMap<AggregateRowResult>,
@@ -100,11 +99,17 @@ export const Sidebar = () => {
   const setSelectionProperty = useSeats((s) => s.setSelectionProperty);
   const clearSelection = useSeats((s) => s.clearSelection);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const classes = useStyles({ open: selectedIds.length > 0 });
+  const isMobile = useMobile();
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  const classes = useStyles({
+    open: selectedIds.length > 0,
+    isMobile,
+    sidebarRef,
+  });
 
   const res = aggregate(selectedSeats.map(({ seat }) => seat.properties));
   return (
-    <Paper square elevation={3} className={classes.sidebar}>
+    <Paper square elevation={3} className={classes.sidebar} ref={sidebarRef}>
       <Typography variant="h6" style={{ fontWeight: 'bold' }}>
         Details
       </Typography>

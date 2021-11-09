@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import * as V2 from '@asw-project/shared/util/vector';
-import { Box } from '@material-ui/core';
+import { Backdrop, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   MouseEvent,
@@ -76,10 +76,13 @@ export const Content = () => {
     ) as unknown as V2.Vector2;
   };
 
-  const handleClick: MouseEventHandler<HTMLElement> = (e) => {
+  const handleBackgroundClick: MouseEventHandler<HTMLElement> = (e) => {
     if (selectedTool === 'select') {
       return clearSelection();
     }
+  };
+
+  const handleClick: MouseEventHandler<HTMLElement> = (e) => {
     if (selectedTool === 'add') {
       const position = scaleClick(e);
       if (position === undefined) return;
@@ -127,6 +130,7 @@ export const Content = () => {
       ref={(el) => setContainer(el)}
       style={{ touchAction: 'none' }}
       {...panZoomHandlers}
+      onClick={handleBackgroundClick}
     >
       <div
         style={{
@@ -135,7 +139,13 @@ export const Content = () => {
           width: size[0] * boxSize,
         }}
       >
-        <span style={{ color: 'rgba(0,0,0,0.87)', fontSize: 12, userSelect: 'none'}}>
+        <span
+          style={{
+            color: 'rgba(0,0,0,0.87)',
+            fontSize: 12,
+            userSelect: 'none',
+          }}
+        >
           Room name ({size[0]} × {size[1]})
         </span>
         <Resizable
@@ -152,7 +162,7 @@ export const Content = () => {
           onResizeStop={(e) => {
             e.stopPropagation();
           }}
-          draggableOpts={{ grid: [50, 50], scale,  }}
+          draggableOpts={{ grid: [50, 50], scale }}
           handle={selectedTool === 'select' ? <MyHandle /> : <></>}
         >
           <Box
