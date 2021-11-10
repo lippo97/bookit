@@ -8,6 +8,8 @@ import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
 import { Property } from '../../types/Property';
 import { iconForProperty } from '../../utils/iconForProperty';
+import { useMobile } from '@/hooks/useMobile';
+import { useState } from 'react';
 
 // eslint-disable-next-line consistent-return
 
@@ -66,6 +68,10 @@ export const Seat = ({ id }: SeatProps) => {
   const scaledPosition = V2.mul(position, boxSize);
   const classes = useStyles({ moving, scaledPosition, selected, selectedTool });
 
+  const isMobile = useMobile();
+  const [ wasMoved, setWasMoved] = useState(false);
+
+
   /*
    * Unfortunately down below it's gonna be a mess of FSM logic.
    */
@@ -74,27 +80,42 @@ export const Seat = ({ id }: SeatProps) => {
       ? {
           onStart: (e: DraggableEvent) => {
             e.stopPropagation();
-            if (e.ctrlKey || e.type === 'touchstart') {
-              updateSelection(id);
-            } else {
-              replaceSelection(id);
-            }
             startMoving();
           },
-          onStop: () => stopMoving(),
+          onStop: (e: DraggableEvent) => {
+            e.stopPropagation();
+            if (!wasMoved) {
+              if (e.ctrlKey || isMobile) {
+                updateSelection(id);
+              } else {
+                replaceSelection(id);
+              }
+            }
+            setWasMoved(false);
+            stopMoving();
+          },
           onDrag: (
             e: DraggableEvent,
             { deltaX, deltaY }: { deltaX: number; deltaY: number },
           ) => {
             e.stopPropagation();
+            if (!selected) {
+              // This prevents a selection bug
+              updateSelection(id);
+            }
             const delta = V2.div([deltaX, deltaY], boxSize);
             move(delta);
+            setWasMoved(true);
           },
         }
       : {};
 
   return (
-    <DraggableCore grid={[boxSize, boxSize]} scale={scale} {...draggableProps}>
+    <DraggableCore
+      grid={[boxSize, boxSize]}
+      scale={scale}
+      {...draggableProps}
+    >
       <div
         className={clsx(classes.box, 'box')}
         onClick={(e) => {
