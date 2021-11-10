@@ -31,7 +31,6 @@ const caseCursor = (selected: boolean, selectedTool: Tool) => {
 const useStyles = makeStyles({
   box: ({
     scaledPosition,
-    moving,
     selected,
     selectedTool,
   }: {
@@ -45,7 +44,7 @@ const useStyles = makeStyles({
     height: `${boxSize + 1}px`,
     top: `${scaledPosition[1]}px`,
     left: `${scaledPosition[0] - 1}px`,
-    background: moving ? '#ffffffaa' : '#ffffff',
+    background: 'rgb(235, 247, 251)',
     border: selected ? '2px dotted #111' : '1px solid #999',
     zIndex: selected ? 1 : 0,
     cursor: caseCursor(selected, selectedTool),
@@ -69,8 +68,7 @@ export const Seat = ({ id }: SeatProps) => {
   const classes = useStyles({ moving, scaledPosition, selected, selectedTool });
 
   const isMobile = useMobile();
-  const [ wasMoved, setWasMoved] = useState(false);
-
+  const [wasMoved, setWasMoved] = useState(false);
 
   /*
    * Unfortunately down below it's gonna be a mess of FSM logic.
@@ -111,11 +109,7 @@ export const Seat = ({ id }: SeatProps) => {
       : {};
 
   return (
-    <DraggableCore
-      grid={[boxSize, boxSize]}
-      scale={scale}
-      {...draggableProps}
-    >
+    <DraggableCore grid={[boxSize, boxSize]} scale={scale} {...draggableProps}>
       <div
         className={clsx(classes.box, 'box')}
         onClick={(e) => {

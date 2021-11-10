@@ -169,10 +169,13 @@ export const Content = () => {
             position="relative"
             width={size[0] * boxSize}
             height={size[1] * boxSize + 1}
-            bgcolor="#fafae2"
+            bgcolor="#ffffff"
             onClick={handleClick}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            style={{
+              boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+            }}
           >
             <div
               ref={boxRef}
