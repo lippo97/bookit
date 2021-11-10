@@ -1,30 +1,14 @@
-import { DialogButton } from '@/components/DialogButton';
 import { useMobile } from '@/hooks/useMobile';
 import { useOpenClose } from '@/hooks/useOpenClose';
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Hidden,
-  IconButton,
-  Paper,
-  Theme,
-  Typography,
-} from '@material-ui/core';
+import { Box, IconButton, Paper, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 // These two are inverted
 import ExpandMoreIcon from '@material-ui/icons/ExpandLess';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
-import sortBy from 'lodash/sortBy';
-import { MutableRefObject, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSeats } from '../../stores/seats';
-import { NormalizedPropertyMap, Property } from '../../types/Property';
-import { iconForProperty } from '../../utils/iconForProperty';
-import { MyCheckbox } from './MyCheckbox';
 import { SidebarContent } from './SidebarContent';
-import { aggregate, AggregateRowResult } from './utils';
 
 interface SidebarProps {}
 
@@ -34,11 +18,8 @@ type StyleProps = {
   open: boolean;
 };
 
-const useMobileStyles = makeStyles<
-  Theme,
-StyleProps & { mobileHeight: () => number }
->((theme) => ({
-  mobile: ({ open, mobileHeight }) => ({
+const useMobileStyles = makeStyles((theme) => ({
+  mobile: {
     position: 'absolute',
     transition: 'translate 0.3s, opacity 0.3s',
     left: 0,
@@ -51,15 +32,20 @@ StyleProps & { mobileHeight: () => number }
     },
     width: '100%',
     height: '560px',
+    translate: `0 ${560 - 40 - theme.spacing(1.5)}px`,
     transformOrigin: 'top left',
-    opacity: !open ? 0.5 : 1,
-    translate: `0 ${!open ? (560 - 40 - theme.spacing(1.5)) : 0}px`,
     borderRadius: theme.spacing(1),
-  }),
+    opacity: 0.5,
+  },
+  mobileOpen: {
+    translate: '0 0',
+    opacity: 1,
+    zIndex: 1400,
+  },
 }));
 
-const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
-  desktop: ({ open }) => ({
+const useStyles = makeStyles((theme) => ({
+  desktop: {
     position: 'absolute',
     transition: 'translate 0.3s',
     padding: theme.spacing(1.5),
@@ -72,27 +58,37 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
     top: 0,
     bottom: 0,
     right: 0,
-    translate: `${open ? 0 : sidebarWidth}px`,
-  }),
+    translate: `${sidebarWidth}px`,
+  },
+  desktopOpen: {
+    translate: '0',
+  },
 }));
 
 const Mobile = () => {
-  const [open, handleOpen, handleClose] = useOpenClose(false)
+  const [open, handleOpen, handleClose] = useOpenClose(false);
   const selectedIds = useSeats((s) => s.selectedIds);
-  const mobileRef = useRef<HTMLDivElement | null>(null);
-  const classes = useMobileStyles({
-    open,
-    mobileHeight: () => mobileRef.current?.getBoundingClientRect().height ?? 0,
-  });
+  const classes = useMobileStyles();
+
+  // If you clear the selection while the sidebar is open, this will close it.
+  useEffect(() => {
+    if (open && selectedIds.length === 0) {
+      handleClose();
+    }
+  }, [open, selectedIds]);
 
   return (
     <Paper
       square
       elevation={3}
-      className={clsx(classes.mobile)}
-      ref={mobileRef}
+      className={clsx(classes.mobile, { [classes.mobileOpen]: open })}
     >
-      <Box display="flex" alignItems="center" justifyContent="center" height={40}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height={40}
+      >
         {open ? (
           <IconButton onClick={handleClose}>
             <ExpandLessIcon />
@@ -110,17 +106,20 @@ const Mobile = () => {
 
 export const Sidebar = () => {
   const isMobile = useMobile();
-  const selectedIds = useSeats((s) => s.selectedIds);
-  const classes = useStyles({
-    open: selectedIds.length > 0,
-  });
+  const selectedIdsLength = useSeats((s) => s.selectedIds.length);
+  const classes = useStyles();
 
   if (isMobile) {
     return <Mobile />;
   }
 
+  const open = selectedIdsLength > 0;
   return (
-    <Paper square elevation={3} className={clsx(classes.desktop)}>
+    <Paper
+      square
+      elevation={3}
+      className={clsx(classes.desktop, { [classes.desktopOpen]: open })}
+    >
       <SidebarContent />
     </Paper>
   );

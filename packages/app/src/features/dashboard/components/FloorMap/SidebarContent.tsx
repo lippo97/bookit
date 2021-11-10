@@ -18,8 +18,6 @@ import { iconForProperty } from '../../utils/iconForProperty';
 import { MyCheckbox } from './MyCheckbox';
 import { aggregate, AggregateRowResult } from './utils';
 
-interface SidebarContentProps {}
-
 const renderProperties = (
   aggregated: NormalizedPropertyMap<AggregateRowResult>,
   setSelectionProperty: (p: Property, value: boolean) => void,
@@ -47,7 +45,7 @@ const renderProperties = (
   </Box>
 );
 
-export const SidebarContent = ({}: SidebarContentProps) => {
+export const SidebarContent = () => {
   const selectedIds = useSeats((s) => s.selectedIds);
   const selectedSeats = useSeats((s) =>
     selectedIds.map((id) => ({ id, seat: s.seatById[id] })),

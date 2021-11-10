@@ -14,6 +14,7 @@ import MuiSpeedDialAction, {
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
+import { compose } from '@asw-project/shared/util/functions';
 
 interface ToolFABProps {
   readonly open: boolean;
@@ -130,7 +131,7 @@ export const ToolFAB = ({ open, onOpen, onClose }: ToolFABProps) => {
             icon={<Icon />}
             tooltipTitle={label}
             tooltipOpen={isMobile}
-            onClick={handle}
+            onClick={compose(handle, onClose)}
           />
         ),
       )}

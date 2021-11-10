@@ -1,6 +1,6 @@
 import ClearAllIcon from '@/assets/clear_selection.svg';
 import { useMobile } from '@/hooks/useMobile';
-import { Box, Button, Paper, Theme } from '@material-ui/core';
+import { Box, Button, Hidden, Paper, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -62,68 +62,70 @@ export const Toolbar = () => {
   const setSelectedTool = useEditor((s) => s.setSelectedTool);
 
   return (
-    <Paper elevation={1} square className={classes.toolbar}>
-      <Box display="flex" justifyContent="space-between" alignItems="end">
-        <Box display="flex">
-          <ButtonSection name="File">
-            <Button variant="outlined" className={classes.actionButton}>
-              <BackIcon />
-            </Button>
-            <Button variant="outlined" className={classes.actionButton}>
-              <SaveIcon />
-            </Button>
-          </ButtonSection>
-          <ButtonSection name="Tool">
-            <ToggleButtonGroup
-              value={selectedTool}
-              exclusive
-              onChange={(_, updated) => {
-                if (updated === null) return;
-                if (updated !== 'selected') {
-                  clearSelection();
-                }
-                setSelectedTool(updated);
-              }}
-              aria-label="current tool"
-            >
-              <ToggleButton value="select" className={classes.toggleButton}>
-                <PanToolIcon />
-              </ToggleButton>
-              <ToggleButton value="add" className={classes.toggleButton}>
-                <SeatIcon />
-              </ToggleButton>
-              <ToggleButton value="remove" className={classes.toggleButton}>
-                <DeleteIcon />
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </ButtonSection>
-          <ButtonSection name="Selection">
-            <Button
-              variant="outlined"
-              onClick={selectAll}
-              className={classes.actionButton}
-            >
-              <SelectAllIcon />
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={clearSelection}
-              className={classes.actionButton}
-            >
-              <ClearAllIcon />
-            </Button>
-          </ButtonSection>
-          <ButtonSection name="Size">
-            <Button
-              variant="outlined"
-              className={classes.button}
-              style={{ fontSize: '18px' }}
-            >
-              {sizeX} × {sizeY}
-            </Button>
-          </ButtonSection>
+    <Hidden smDown>
+      <Paper elevation={1} square className={classes.toolbar}>
+        <Box display="flex" justifyContent="space-between" alignItems="end">
+          <Box display="flex">
+            <ButtonSection name="File">
+              <Button variant="outlined" className={classes.actionButton}>
+                <BackIcon />
+              </Button>
+              <Button variant="outlined" className={classes.actionButton}>
+                <SaveIcon />
+              </Button>
+            </ButtonSection>
+            <ButtonSection name="Tool">
+              <ToggleButtonGroup
+                value={selectedTool}
+                exclusive
+                onChange={(_, updated) => {
+                  if (updated === null) return;
+                  if (updated !== 'selected') {
+                    clearSelection();
+                  }
+                  setSelectedTool(updated);
+                }}
+                aria-label="current tool"
+              >
+                <ToggleButton value="select" className={classes.toggleButton}>
+                  <PanToolIcon />
+                </ToggleButton>
+                <ToggleButton value="add" className={classes.toggleButton}>
+                  <SeatIcon />
+                </ToggleButton>
+                <ToggleButton value="remove" className={classes.toggleButton}>
+                  <DeleteIcon />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </ButtonSection>
+            <ButtonSection name="Selection">
+              <Button
+                variant="outlined"
+                onClick={selectAll}
+                className={classes.actionButton}
+              >
+                <SelectAllIcon />
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={clearSelection}
+                className={classes.actionButton}
+              >
+                <ClearAllIcon />
+              </Button>
+            </ButtonSection>
+            <ButtonSection name="Size">
+              <Button
+                variant="outlined"
+                className={classes.button}
+                style={{ fontSize: '18px' }}
+              >
+                {sizeX} × {sizeY}
+              </Button>
+            </ButtonSection>
+          </Box>
         </Box>
-      </Box>
-    </Paper>
+      </Paper>
+    </Hidden>
   );
 };
