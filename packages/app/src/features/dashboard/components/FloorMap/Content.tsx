@@ -1,24 +1,25 @@
 /* eslint-disable consistent-return */
 import * as V2 from '@asw-project/shared/util/vector';
-import { Backdrop, Box } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import {
-  MouseEvent,
-  MouseEventHandler,
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
+    forwardRef, MouseEvent,
+    MouseEventHandler,
+    useEffect,
+    useRef,
+    useState
 } from 'react';
-import usePanZoom from 'use-pan-and-zoom';
 import { Resizable } from 'react-resizable';
+import 'react-resizable/css/styles.css';
+import usePanZoom from 'use-pan-and-zoom';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { boxSize } from './constants';
 import { Hover } from './Hover';
 import { Seat } from './Seat';
-import clsx from 'clsx';
-import 'react-resizable/css/styles.css';
+
+const gridColor = "#ddd";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -183,10 +184,10 @@ export const Content = () => {
                 height: '100%',
                 backgroundSize: '50px 50px',
                 backgroundImage:
-                  'linear-gradient(to right, grey 1px, transparent 1px),  linear-gradient(to bottom, grey 1px, transparent 1px)',
+                  `linear-gradient(to right, ${gridColor} 1px, transparent 1px),  linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)`,
                 backgroundRepeat: 'repeat',
                 margin: '-1px 0 0 -1px',
-                borderBottom: '1px solid grey',
+                borderBottom: `1px solid ${gridColor}`,
               }}
             />
             {seatIds.map((id) => (

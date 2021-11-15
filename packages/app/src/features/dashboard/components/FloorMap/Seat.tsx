@@ -45,7 +45,7 @@ const useStyles = makeStyles({
     top: `${scaledPosition[1]}px`,
     left: `${scaledPosition[0] - 1}px`,
     background: 'rgb(235, 247, 251)',
-    border: selected ? '2px dotted #111' : '1px solid #999',
+    border: selected ? '2px dotted #555' : '1px solid rgb(156, 190, 202)',
     zIndex: selected ? 1 : 0,
     cursor: caseCursor(selected, selectedTool),
   }),
