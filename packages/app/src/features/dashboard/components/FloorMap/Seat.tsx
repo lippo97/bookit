@@ -1,22 +1,22 @@
+import { useMobile } from '@/hooks/useMobile';
+import { Service } from '@asw-project/shared/generatedTypes';
 import * as V2 from '@asw-project/shared/util/vector';
 import { Vector2 } from '@asw-project/shared/util/vector';
 import { Box, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
+import { useState } from 'react';
 import { DraggableCore, DraggableEvent } from 'react-draggable';
 import { Tool, useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
+import { iconForService } from '../../utils/iconForProperty';
 import { boxSize } from './constants';
-import { Property } from '../../types/Property';
-import { iconForProperty } from '../../utils/iconForProperty';
-import { useMobile } from '@/hooks/useMobile';
-import { useState } from 'react';
 
 // eslint-disable-next-line consistent-return
 
-const iconForPropertyCurried =
-  (style: Parameters<typeof iconForProperty>[1]) =>
-  (property: Parameters<typeof iconForProperty>[0]) =>
-    iconForProperty(property, style);
+const iconForServiceCurried =
+  (style: Parameters<typeof iconForService>[1]) =>
+  (property: Parameters<typeof iconForService>[0]) =>
+    iconForService(property, style);
 
 interface SeatProps {
   readonly id: string;
@@ -54,7 +54,7 @@ const useStyles = makeStyles({
 export const Seat = ({ id }: SeatProps) => {
   const selectedTool = useEditor((s) => s.selectedTool);
   const scale = useEditor((s) => s.scale);
-  const { moving, position, selected, properties } = useSeats(
+  const { moving, position, selected, services } = useSeats(
     (s) => s.seatById[id],
   );
   const replaceSelection = useSeats((s) => s.replaceSelection);
@@ -129,11 +129,11 @@ export const Seat = ({ id }: SeatProps) => {
             alignItems="flex-end"
             flex={1}
           >
-            {Object.entries(properties)
+            {Object.entries(services)
               .filter(([_, v]) => v)
-              .map(([k]) => k as Property)
+              .map(([k]) => k as Service)
               .map(
-                iconForPropertyCurried({
+                iconForServiceCurried({
                   height: 12,
                   width: 12,
                   marginLeft: 2,

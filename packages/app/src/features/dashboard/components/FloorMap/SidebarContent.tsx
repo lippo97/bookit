@@ -1,4 +1,5 @@
 import { DialogButton } from '@/components/DialogButton';
+import { Service } from '@asw-project/shared/generatedTypes';
 import {
   Box,
   Button,
@@ -13,14 +14,14 @@ import {
 import sortBy from 'lodash/sortBy';
 import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
-import { NormalizedPropertyMap, Property } from '../../types/Property';
-import { iconForProperty } from '../../utils/iconForProperty';
+import { NormalizedServiceMap } from '../../types/ServiceMap';
+import { iconForService } from '../../utils/iconForProperty';
 import { MyCheckbox } from './MyCheckbox';
 import { aggregate, AggregateRowResult } from './utils';
 
 const renderProperties = (
-  aggregated: NormalizedPropertyMap<AggregateRowResult>,
-  setSelectionProperty: (p: Property, value: boolean) => void,
+  aggregated: NormalizedServiceMap<AggregateRowResult>,
+  setSelectionProperty: (p: Service, value: boolean) => void,
 ) => (
   <Box>
     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
@@ -31,7 +32,7 @@ const renderProperties = (
         <Box display="flex">
           <Box flex={1} display="flex" alignItems="center">
             <Box minWidth={56} style={{ color: 'rgba(0,0,0,0.54)' }}>
-              {iconForProperty(k as any)}
+              {iconForService(k as any)}
             </Box>
             <Typography variant="body2">{k}</Typography>
           </Box>
@@ -51,11 +52,11 @@ export const SidebarContent = () => {
     selectedIds.map((id) => ({ id, seat: s.seatById[id] })),
   );
   const removeSeat = useSeats((s) => s.removeSeat);
-  const setSelectionProperty = useSeats((s) => s.setSelectionProperty);
+  const setSelectionProperty = useSeats((s) => s.setSelectionService);
   const clearSelection = useSeats((s) => s.clearSelection);
   const [isDialogOpen, setDialogOpen] = useState(false);
 
-  const res = aggregate(selectedSeats.map(({ seat }) => seat.properties));
+  const res = aggregate(selectedSeats.map(({ seat }) => seat.services));
 
   return (
     <>

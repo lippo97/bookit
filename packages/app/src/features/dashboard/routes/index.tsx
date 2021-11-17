@@ -10,7 +10,7 @@ const initialSeats = {
     position: [0, 0] as const,
     moving: false,
     selected: false,
-    properties: {
+    services: {
       Computer: true,
       'Wi-Fi': true,
       'Power supply': true,
@@ -20,7 +20,7 @@ const initialSeats = {
     position: [1, 0] as const,
     moving: false,
     selected: false,
-    properties: {
+    services: {
       'Wi-Fi': true,
     },
   },
@@ -28,7 +28,7 @@ const initialSeats = {
     position: [2, 1] as const,
     moving: false,
     selected: false,
-    properties: {
+    services: {
       'Wi-Fi': true,
     },
   },
@@ -36,7 +36,7 @@ const initialSeats = {
     position: [2, 2] as const,
     moving: false,
     selected: false,
-    properties: {
+    services: {
       'Wi-Fi': true,
     },
   },
@@ -44,7 +44,7 @@ const initialSeats = {
     position: [2, 3] as const,
     moving: false,
     selected: false,
-    properties: {
+    services: {
       'Wi-Fi': true,
     },
   },
@@ -55,7 +55,7 @@ export const DashboardRoutes = () => (
     <Route path="/" element={<Dashboard />} />
     <Route
       path="/floormap"
-      element={<FloorMap initialSeats={initialSeats} />}
+      element={<FloorMap roomId="mock" initialSeats={initialSeats} />}
     />
     <Route path="/libraries">
       <Route path="add" element={<AddLibrary />} />

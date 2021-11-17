@@ -1,14 +1,16 @@
 /* eslint-disable consistent-return */
+import { useMobile } from '@/hooks/useMobile';
 import * as V2 from '@asw-project/shared/util/vector';
 import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {
-    forwardRef, MouseEvent,
-    MouseEventHandler,
-    useEffect,
-    useRef,
-    useState
+  forwardRef,
+  MouseEvent,
+  MouseEventHandler,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import { Resizable } from 'react-resizable';
 import 'react-resizable/css/styles.css';
@@ -19,7 +21,7 @@ import { boxSize } from './constants';
 import { Hover } from './Hover';
 import { Seat } from './Seat';
 
-const gridColor = "#ddd";
+const gridColor = '#ddd';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -56,6 +58,7 @@ export const Content = () => {
   const setSize = useSeats((s) => s.setSize);
   const size = useSeats((s) => s.size);
   const boxRef = useRef<HTMLDivElement | null>(null);
+  const isMobile = useMobile();
 
   const [counter, setCounter] = useState<number>(0);
   const [hover, setHover] = useState<V2.Vector2 | null>(null);
@@ -104,7 +107,7 @@ export const Content = () => {
 
   const handleMouseLeave: MouseEventHandler<HTMLElement> = () => setHover(null);
 
-  const { transform, setContainer, panZoomHandlers, zoom, setPan, container } =
+  const { transform, setContainer, panZoomHandlers, zoom, setPan, setZoom, container } =
     usePanZoom({
       enableZoom: selectedTool === 'select',
       enablePan: selectedTool === 'select',
@@ -122,8 +125,16 @@ export const Content = () => {
     const { width, height } = container.getBoundingClientRect();
     const x = (width - size[0] * boxSize) / 2;
     const y = (height - size[1] * boxSize) / 2;
-    setPan({ x, y });
-  }, [container]);
+    const ratio = width  / (size[0] * boxSize )
+    if (isMobile) {
+      // setPan({ x: 100, y: 0 })
+      setZoom(ratio / 1.1);
+      // setPan({ x, y });
+    } else {
+      setPan({ x, y });
+    }
+
+  }, [container, isMobile]);
 
   return (
     <div
@@ -147,8 +158,18 @@ export const Content = () => {
             userSelect: 'none',
           }}
         >
-          Room name ({size[0]} × {size[1]})
+          Room name ({size[0]} × {size[1]}){' - '}
+          <a
+            onClick={() => console.log('click')}
+            style={{
+              color: 'rgb(34, 88, 106)',
+              cursor: 'pointer',
+            }}
+          >
+            Change size
+          </a>
         </span>
+
         <Resizable
           height={size[1] * boxSize + 1}
           width={size[0] * boxSize}
@@ -183,8 +204,7 @@ export const Content = () => {
               style={{
                 height: '100%',
                 backgroundSize: '50px 50px',
-                backgroundImage:
-                  `linear-gradient(to right, ${gridColor} 1px, transparent 1px),  linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)`,
+                backgroundImage: `linear-gradient(to right, ${gridColor} 1px, transparent 1px),  linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)`,
                 backgroundRepeat: 'repeat',
                 margin: '-1px 0 0 -1px',
                 borderBottom: `1px solid ${gridColor}`,
@@ -193,7 +213,7 @@ export const Content = () => {
             {seatIds.map((id) => (
               <Seat id={id} key={id} />
             ))}
-            {hover && <Hover position={hover} />}
+            {hover && !isMobile && <Hover position={hover} />}
           </Box>
         </Resizable>
       </div>

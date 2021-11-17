@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { PositionSchema } from './position';
-import { AvailableServiceSchema } from './availableService';
+import { ServiceSchema } from './service';
 
 const roomId = Joi.string()
   .required()
@@ -8,18 +8,14 @@ const roomId = Joi.string()
     _mongoose: {
       type: 'ObjectId',
       ref: 'Room',
-      // validate: null
     },
   });
-// valutare se usare un oggetto room
 
-const name = Joi.string().required();
-
-const services = Joi.array().items(AvailableServiceSchema).required();
+const services = Joi.array().items(ServiceSchema).required();
 
 const position = PositionSchema.required();
 
-export const SeatSchema = Joi.object({ roomId, name, services, position }).meta(
+export const SeatSchema = Joi.object({ services, position }).meta(
   {
     className: 'Seat',
   },

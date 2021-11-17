@@ -14,6 +14,10 @@ import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { ButtonSection } from './ButtonSection';
 
+interface ToolbarProps {
+  onSave(): void;
+}
+
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     gridArea: 'toolbar',
@@ -52,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Toolbar = () => {
+export const Toolbar = ({ onSave }: ToolbarProps) => {
   const clearSelection = useSeats((s) => s.clearSelection);
   const selectAll = useSeats((s) => s.selectAll);
   const [sizeX, sizeY] = useSeats((s) => s.size);
@@ -70,7 +74,7 @@ export const Toolbar = () => {
               <Button variant="outlined" className={classes.actionButton}>
                 <BackIcon />
               </Button>
-              <Button variant="outlined" className={classes.actionButton}>
+              <Button variant="outlined" className={classes.actionButton} onClick={onSave}>
                 <SaveIcon />
               </Button>
             </ButtonSection>

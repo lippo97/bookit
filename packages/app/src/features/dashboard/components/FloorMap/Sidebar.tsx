@@ -14,17 +14,14 @@ const sidebarWidth = 256;
 
 const useMobileStyles = makeStyles((theme) => ({
   container: {
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
-    right: 0,
+    position: 'fixed',
+    inset: 0,
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'flex-end'
   },
   containerOpen: {
-    top: 0,
-    height: '100%',
-    zIndex: 1400,
+    zIndex: 1200,
     overflowY: 'scroll',
   },
   mobile: {
@@ -38,6 +35,7 @@ const useMobileStyles = makeStyles((theme) => ({
     transformOrigin: 'top left',
     borderRadius: theme.spacing(1),
     opacity: 0.3,
+    zIndex: 200,
   },
   mobileOpen: {
     translate: '0 0',

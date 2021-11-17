@@ -15,7 +15,7 @@ import values from 'lodash/values';
 import zipWith from 'lodash/zipWith';
 import create, { GetState } from 'zustand';
 import { NamedSet } from 'zustand/middleware';
-import { Property } from '../types/Property';
+import { Service } from '@asw-project/shared/generatedTypes';
 
 type SeatId = string;
 
@@ -23,8 +23,8 @@ type Seat = {
   position: Vector2;
   moving: boolean;
   selected: boolean;
-  properties: {
-    [k in Property]?: boolean;
+  services: {
+    [k in Service]?: boolean;
   };
 };
 
@@ -41,14 +41,14 @@ type SeatState = {
   initialize(initialSeats: SeatMap): void;
   addSeat(
     id: SeatId,
-    seat: Omit<Seat, 'properties' | 'moving' | 'selected'>,
+    seat: Omit<Seat, 'services' | 'moving' | 'selected'>,
   ): boolean;
   removeSeat(id: SeatId | readonly SeatId[]): void;
   selectAll(): void;
   clearSelection(): void;
   updateSelection(id: SeatId | readonly SeatId[]): void;
   replaceSelection(id: SeatId | readonly SeatId[]): void;
-  setSelectionProperty(property: Property, value: boolean): void;
+  setSelectionService(service: Service, value: boolean): void;
   startMoving(): void;
   move(delta: Vector2): void;
   stopMoving(): void;
@@ -119,7 +119,7 @@ const seatState = (
       seatIds: [...seatIds, id],
       seatById: {
         ...seatById,
-        [id]: { ...seat, moving: false, selected: false, properties: {} },
+        [id]: { ...seat, moving: false, selected: false, services: {} },
       },
     });
     return true;
@@ -206,16 +206,16 @@ const seatState = (
       },
     });
   },
-  setSelectionProperty: (property, value) => {
+  setSelectionService: (service, value) => {
     const { seatById, selectedIds } = get();
     const updatedSelection = mapValues(
       pickBy(seatById, (_, k) => selectedIds.includes(k)),
       // unfortunately we didn't use lenses in this project
       (s) => ({
         ...s,
-        properties: {
-          ...s.properties,
-          [property]: value,
+        services: {
+          ...s.services,
+          [service]: value,
         },
       }),
     );

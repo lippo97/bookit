@@ -20,6 +20,7 @@ interface ToolFABProps {
   readonly open: boolean;
   onOpen(): void;
   onClose(): void;
+  onSave(): void;
 }
 
 type Icon = OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
@@ -43,9 +44,11 @@ const tools = [
 ] as const;
 
 const actions = ({
+  onSave,
   clearSelection,
   selectAll,
 }: {
+  onSave: () => void;
   clearSelection: () => void;
   selectAll: () => void;
 }) =>
@@ -54,7 +57,7 @@ const actions = ({
       name: 'save',
       label: 'Save',
       Icon: SaveIcon,
-      handle: () => {},
+      handle: onSave,
     },
     {
       name: 'clearAll',
@@ -99,7 +102,7 @@ const MySpeedDialAction = ({
   return <MuiSpeedDialAction {...rest} {...props} />;
 };
 
-export const ToolFAB = ({ open, onOpen, onClose }: ToolFABProps) => {
+export const ToolFAB = ({ open, onOpen, onClose, onSave }: ToolFABProps) => {
   const selectedTool = useEditor((s) => s.selectedTool);
   const setSelectedTool = useEditor((s) => s.setSelectedTool);
   const clearSelection = useSeats((s) => s.clearSelection);
@@ -124,7 +127,7 @@ export const ToolFAB = ({ open, onOpen, onClose }: ToolFABProps) => {
           selected={selectedTool === name}
         />
       ))}
-      {actions({ selectAll, clearSelection }).map(
+      {actions({ onSave, selectAll, clearSelection }).map(
         ({ name, Icon, label, handle }) => (
           <MuiSpeedDialAction
             key={name}

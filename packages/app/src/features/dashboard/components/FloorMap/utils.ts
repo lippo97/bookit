@@ -1,16 +1,16 @@
+import { services } from '@asw-project/shared/types/services';
 import reduce from 'lodash/reduce';
 import {
-  NormalizedPropertyMap,
-  properties,
-  PropertyMap,
-} from '../../types/Property';
+  NormalizedServiceMap,
+  ServiceMap,
+} from '../../types/ServiceMap';
 
 function merge(
-  acc: PropertyMap<AggregateRowResult>,
-  v: PropertyMap<boolean>,
-): PropertyMap<AggregateRowResult> {
-  const merged: PropertyMap<AggregateRowResult> = {};
-  properties.forEach((k) => {
+  acc: ServiceMap<AggregateRowResult>,
+  v: ServiceMap<boolean>,
+): ServiceMap<AggregateRowResult> {
+  const merged: ServiceMap<AggregateRowResult> = {};
+  services.forEach((k) => {
     const oldValue = acc[k] ?? false;
     const newValue = v[k] ?? false;
     if (oldValue === 'indeterminate' || oldValue !== newValue) {
@@ -22,7 +22,7 @@ function merge(
   return merged;
 }
 
-const normalize = (reduceResult: PropertyMap<AggregateRowResult>): NormalizedPropertyMap<AggregateRowResult> => ({
+const normalize = (reduceResult: ServiceMap<AggregateRowResult>): NormalizedServiceMap<AggregateRowResult> => ({
   "Power supply": reduceResult['Power supply'] ?? false,
   "Wi-Fi": reduceResult['Wi-Fi'] ?? false,
   Computer: reduceResult.Computer ?? false,
@@ -32,17 +32,17 @@ const normalize = (reduceResult: PropertyMap<AggregateRowResult>): NormalizedPro
 
 export type AggregateRowResult = boolean | 'indeterminate';
 
-export type AggregateResult = NormalizedPropertyMap<AggregateRowResult>;
+export type AggregateResult = NormalizedServiceMap<AggregateRowResult>;
 
 export const aggregate = (
-  propertyMaps: PropertyMap<boolean>[],
+  propertyMaps: ServiceMap<boolean>[],
 ): AggregateResult => {
   if (propertyMaps.length > 0) {
     const [head, ...tail] = propertyMaps;
     const reduceResult = reduce(
       tail,
       (acc, v) => merge(acc, v),
-      head as PropertyMap<AggregateRowResult>,
+      head as ServiceMap<AggregateRowResult>,
     );
     return normalize(reduceResult);
   }
