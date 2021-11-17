@@ -37,21 +37,15 @@ module.exports = {
         options: {
           configFile: path.join('.', 'tsconfig.json'),
           projectReferences: true,
-          // This seem not to work
-          // getCustomTransformers: () => ({
-          // before: [
-          // tsImportPluginFactory({
-          //   libraryName: '@material-ui/core',
-          //   libraryDirectory: '',
-          //   camel2DashComponentName: false,
-          // }),
-          //   ],
-          // }),
         },
       },
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.svg$/i,
+        use: ['@svgr/webpack'],
       },
       {
         test: /\.(png|jpe?g|gif)$/i,

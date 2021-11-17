@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { RoomSchema } from './room';
-import { AvailableServiceSchema } from './availableService';
+import { ServiceSchema } from './service';
 
 export const name = Joi.string().required();
 
@@ -50,7 +50,7 @@ const ShiftSchema = Joi.object({
 const timetable = Joi.array().items(ShiftSchema).required();
 
 //properties
-const availableServices = Joi.array().items(AvailableServiceSchema).required();
+const availableServices = Joi.array().items(ServiceSchema).required();
 
 const rooms = Joi.array().items(RoomSchema).required();
 
