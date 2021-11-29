@@ -20,10 +20,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     paddingLeft: theme.spacing(0.5),
     paddingRight: theme.spacing(0.5),
-  },
-  button: {
-    textTransform: 'none',
-  },
+  }
 }));
 
 export const RoomList = ({ rooms }: RoomListProps) => {

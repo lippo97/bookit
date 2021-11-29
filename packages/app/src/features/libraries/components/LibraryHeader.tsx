@@ -2,13 +2,10 @@ import { Tooltip, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { getLibraryImageUrlOrFallback } from '@/lib/images';
+import { PageHeader } from '@/components/PageHeader';
+import { getImageUrlOrFallback } from '@/config/images';
 
 const useStyles = makeStyles(() => ({
-  root: {
-    height: '250px',
-    width: '100%',
-    position: 'relative',
-  },
   image: {
     height: '100%',
     width: '100%',
@@ -50,10 +47,10 @@ export const LibraryHeader = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <PageHeader>
       <img
         className={classes.image}
-        src={getLibraryImageUrlOrFallback(src)}
+        src={getImageUrlOrFallback(src)}
         alt="The library"
       />
       {isStarred !== undefined && (
@@ -70,6 +67,6 @@ export const LibraryHeader = ({
           </Tooltip>
         </>
       )}
-    </div>
+    </PageHeader>
   );
 };

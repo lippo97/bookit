@@ -5,18 +5,23 @@ import { WithId } from '@asw-project/shared/data/withId';
 import { Library } from '@asw-project/shared/generatedTypes';
 import {
   IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
   TableCell,
   TableRow as MuiTableRow,
   Tooltip,
 } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
-import BusinessIcon from '@material-ui/icons/Business';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteLibrary } from '../api/getLibraries';
+import { Link as RouterLink } from 'react-router-dom';
+import BusinessIcon from '@material-ui/icons/Business';
 
 interface LibraryListItemProps {
   readonly data: WithId<Library>;
@@ -42,9 +47,9 @@ const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
   const pushNotification = useNotification((s) => s.pushNotification);
   return (
     <FlexDiv>
-      <Tooltip title="Manage">
+      <Tooltip title="Show">
         <LinkIconButton
-          to={`/dashboard/libraries/${_id}/manage`}
+          to={`/dashboard/libraries/${_id}`}
           icon={<BusinessIcon />}
         />
         {/* <IconButton>
@@ -95,12 +100,14 @@ const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
 export const LibraryListItem = ({
   data: { name, city, street, _id },
 }: LibraryListItemProps) => (
-  <TableRow>
-    <TableCell>{name}</TableCell>
-    <TableCell>{city}</TableCell>
-    <TableCell>{street}</TableCell>
-    <TableCell>
-      <Actions name={name} _id={_id} />
-    </TableCell>
-  </TableRow>
+  <ListItem button component={RouterLink} to={`/dashboard/libraries/${_id}`}>
+    <ListItemIcon>
+      <BusinessIcon />
+    </ListItemIcon>
+    <ListItemText primary={name} secondary={`${street}, ${city}`} />
+    <ListItemSecondaryAction>
+      <LinkIconButton to={`/dashboard/libraries/${_id}/edit`} icon={<EditIcon />}>
+      <LinkIconButton to={`/dashboard/libraries/${_id}/del`} icon={<EditIcon />}>
+    </ListItemSecondaryAction>
+  </ListItem>
 );

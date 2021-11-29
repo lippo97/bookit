@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const ManageLibrary = () => {
+export const ShowLibrary = () => {
   const { id } = useParams();
   const classes = useStyles();
   const { data, status } = useQuery(['library', id], () => getLibraryById(id));
