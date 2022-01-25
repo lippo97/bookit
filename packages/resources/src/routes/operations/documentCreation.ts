@@ -16,12 +16,7 @@ export type DocumentCreationError =
 
 function parseErrors(errObj: any): Reason[] {
   function parseOne(error: any): Reason[] {
-    const {
-      value,
-      path: property,
-      kind,
-      properties: { message },
-    } = error;
+    const { value, path: property, kind, properties: message } = error;
     return [
       {
         value,

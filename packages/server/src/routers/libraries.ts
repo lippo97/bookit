@@ -20,17 +20,4 @@ router.post(
   },
 );
 
-/* router.get('/libraryImage/:imageFileName', async (req: any, res: any) => {
-  const { imageFileName } = req.params;
-  const image = await libraryImageGetter(imageFileName);
-  if (image) {
-    const extension = imageFileName.split('.').slice(-1);
-    res.header('Content-Type', `image/${extension}`);
-    res.status(200);
-    res.end(image);
-  } else {
-    res.sendStatus(404);
-  }
-}); */
-
 export default router;

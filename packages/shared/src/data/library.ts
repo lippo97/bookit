@@ -20,23 +20,16 @@ const ownerId = Joi.string()
 
 const imageFileName = Joi.string();
 //
-const timeRange = Joi.object().keys({
+export const timeRange = Joi.object().keys({
   from: Joi.number().required(),
   to: Joi.number().required(),
 });
-const daytime = Joi.array().items(timeRange); /*Joi.object().keys({
-  daytime: Joi.array().items(timeRange),
-});*/
-//
+const daytime = Joi.array().items(timeRange);
+
 const defaultTimerange = Joi.object().keys({
   from: Joi.number().default(10).required(),
   to: Joi.number().default(12).required(),
 });
-/*const timetable = Joi.array()
-  .length(7)
-  .items(daytime)
- 
-  .required();*/
 
 const DaySchema = Joi.number().min(0).max(6);
 
@@ -49,7 +42,6 @@ const ShiftSchema = Joi.object({
 });
 const timetable = Joi.array().items(ShiftSchema).required();
 
-//properties
 const availableServices = Joi.array().items(ServiceSchema).required();
 
 const rooms = Joi.array().items(RoomSchema).required();
@@ -66,7 +58,3 @@ export const LibrarySchema = Joi.object({
 }).meta({
   className: 'Library',
 });
-
-function emptyDay(): Joi.ArraySchema {
-  return Joi.array().default([]);
-}
