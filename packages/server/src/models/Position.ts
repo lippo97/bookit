@@ -2,5 +2,5 @@ import { PositionSchema as PositionJoiSchema } from '@asw-project/shared/data/po
 import { Position } from '@asw-project/shared/generatedTypes/position';
 import { Resource } from '@asw-project/resources';
 
-export const [PositionModel, PositionSchema, positionKeys] =
-  Resource.getModelFromJoi<Position>(PositionJoiSchema);
+// export const [PositionModel, PositionSchema, positionKeys] =
+//   Resource.getModelFromJoi<Position>(PositionJoiSchema);

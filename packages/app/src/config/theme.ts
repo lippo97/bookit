@@ -1,5 +1,13 @@
 import { createTheme } from '@material-ui/core/styles';
 import {} from '@material-ui/core/styles/createSpacing';
+import { SpeedDialActionClassKey } from '@material-ui/lab/SpeedDialAction';
+
+declare module '@material-ui/core/styles/overrides' {
+  export interface ComponentNameToClassKey {
+    MuiSpeedDialAction: SpeedDialActionClassKey;
+  }
+}
+
 
 export const theme = createTheme({
   props: {
@@ -29,10 +37,11 @@ export const theme = createTheme({
         fontSize: '0.9em',
       },
     },
+    MuiSpeedDialAction: {
+      staticTooltipLabel: {
+        width: '90px',
+        fontSize: '14px',
+      }
+    }
   },
-  // palette: {
-  //   primary: {
-  //     main: '#ffa04d',
-  //   },
-  // },
 });

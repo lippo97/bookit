@@ -7,11 +7,11 @@ import flow from 'lodash/fp/flow';
 import identity from 'lodash/fp/identity';
 import create, { GetState } from 'zustand';
 import {
-  devtools,
   NamedSet,
   persist as createPersist,
 } from 'zustand/middleware';
 import { log } from './_log';
+import { myDevtools } from './_myDevtools';
 
 export type Authentication = ReturnedUser | null;
 
@@ -71,7 +71,7 @@ const persist = (as: typeof authState) =>
 
 const middlewares = flow(
   // Use devtools and log only in development builds
-  IS_DEVELOPMENT ? devtools : identity,
+  IS_DEVELOPMENT ? myDevtools('Authentication') : identity,
   IS_DEVELOPMENT ? log : identity,
   persist,
 );
