@@ -36,15 +36,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyHandle = forwardRef<HTMLDivElement>((props, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={clsx('react-resizable-handle', 'react-resizable-handle-se')}
-      {...props}
-    />
-  );
-});
+const MyHandle = forwardRef<HTMLDivElement>((props, ref) => (
+  <div
+    ref={ref}
+    className={clsx('react-resizable-handle', 'react-resizable-handle-se')}
+    {...props}
+  />
+));
 
 export const Content = () => {
   const classes = useStyles();
@@ -75,7 +73,7 @@ export const Content = () => {
     if (rect === undefined) return undefined;
     const { top, left } = rect;
     const point = V2.sub([clientX, clientY], [left, top]);
-    return V2.div(point, boxSize * 1.01 * scale).map(
+    return V2.div(point, boxSize * 1.0 * scale).map(
       Math.floor,
     ) as unknown as V2.Vector2;
   };
@@ -107,14 +105,21 @@ export const Content = () => {
 
   const handleMouseLeave: MouseEventHandler<HTMLElement> = () => setHover(null);
 
-  const { transform, setContainer, panZoomHandlers, zoom, setPan, setZoom, container } =
-    usePanZoom({
-      enableZoom: selectedTool === 'select',
-      enablePan: selectedTool === 'select',
-      zoomSensitivity: 0.002,
-      requireCtrlToZoom: true,
-      preventClickOnPan: true,
-    });
+  const {
+    transform,
+    setContainer,
+    panZoomHandlers,
+    zoom,
+    setPan,
+    setZoom,
+    container,
+  } = usePanZoom({
+    enableZoom: selectedTool === 'select',
+    enablePan: selectedTool === 'select',
+    zoomSensitivity: 0.002,
+    requireCtrlToZoom: true,
+    preventClickOnPan: true,
+  });
 
   useEffect(() => {
     setScale(zoom);
@@ -125,7 +130,7 @@ export const Content = () => {
     const { width, height } = container.getBoundingClientRect();
     const x = (width - size[0] * boxSize) / 2;
     const y = (height - size[1] * boxSize) / 2;
-    const ratio = width  / (size[0] * boxSize )
+    const ratio = width / (size[0] * boxSize);
     if (isMobile) {
       // setPan({ x: 100, y: 0 })
       setZoom(ratio / 1.1);
@@ -133,7 +138,6 @@ export const Content = () => {
     } else {
       setPan({ x, y });
     }
-
   }, [container, isMobile]);
 
   return (

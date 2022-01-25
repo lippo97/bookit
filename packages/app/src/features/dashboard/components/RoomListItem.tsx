@@ -1,3 +1,5 @@
+import { LinkIconButton } from '@/components/LinkIconButton';
+import { WithId } from '@asw-project/shared/data/withId';
 import { Room } from '@asw-project/shared/generatedTypes';
 import {
   ListItem,
@@ -12,11 +14,11 @@ import RoomIcon from '@material-ui/icons/Room';
 import { Link as RouterLink } from 'react-router-dom';
 
 interface RoomListItemProps {
-  data: Room;
+  data: WithId<Room>;
 }
 
 export const RoomListItem = ({
-  data: { name, capacity },
+  data: { name, capacity, libraryId, _id },
 }: RoomListItemProps) => (
   <ListItem button component={RouterLink} to="#">
     <ListItemIcon>
@@ -24,9 +26,10 @@ export const RoomListItem = ({
     </ListItemIcon>
     <ListItemText primary={name} secondary={`Available seats: ${capacity}`} />
     <ListItemSecondaryAction>
-      <IconButton>
-        <EditIcon />
-      </IconButton>
+      <LinkIconButton
+        to={`/dashboard/libraries/${libraryId}/rooms/${_id}/edit`}
+        icon={<EditIcon />}
+      />
       <IconButton>
         <DeleteIcon />
       </IconButton>

@@ -18,10 +18,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
-import { deleteLibrary } from '../api/getLibraries';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, useNavigate, Link as RouterLink } from 'react-router-dom';
 import BusinessIcon from '@material-ui/icons/Business';
+import { deleteLibrary } from '../api/getLibraries';
 
 interface LibraryListItemProps {
   readonly data: WithId<Library>;
@@ -52,9 +51,6 @@ const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
           to={`/dashboard/libraries/${_id}`}
           icon={<BusinessIcon />}
         />
-        {/* <IconButton>
-          <BusinessIcon />
-        </IconButton> */}
       </Tooltip>
       <Tooltip title="Delete">
         <DialogButton
@@ -106,8 +102,14 @@ export const LibraryListItem = ({
     </ListItemIcon>
     <ListItemText primary={name} secondary={`${street}, ${city}`} />
     <ListItemSecondaryAction>
-      <LinkIconButton to={`/dashboard/libraries/${_id}/edit`} icon={<EditIcon />}>
-      <LinkIconButton to={`/dashboard/libraries/${_id}/del`} icon={<EditIcon />}>
+      <LinkIconButton
+        to={`/dashboard/libraries/${_id}/edit`}
+        icon={<EditIcon />}
+      />
+      <LinkIconButton
+        to={`/dashboard/libraries/${_id}/del`}
+        icon={<EditIcon />}
+      />
     </ListItemSecondaryAction>
   </ListItem>
 );

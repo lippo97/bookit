@@ -8,22 +8,25 @@ import {
   makeStyles,
   Paper,
 } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
 import CropFreeIcon from '@material-ui/icons/CropFree';
+import { WithId } from '@asw-project/shared/data/withId';
 import { RoomListItem } from './RoomListItem';
 
 interface RoomListProps {
-  readonly rooms: readonly Room[];
+  readonly libraryId: string;
+  readonly rooms: readonly WithId<Room>[];
 }
 
 const useStyles = makeStyles((theme) => ({
   list: {
     paddingLeft: theme.spacing(0.5),
     paddingRight: theme.spacing(0.5),
-  }
+  },
 }));
 
-export const RoomList = ({ rooms }: RoomListProps) => {
+export const RoomList = ({ rooms, libraryId }: RoomListProps) => {
   const classes = useStyles();
   return (
     <List className={classes.list} component={Paper}>
@@ -32,7 +35,11 @@ export const RoomList = ({ rooms }: RoomListProps) => {
         <RoomListItem data={d} />
       ))}
       <ListSubheader>Actions</ListSubheader>
-      <ListItem button>
+      <ListItem
+        button
+        component={RouterLink}
+        to={`/dashboard/libraries/${libraryId}/rooms/add`}
+      >
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>

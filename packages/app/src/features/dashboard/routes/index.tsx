@@ -5,6 +5,8 @@ import { Dashboard } from './Dashboard';
 import { ShowLibrary } from './libraries/Show';
 import { FloorMap } from '../components/FloorMap';
 import { AllLibraries } from './libraries/All';
+import AddRoom from './rooms/Add';
+import EditRoom from './rooms/Edit';
 
 const initialSeats = {
   a: {
@@ -63,6 +65,8 @@ export const DashboardRoutes = () => (
       <Route path="add" element={<AddLibrary />} />
       <Route path=":id" element={<ShowLibrary />} />
       <Route path=":id/edit" element={<EditLibrary />} />
+      <Route path=":id/rooms/add" element={<AddRoom />} />
+      <Route path=":id/rooms/:roomId/edit" element={<EditRoom />} />
     </Route>
   </Routes>
 );
