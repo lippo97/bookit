@@ -23,11 +23,14 @@ const capacity = Joi.number() //
   .min(1)
   .required();
 
+const accessibility = Joi.boolean().required();
+
 export const RoomSchema = Joi.object({
   libraryId,
   name,
   seats,
   capacity,
+  accessibility,
 }).meta({
   className: 'Room',
 });

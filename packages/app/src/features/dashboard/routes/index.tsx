@@ -2,8 +2,11 @@ import { Route, Routes } from 'react-router-dom';
 import { AddLibrary } from './libraries/Add';
 import { EditLibrary } from './libraries/Edit';
 import { Dashboard } from './Dashboard';
-import { ManageLibrary } from './libraries/Manage';
+import { ShowLibrary } from './libraries/Show';
 import { FloorMap } from '../components/FloorMap';
+import { AllLibraries } from './libraries/All';
+import AddRoom from './rooms/Add';
+import EditRoom from './rooms/Edit';
 
 const initialSeats = {
   a: {
@@ -58,9 +61,12 @@ export const DashboardRoutes = () => (
       element={<FloorMap roomId="mock" initialSeats={initialSeats} />}
     />
     <Route path="/libraries">
+      <Route path="/" element={<AllLibraries />} />
       <Route path="add" element={<AddLibrary />} />
+      <Route path=":id" element={<ShowLibrary />} />
       <Route path=":id/edit" element={<EditLibrary />} />
-      <Route path=":id/manage" element={<ManageLibrary />} />
+      <Route path=":id/rooms/add" element={<AddRoom />} />
+      <Route path=":id/rooms/:roomId/edit" element={<EditRoom />} />
     </Route>
   </Routes>
 );

@@ -1,14 +1,14 @@
 import { Room, Service } from '@asw-project/shared/generatedTypes';
-import { SeatMap } from '../stores/seats';
 import { V2ToPosition } from '@asw-project/shared/types/position';
-import { fst, snd } from '@asw-project/shared/util/tuples';
+import { fst } from '@asw-project/shared/util/tuples';
 import { pick } from '@asw-project/shared/util/objects';
+import { SeatMap } from '../stores/seats';
 
 const serviceObjectToArray = (
   input: SeatMap[string]['services'],
 ): Room['seats'][number]['services'] =>
   Object.entries(input)
-    .filter(([_, value]) => value)
+    .filter(([, value]) => value)
     .map(fst) as Service[];
 
 export const updateRoomSeats = (
@@ -28,3 +28,36 @@ export const updateRoomSeats = (
     }, 1000);
   });
 };
+
+// TODO
+export async function createLibraryRoom(
+  id: string,
+  name: string,
+  accessibility: boolean,
+): Promise<void> {
+  Promise.resolve();
+}
+
+// TODO
+export async function getLibraryRoomById(
+  id: string,
+  roomid: string,
+): Promise<Room> {
+  return Promise.resolve({
+    name: 'ciao',
+    capacity: 30,
+    libraryId: '10',
+    seats: [],
+    accessibility: true,
+  });
+}
+
+// TODO
+export async function updateLibraryRoom(
+  id: string,
+  roomId: string,
+  name: string,
+  accessibility: boolean,
+): Promise<void> {
+  Promise.resolve();
+}
