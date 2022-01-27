@@ -11,6 +11,7 @@ const libraryId = Joi.string()
     },
   });
 
+  // = library owner
 const ownerId = Joi.string()
   .required()
   .meta({

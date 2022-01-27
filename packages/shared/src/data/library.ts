@@ -8,6 +8,7 @@ export const street = Joi.string().required();
 
 export const city = Joi.string().required();
 
+//library owner
 const ownerId = Joi.string()
   .required()
   .meta({

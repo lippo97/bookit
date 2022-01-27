@@ -1,14 +1,7 @@
 import Joi from 'joi';
 import { timeRange } from './library';
 
-const ownerId = Joi.string()
-  .required()
-  .meta({
-    _mongoose: {
-      type: 'ObjectId',
-      ref: 'Authentication',
-    },
-  });
+
 
 const seatId = Joi.string()
   .required()
@@ -19,6 +12,15 @@ const seatId = Joi.string()
     },
   });
 
+  // user that reserves
+const ownerId = Joi.string()
+.required()
+.meta({
+  _mongoose: {
+    type: 'ObjectId',
+    ref: 'Authentication',
+  },
+});
 const timeSlot = timeRange.required();
 
 const date = Joi.date().required();
