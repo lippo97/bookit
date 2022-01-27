@@ -98,7 +98,7 @@ export const EditLibrary = () => {
               })
                 .then(() => {
                   pushNotification({
-                    message: 'Updated library successfully.',
+                    message: 'Library updated successfully.',
                     severity: 'success',
                   });
                   navigate('/dashboard');

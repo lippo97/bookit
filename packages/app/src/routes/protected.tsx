@@ -18,18 +18,10 @@ const switchAccountType = (accountType: AccountType) =>
   accountType === 'manager'
     ? [
         {
-<<<<<<< HEAD
           path: '/libraries/*',
           element: <LibrariesRoutes />,
         },
-
         {
-          path: '/favorites/*',
-          element: <FavoritesRoutes />,
-        },
-        {
-=======
->>>>>>> 66e8ccaccafa3f5ab9a21061941f803d4c636ebb
           path: '/dashboard/*',
           element: <DashboardRoutes />,
         },
@@ -38,6 +30,10 @@ const switchAccountType = (accountType: AccountType) =>
         {
           path: '/libraries/*',
           element: <LibrariesRoutes />,
+        },
+        {
+          path: '/favorites/*',
+          element: <FavoritesRoutes />,
         },
       ];
 

@@ -112,7 +112,7 @@ interface LibraryDataProps {
 
 export const LibraryData = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  data: { name, city, street, availableServices, rooms, timetable },
+  data: { name, city, street, availableServices, timetable }, // rooms, timetable },
 }: LibraryDataProps) => {
   const classes = useStyles();
 

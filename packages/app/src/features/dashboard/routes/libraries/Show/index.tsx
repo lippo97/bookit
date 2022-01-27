@@ -1,10 +1,9 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
 import { getLibraryById } from '@/features/dashboard/api/getLibraries';
+import { getRooms } from '@/features/dashboard/api/rooms';
 import { RoomList } from '@/features/dashboard/components/RoomList';
 import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
-import { WithId } from '@asw-project/shared/data/withId';
-import { Room } from '@asw-project/shared/generatedTypes';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -19,18 +18,23 @@ const useStyles = makeStyles((theme) => ({
 export const ShowLibrary = () => {
   const { id } = useParams();
   const classes = useStyles();
-  const { data, status } = useQuery(['library', id], () => getLibraryById(id));
+  const { data, status } = useQuery(['library', id], async () => {
+    const library = await getLibraryById(id);
+    const rooms = await getRooms(id);
+    console.log(rooms);
+    return { library, rooms };
+  });
   return (
     <Layout transparentAppBar>
       <QueryContent data={data} status={status}>
         {(d) => (
           <>
-            <LibraryHeader src={d.imageFileName} />
+            <LibraryHeader src={d.library.imageFileName} />
             <Container>
               <Typography variant="h6" className={classes.title}>
-                {d.name}
+                {d.library.name}
               </Typography>
-              <RoomList rooms={d.rooms as any} libraryId={id} />
+              <RoomList libraryId={id} rooms={d.rooms as any} />
             </Container>
           </>
         )}

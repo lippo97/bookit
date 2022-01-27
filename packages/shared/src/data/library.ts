@@ -44,7 +44,7 @@ const timetable = Joi.array().items(ShiftSchema).required();
 
 const availableServices = Joi.array().items(ServiceSchema).required();
 
-const rooms = Joi.array().items(RoomSchema).required();
+//const rooms = Joi.array().items(RoomSchema).required();
 
 export const LibrarySchema = Joi.object({
   name,
@@ -53,7 +53,7 @@ export const LibrarySchema = Joi.object({
   ownerId,
   timetable,
   availableServices,
-  rooms,
+  //rooms,
   imageFileName,
 }).meta({
   className: 'Library',

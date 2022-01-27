@@ -21,6 +21,7 @@ type SeatId = string;
 
 type Seat = {
   position: Vector2;
+  //previouslyExisting: boolean;
   moving: boolean;
   selected: boolean;
   services: {

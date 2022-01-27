@@ -1,8 +1,15 @@
+import { ky } from '@/config/ky';
 import { Room, Service } from '@asw-project/shared/generatedTypes';
 import { V2ToPosition } from '@asw-project/shared/types/position';
 import { fst } from '@asw-project/shared/util/tuples';
 import { pick } from '@asw-project/shared/util/objects';
+import { WithId } from '@asw-project/shared/data/withId';
+import { useAuth } from '@/stores/authentication';
 import { SeatMap } from '../stores/seats';
+
+export type CreateRoomArg = Pick<Room, 'libraryId' | 'name' | 'accessibility'>;
+
+export type UpdateRoomArg = Omit<CreateRoomArg, 'libraryId'>;
 
 const serviceObjectToArray = (
   input: SeatMap[string]['services'],
@@ -11,6 +18,7 @@ const serviceObjectToArray = (
     .filter(([, value]) => value)
     .map(fst) as Service[];
 
+// TODO
 export const updateRoomSeats = (
   roomId: string,
   seatMap: SeatMap,
@@ -29,35 +37,30 @@ export const updateRoomSeats = (
   });
 };
 
-// TODO
-export async function createLibraryRoom(
-  id: string,
-  name: string,
-  accessibility: boolean,
-): Promise<void> {
-  Promise.resolve();
+export async function createRoom(data: CreateRoomArg): Promise<WithId<Room>> {
+  return ky.post('rooms', { json: data }).json<WithId<Room>>();
 }
 
-// TODO
-export async function getLibraryRoomById(
-  id: string,
-  roomid: string,
-): Promise<Room> {
-  return Promise.resolve({
-    name: 'ciao',
-    capacity: 30,
-    libraryId: '10',
-    seats: [],
-    accessibility: true,
-  });
+// da usare proteced  o simple??
+
+export async function getRoomById(roomId: string): Promise<WithId<Room>> {
+  return ky.get(`rooms/${roomId}`).json<WithId<Room>>();
 }
 
-// TODO
-export async function updateLibraryRoom(
-  id: string,
-  roomId: string,
-  name: string,
-  accessibility: boolean,
-): Promise<void> {
-  Promise.resolve();
+export async function getRooms(libraryId: string): Promise<WithId<Room>[]> {
+  const authInfo = useAuth.getState().auth;
+  const searchParams = {
+    libraryId,
+    ownerId: authInfo?.userId,
+  };
+  return ky.get('rooms', { searchParams }).json<WithId<Room>[]>();
+}
+
+export const updateRoom =
+  (roomId: string) =>
+  async (data: UpdateRoomArg): Promise<WithId<Room>> =>
+    ky.patch(`rooms/${roomId}`, { json: data }).json<WithId<Room>>();
+
+export async function deleteRoom(roomId: string): Promise<WithId<Room>> {
+  return ky.delete(`rooms/${roomId}`).json<WithId<Room>>();
 }

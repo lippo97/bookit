@@ -51,6 +51,7 @@ function RoomForm({
         render={({ field }) => (
           <FormControlLabel
             label="Accessibility"
+            // eslint-disable-next-line react/no-this-in-sfc
             control={<Checkbox color="primary" {...field} />}
           />
         )}

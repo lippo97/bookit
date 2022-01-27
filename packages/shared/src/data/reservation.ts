@@ -10,12 +10,12 @@ const ownerId = Joi.string()
     },
   });
 
-const roomId = Joi.string()
+const seatId = Joi.string()
   .required()
   .meta({
     _mongoose: {
       type: 'ObjectId',
-      ref: 'Room',
+      ref: 'Seat',
     },
   });
 
@@ -25,7 +25,7 @@ const date = Joi.date().required();
 
 export const ReservationSchema = Joi.object({
   ownerId,
-  roomId,
+  seatId,
   timeSlot,
   date,
 }).meta({

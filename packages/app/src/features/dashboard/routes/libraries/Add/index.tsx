@@ -72,7 +72,7 @@ export const AddLibrary = () => {
           })
             .then(() =>
               pushNotification({
-                message: 'Created library successfully.',
+                message: 'Library created successfully.',
                 severity: 'success',
               }),
             )

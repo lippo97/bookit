@@ -2,17 +2,13 @@ import { useNotification } from '@/stores/notifications';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import { useForm } from 'react-hook-form';
-import {
-  createRoutesFromChildren,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
-import { createLibraryRoom } from '../../api/rooms';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createRoom } from '../../api/rooms';
 import { LibraryFormLayout } from '../../components/LibraryFormLayout';
 import RoomForm, { RoomFormValue } from '../../components/RoomForm';
 
 function AddRoom() {
-  const { id } = useParams();
+  const { id: libraryId } = useParams();
   const { pushNotification } = useNotification();
   const navigate = useNavigate();
 
@@ -31,16 +27,16 @@ function AddRoom() {
 
   const onSubmit = handleSubmit(async ({ name, accessibility }) => {
     try {
-      await createLibraryRoom(id, name, accessibility);
+      await createRoom({ libraryId, name, accessibility });
       console.log(name, accessibility);
       pushNotification({
         message: 'Room created successfully!',
         severity: 'success',
       });
-      navigate(`/dashboard/libraries/${id}`);
+      navigate(`/dashboard/libraries/${libraryId}`);
     } catch {
       pushNotification({
-        message: "Couldn't create library, retry later.",
+        message: 'Unable to create room, retry later.',
         severity: 'error',
       });
     }
@@ -51,7 +47,7 @@ function AddRoom() {
       <RoomForm
         formControl={control}
         onSubmit={onSubmit}
-        onBack={() => navigate(`/dashboard/libraries/${id}`)}
+        onBack={() => navigate(`/dashboard/libraries/${libraryId}`)}
         buttonText="Add"
       />
     </LibraryFormLayout>

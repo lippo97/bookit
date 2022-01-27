@@ -7,18 +7,18 @@ import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 
 import { useNavigate, useParams } from 'react-router-dom';
-import { getLibraryRoomById, updateLibraryRoom } from '../../api/rooms';
+import { getRoomById, updateRoom } from '../../api/rooms';
 import { LibraryFormLayout } from '../../components/LibraryFormLayout';
 import RoomForm, { RoomFormValue } from '../../components/RoomForm';
 
 function EditRoom() {
-  const { id, roomId } = useParams();
+  const { id: libraryId, roomId } = useParams();
   const { pushNotification } = useNotification();
   const navigate = useNavigate();
 
   const { data, status } = useQuery(
     ['get room', roomId],
-    () => getLibraryRoomById(id, roomId),
+    () => getRoomById(roomId),
     {
       retry: false,
     },
@@ -33,32 +33,32 @@ function EditRoom() {
       }),
     ),
     defaultValues: {
-      accessibility: false,
+      accessibility: undefined,
     },
   });
 
   useEffect(() => {
-    if (data?.name !== undefined) {
+    if (data?.name !== undefined && data?.accessibility !== undefined) {
       setValue('name', data.name);
       setValue('accessibility', data.accessibility);
     }
     if (status === 'error') {
-      navigate(`/dashboard/libraries/${id}`);
+      navigate(`/dashboard/libraries/${libraryId}`);
     }
   }, [data, status]);
 
   const onSubmit = handleSubmit(async ({ name, accessibility }) => {
     try {
-      await updateLibraryRoom(id, roomId, name, accessibility);
+      await updateRoom(roomId)({ name, accessibility });
       pushNotification({
         message: 'Room updated successfully!',
         severity: 'success',
       });
-      navigate(`/dashboard/libraries/${id}`);
+      navigate(`/dashboard/libraries/${libraryId}`);
     } catch (err) {
       console.error(err);
       pushNotification({
-        message: "Couldn't update library, retry later.",
+        message: 'Unable to update room, retry later.',
         severity: 'error',
       });
     }
@@ -72,7 +72,7 @@ function EditRoom() {
             formControl={control}
             onSubmit={onSubmit}
             buttonText="Edit"
-            onBack={() => navigate(`/dashboard/libraries/${id}`)}
+            onBack={() => navigate(`/dashboard/libraries/${libraryId}`)}
           />
         )}
       </QueryContent>

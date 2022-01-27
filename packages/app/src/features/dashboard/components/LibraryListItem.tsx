@@ -1,26 +1,18 @@
-import { DialogButton } from '@/components/DialogButton';
 import { LinkIconButton } from '@/components/LinkIconButton';
-import { useNotification } from '@/stores/notifications';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Library } from '@asw-project/shared/generatedTypes';
 import {
-  IconButton,
   ListItem,
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-  TableCell,
   TableRow as MuiTableRow,
-  Tooltip,
 } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { useState } from 'react';
-import { useMutation } from 'react-query';
-import { Link, useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import BusinessIcon from '@material-ui/icons/Business';
-import { deleteLibrary } from '../api/getLibraries';
 
 interface LibraryListItemProps {
   readonly data: WithId<Library>;
@@ -37,7 +29,7 @@ const FlexDiv = styled('div')(() => ({
   justifyContent: 'space-evenly',
 }));
 
-const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
+/* const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
   const navigate = useNavigate();
   const [isOpen, setOpen] = useState(false);
   const { mutateAsync } = useMutation<Library, Error, void, unknown>(() =>
@@ -91,7 +83,7 @@ const Actions = ({ _id, name }: Pick<WithId<Library>, '_id' | 'name'>) => {
       </Tooltip>
     </FlexDiv>
   );
-};
+}; */
 
 export const LibraryListItem = ({
   data: { name, city, street, _id },
@@ -108,7 +100,7 @@ export const LibraryListItem = ({
       />
       <LinkIconButton
         to={`/dashboard/libraries/${_id}/del`}
-        icon={<EditIcon />}
+        icon={<DeleteIcon />}
       />
     </ListItemSecondaryAction>
   </ListItem>

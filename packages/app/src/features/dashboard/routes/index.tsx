@@ -58,7 +58,12 @@ export const DashboardRoutes = () => (
     <Route path="/" element={<Dashboard />} />
     <Route
       path="/floormap"
-      element={<FloorMap roomId="mock" initialSeats={initialSeats} />}
+      element={
+        <FloorMap
+          roomId="61f16e1a4cfc874b18a97db0"
+          initialSeats={initialSeats}
+        />
+      }
     />
     <Route path="/libraries">
       <Route path="/" element={<AllLibraries />} />

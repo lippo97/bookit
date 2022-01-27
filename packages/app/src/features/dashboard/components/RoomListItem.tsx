@@ -19,20 +19,32 @@ interface RoomListItemProps {
 
 export const RoomListItem = ({
   data: { name, capacity, libraryId, _id },
-}: RoomListItemProps) => (
-  <ListItem button component={RouterLink} to="#">
-    <ListItemIcon>
-      <RoomIcon />
-    </ListItemIcon>
-    <ListItemText primary={name} secondary={`Available seats: ${capacity}`} />
-    <ListItemSecondaryAction>
-      <LinkIconButton
-        to={`/dashboard/libraries/${libraryId}/rooms/${_id}/edit`}
-        icon={<EditIcon />}
+}: RoomListItemProps) => {
+  let capacityDescription = capacity?.toString();
+  if (!capacityDescription) {
+    capacityDescription = 'Not Available';
+  }
+
+  return (
+    <ListItem button component={RouterLink} to="#">
+      <ListItemIcon>
+        <RoomIcon />
+      </ListItemIcon>
+
+      <ListItemText
+        primary={name}
+        secondary={`Available seats: ${capacityDescription}`}
       />
-      <IconButton>
-        <DeleteIcon />
-      </IconButton>
-    </ListItemSecondaryAction>
-  </ListItem>
-);
+      <ListItemSecondaryAction>
+        <LinkIconButton
+          to={`/dashboard/libraries/${libraryId}/rooms/${_id}/edit`}
+          icon={<EditIcon />}
+        />
+        <LinkIconButton
+          to={`/dashboard/libraries/${libraryId}/rooms/${_id}/del`}
+          icon={<DeleteIcon />}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
+};
