@@ -48,10 +48,10 @@ function RoomForm({
       <Controller
         control={formControl}
         name="accessibility"
-        render={({ field }) => (
+        render={({ field: { value, ...rest } }) => (
           <FormControlLabel
             label="Accessibility"
-            control={<Checkbox color="primary" {...field} />}
+            control={<Checkbox color="primary" {...rest} checked={value} />}
           />
         )}
       />

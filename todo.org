@@ -1,10 +1,10 @@
 #+TITLE: Todo
 
 * Frontend
-** STRT Room form
-*** TODO new room
-*** TODO edit room
-** TODO remove room
+** DONE Room form
+*** DONE new room
+*** DONE edit room
+** DONE remove room
 ** TODO check-in
 ** TODO prenotazione
 posto con editor
