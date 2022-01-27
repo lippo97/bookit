@@ -37,7 +37,7 @@ export const RoomList = ({ rooms, libraryId, refetch }: RoomListProps) => {
         rooms.map((d) => <RoomListItem data={d} refetch={refetch} />)
       ) : (
         <ListItem>
-          <ListItemText>No rooms yet.</ListItemText>
+          <ListItemText>(No rooms yet)</ListItemText>
         </ListItem>
       )}
 

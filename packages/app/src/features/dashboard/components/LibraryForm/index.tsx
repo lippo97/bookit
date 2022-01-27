@@ -106,6 +106,7 @@ export const LibraryForm = ({
               TextFieldProps: {
                 required: true,
                 label: 'Name',
+                fullWidth: true,
               },
             })}
           />
@@ -117,6 +118,7 @@ export const LibraryForm = ({
               TextFieldProps: {
                 required: true,
                 label: 'Street',
+                fullWidth: true,
               },
             })}
           />
@@ -128,6 +130,7 @@ export const LibraryForm = ({
               TextFieldProps: {
                 required: true,
                 label: 'City',
+                fullWidth: true,
               },
             })}
           />
