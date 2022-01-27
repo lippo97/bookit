@@ -5,7 +5,7 @@ import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
 import { Container, makeStyles, Typography } from '@material-ui/core';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getLibraries } from '../../../api/getLibraries';
+import { getLibraries } from '../../../api/libraries';
 import { LibraryList } from '../../../components/LibraryList';
 import background from '@/assets/bg.png';
 

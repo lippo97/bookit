@@ -1,7 +1,7 @@
 import {
   createLibrary,
   CreateLibraryArg,
-} from '@/features/dashboard/api/getLibraries';
+} from '@/features/dashboard/api/libraries';
 import {
   LibraryForm,
   LibraryFormValue,

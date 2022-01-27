@@ -3,7 +3,7 @@ import {
   getLibraryById,
   updateLibrary,
   UpdateLibraryArg,
-} from '@/features/dashboard/api/getLibraries';
+} from '@/features/dashboard/api/libraries';
 import {
   LibraryForm,
   LibraryFormValue,
