@@ -1,9 +1,11 @@
 import { Layout } from '@/components/Layout';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { QueryContent } from '@/components/QueryContent';
 import {
   Box,
+  Breadcrumbs,
   Button,
+  Link,
   Container,
   Fab,
   Hidden,
@@ -12,14 +14,20 @@ import {
 import { useQuery } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+import HomeIcon from '@material-ui/icons/Home';
+import background from '@/assets/bg.png';
+import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
 import { LibraryList } from '../components/LibraryList';
 import { getLibraries } from '../api/getLibraries';
 
 const useStyles = makeStyles((theme) => ({
-  fab: {
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
+  icon: {
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  },
+  link: {
+    display: 'flex',
   },
 }));
 
@@ -28,38 +36,21 @@ export const Dashboard = () => {
   const classes = useStyles();
 
   return (
-    <Layout>
+    <Layout transparentAppBar>
+      <LibraryHeader src={background} />
       <Container>
         <Box mt={2} mb={2}>
-          <Typography variant="h4">Dashboard</Typography>
-          <QueryContent status={status} data={data} retry={() => refetch()}>
-            {(d) => <LibraryList data={d} />}
-          </QueryContent>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Typography color="textPrimary" className={classes.link}>
+              <HomeIcon className={classes.icon} />
+              Dashboard
+            </Typography>
+          </Breadcrumbs>
         </Box>
-        <Hidden smDown>
-          <Box display="flex" justifyContent="right" mt={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              component={Link}
-              to="/dashboard/libraries/add"
-            >
-              Add library
-            </Button>
-          </Box>
-        </Hidden>
+        <QueryContent status={status} data={data} retry={() => refetch()}>
+          {(d) => <LibraryList data={d} refetch={refetch} />}
+        </QueryContent>
       </Container>
-      <Hidden mdUp>
-        <Fab
-          className={classes.fab}
-          color="primary"
-          aria-label="add"
-          component={Link}
-          to="/dashboard/libraries/add"
-        >
-          <AddIcon />
-        </Fab>
-      </Hidden>
     </Layout>
   );
 };

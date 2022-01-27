@@ -2,12 +2,19 @@ import { Layout } from '@/components/Layout';
 import { PageHeader } from '@/components/PageHeader';
 import { QueryContent } from '@/components/QueryContent';
 import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
-import { Container, makeStyles, Typography } from '@material-ui/core';
+import {
+  Breadcrumbs,
+  Container,
+  makeStyles,
+  Link,
+  Typography,
+} from '@material-ui/core';
 import { useQuery } from 'react-query';
+import HomeIcon from '@material-ui/icons/Home';
 import { useParams } from 'react-router-dom';
+import background from '@/assets/bg.png';
 import { getLibraries } from '../../../api/getLibraries';
 import { LibraryList } from '../../../components/LibraryList';
-import background from '@/assets/bg.png';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -19,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export const AllLibraries = () => {
   const { id } = useParams();
   const classes = useStyles();
-  const { data, status } = useQuery(['library'], () => getLibraries());
+  const { data, status, refetch } = useQuery(['library'], () => getLibraries());
   return (
     <Layout transparentAppBar>
       <PageHeader>
@@ -33,9 +40,9 @@ export const AllLibraries = () => {
         {(d) => (
           <Container>
             <Typography variant="h6" className={classes.title}>
-              Libraries
+              Librariesaaa
             </Typography>
-            <LibraryList data={d} />
+            <LibraryList data={d} refetch={refetch} />
           </Container>
         )}
       </QueryContent>

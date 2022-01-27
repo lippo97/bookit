@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-} from '@material-ui/core';
+import { Box, Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import { Control, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { controlledTextField } from '../LibraryForm/controlledTextField';

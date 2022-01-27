@@ -61,3 +61,11 @@ export async function updateLibraryRoom(
 ): Promise<void> {
   Promise.resolve();
 }
+
+// TODO
+export async function deleteLibraryRoom(
+  id: string,
+  roomId: string,
+): Promise<void> {
+  Promise.resolve();
+}
