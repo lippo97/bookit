@@ -58,6 +58,7 @@ export const ShowLibrary = () => {
               </Box>
               <RoomList
                 rooms={d.rooms as any}
+                libraryName={d.name}
                 libraryId={id}
                 refetch={refetch}
               />

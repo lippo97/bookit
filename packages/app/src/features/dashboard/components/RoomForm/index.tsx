@@ -14,7 +14,7 @@ interface RoomFormProps {
   onSubmit(): void;
 }
 
-function RoomForm({
+export function RoomForm({
   formControl,
   onBack,
   onSubmit,

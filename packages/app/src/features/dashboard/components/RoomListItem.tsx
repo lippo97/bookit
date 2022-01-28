@@ -21,11 +21,13 @@ import { deleteLibraryRoom } from '../api/rooms';
 
 interface RoomListItemProps {
   data: WithId<Room>;
+  libraryName: string;
   refetch(): void;
 }
 
 export const RoomListItem = ({
   data: { name, capacity, libraryId, _id, accessibility },
+  libraryName,
   refetch,
 }: RoomListItemProps) => {
   const [isOpen, setOpen] = useState(false);
@@ -58,7 +60,7 @@ export const RoomListItem = ({
       />
       <ListItemSecondaryAction>
         <LinkIconButton
-          to={`/dashboard/libraries/${libraryId}/rooms/${_id}/edit`}
+          to={`/dashboard/libraries/${libraryId}/rooms/${_id}/edit?libraryName=${libraryName}`}
           icon={<EditIcon />}
         />
         <DialogButton

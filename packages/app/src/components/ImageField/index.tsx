@@ -14,7 +14,7 @@ interface ImageFieldProps {
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
-    height: 300,
+    maxHeight: 300,
     maxWidth: 600,
     '&:hover .hover': {
       opacity: 1,
