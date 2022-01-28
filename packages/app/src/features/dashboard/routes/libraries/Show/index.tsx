@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     display: 'flex',
+    cursor: 'pointer',
   },
 }));
 

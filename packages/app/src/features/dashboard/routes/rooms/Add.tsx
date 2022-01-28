@@ -18,6 +18,7 @@ import {
   makeStyles,
   Typography,
   Paper,
+  Link as MuiLink,
 } from '@material-ui/core';
 import Link from '@/components/Link';
 import { useQueryParams } from '@/hooks';
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     height: 20,
   },
   link: {
+    cursor: 'pointer',
     display: 'flex',
   },
 }));
@@ -78,17 +80,19 @@ function AddRoom() {
       <Container>
         <Box mt={2} mb={2}>
           <Breadcrumbs aria-label="breadcrumb">
+            {/* eslint-disable jsx-a11y/anchor-is-valid */}
             <Link color="inherit" className={classes.link} to="/dashboard">
               <HomeIcon className={classes.icon} />
               Dashboard
             </Link>
-            <Link
+            <MuiLink
               color="inherit"
               className={classes.link}
-              to={`/dashboard/libraries/${id}`}
+              onClick={() => navigate(-1)}
             >
               {libraryName}
-            </Link>
+            </MuiLink>
+            {/* eslint-enable jsx-a11y/anchor-is-valid */}
             <Typography color="textPrimary" className={classes.link}>
               Add new room
             </Typography>

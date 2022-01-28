@@ -25,11 +25,11 @@ import {
   Box,
   Breadcrumbs,
   Container,
+  Link,
   makeStyles,
   Paper,
   Typography,
 } from '@material-ui/core';
-import Link from '@/components/Link';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     display: 'flex',
+    cursor: 'pointer',
   },
 }));
 
@@ -85,7 +86,12 @@ export const AddLibrary = () => {
       <Container>
         <Box mt={2} mb={2}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="inherit" className={classes.link} to="/dashboard">
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <Link
+              color="inherit"
+              className={classes.link}
+              onClick={() => navigate(-1)}
+            >
               <HomeIcon className={classes.icon} />
               Dashboard
             </Link>

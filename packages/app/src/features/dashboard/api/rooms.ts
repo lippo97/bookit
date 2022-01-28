@@ -47,7 +47,12 @@ export async function getLibraryRoomById(
     name: 'ciao',
     capacity: 30,
     libraryId: '10',
-    seats: [],
+    seats: [
+      {
+        position: { x: 3, y: 3 },
+        services: ['Wi-Fi', 'Printer'],
+      },
+    ],
     accessibility: true,
   });
 }

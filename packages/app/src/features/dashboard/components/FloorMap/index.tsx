@@ -4,6 +4,7 @@ import { useOpenClose } from '@/hooks/useOpenClose';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { updateRoomSeats } from '../../api/rooms';
 import { SeatMap, useSeats } from '../../stores/seats';
 import { Content } from './Content';
@@ -37,6 +38,7 @@ const useStyles = makeStyles({
 export const FloorMap = ({ roomId, initialSeats }: FloorMapProps) => {
   const classes = useStyles();
   const initialize = useSeats((s) => s.initialize);
+  const navigate = useNavigate();
   const [isFABOpen, handleOpen, handleClose] = useOpenClose();
   const [isSaving, setSaving, stopSaving] = useOpenClose();
 

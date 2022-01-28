@@ -13,6 +13,7 @@ import {
 import AccessibleIcon from '@material-ui/icons/Accessible';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import GridOnIcon from '@material-ui/icons/GridOn';
 import RoomIcon from '@material-ui/icons/Room';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
@@ -59,6 +60,10 @@ export const RoomListItem = ({
         }
       />
       <ListItemSecondaryAction>
+        <LinkIconButton
+          to={`/dashboard/libraries/${libraryId}/rooms/${_id}/floormap`}
+          icon={<GridOnIcon />}
+        />
         <LinkIconButton
           to={`/dashboard/libraries/${libraryId}/rooms/${_id}/edit?libraryName=${libraryName}`}
           icon={<EditIcon />}

@@ -16,6 +16,7 @@ import {
   Container,
   makeStyles,
   Paper,
+  Link as MuiLink,
   Typography,
 } from '@material-ui/core';
 import { Layout } from '@/components/Layout';
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     display: 'flex',
+    cursor: 'pointer',
   },
 }));
 
@@ -97,17 +99,19 @@ function EditRoom() {
       <Container>
         <Box mt={2} mb={2}>
           <Breadcrumbs aria-label="breadcrumb">
+            {/* eslint-disable jsx-a11y/anchor-is-valid */}
             <Link color="inherit" className={classes.link} to="/dashboard">
               <HomeIcon className={classes.icon} />
               Dashboard
             </Link>
-            <Link
+            <MuiLink
               color="inherit"
               className={classes.link}
-              to={`/dashboard/libraries/${id}`}
+              onClick={() => navigate(-1)}
             >
               {libraryName}
-            </Link>
+            </MuiLink>
+            {/* eslint-enable jsx-a11y/anchor-is-valid */}
             <Typography color="textPrimary" className={classes.link}>
               Edit room
             </Typography>
