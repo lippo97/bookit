@@ -4,7 +4,7 @@ import { AbstractService } from '../AbstractService';
 import { definedOrNotFound } from './documentFind';
 import { FindByIdError, ProtectedFindByIdOptions } from './FindById';
 
-type RemoveError = FindByIdError;
+export type RemoveError = FindByIdError;
 
 export interface Remove<T> extends AbstractService<T> {
   remove(

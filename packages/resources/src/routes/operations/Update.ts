@@ -11,7 +11,7 @@ import {
 } from './FindById';
 
 export type EditError = DocumentCreationError | FindByIdError;
-type UpdateParam = UpdateWithAggregationPipeline;
+export type UpdateParam = UpdateWithAggregationPipeline;
 // TODO: investigate this
 // type UpdateParam<T> = UpdateQuery<T> | UpdateWithAggregationPipeline;
 

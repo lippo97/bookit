@@ -1,15 +1,15 @@
 import {
   applyMixins,
   BaseService,
-  Create,
+  CreateMany,
   FindAll,
   SimpleFindById,
-  ProtectedRemove,
-  Update,
-  ProtectedUpdate,
-  Remove,
+  ProtectedUpdateMany,
+  ProtectedRemoveMany,
+  RemoveMany,
 } from '@asw-project/resources/routes';
 import { FindById } from '@asw-project/resources/routes/operations/FindById';
+import { UpdateMany } from '@asw-project/resources/routes/operations/UpdateMany';
 import { Seat } from '@asw-project/shared/generatedTypes/seat';
 import { SeatModel } from '../models/Seat';
 
@@ -21,15 +21,15 @@ export class SeatService extends BaseService<Seat> {
 
 export interface SeatService
   extends FindById<Seat>,
-    Create<Seat>,
+    CreateMany<Seat>,
     FindAll<Seat>,
-    Remove<Seat>,
-    Update<Seat> {}
+    RemoveMany<Seat>,
+    UpdateMany<Seat> {}
 
 applyMixins(SeatService, [
   SimpleFindById,
-  Create,
+  CreateMany,
   FindAll,
-  ProtectedRemove,
-  ProtectedUpdate,
+  ProtectedRemoveMany,
+  ProtectedUpdateMany,
 ]);

@@ -22,7 +22,9 @@ async function main() {
   app.use(cors({ credentials: true, origin: ['http://localhost:8080'] }));
   app.use(session(sessionOptions));
   app.use(express.json());
-
+  // eslint-disable-next-line global-require
+  const uest = require('uest');
+  app.use(uest());
   app.use('/api/v1', apiV1);
 
   app.use(logError);

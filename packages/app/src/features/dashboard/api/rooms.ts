@@ -11,37 +11,36 @@ export type CreateRoomArg = Pick<Room, 'libraryId' | 'name' | 'accessibility'>;
 
 export type UpdateRoomArg = Omit<CreateRoomArg, 'libraryId'>;
 
-const serviceObjectToArray = (
+/* const serviceObjectToArray = (
   input: SeatMap[string]['services'],
 ): Room['seats'][number]['services'] =>
   Object.entries(input)
     .filter(([, value]) => value)
     .map(fst) as Service[];
-
+*/
 // TODO
 export const updateRoomSeats = (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   roomId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   seatMap: SeatMap,
-): Promise<void> => {
-  const seats: Room['seats'] = Object.values(seatMap)
+): Promise<void> =>
+  /* const seats: Room['seats'] = Object.values(seatMap)
     .map(pick('position', 'services'))
     .map(({ position, services }) => ({
       position: V2ToPosition(position),
       services: serviceObjectToArray(services),
     }));
-  console.log('transformed', seats);
-  return new Promise((resolve) => {
+  console.log('transformed', seats); */
+  new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, 1000);
   });
-};
 
 export async function createRoom(data: CreateRoomArg): Promise<WithId<Room>> {
   return ky.post('rooms', { json: data }).json<WithId<Room>>();
 }
-
-// da usare proteced  o simple??
 
 export async function getRoomById(roomId: string): Promise<WithId<Room>> {
   return ky.get(`rooms/${roomId}`).json<WithId<Room>>();

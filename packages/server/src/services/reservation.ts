@@ -4,7 +4,7 @@ import {
   ProtectedRemove,
   Remove,
   BaseService,
-  SimpleFindById,
+  ProtectedFindById,
 } from '@asw-project/resources/routes';
 import { FindById } from '@asw-project/resources/routes/operations/FindById';
 
@@ -22,4 +22,4 @@ export interface ReservationService
     Create<Reservation>,
     Remove<Reservation> {}
 
-applyMixins(ReservationService, [SimpleFindById, Create, ProtectedRemove]);
+applyMixins(ReservationService, [ProtectedFindById, Create, ProtectedRemove]);

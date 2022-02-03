@@ -1,10 +1,15 @@
 export { Create } from './Create';
+export { CreateMany } from './CreateMany';
 export { FindAll } from './FindAll';
 export { SimpleFindById } from './FindById';
 export { Remove } from './Remove';
+export { RemoveMany } from './RemoveMany';
 export { Update } from './Update';
+export { UpdateMany } from './UpdateMany';
 export { SimpleUpdate } from './Update';
 export { SimpleRemove } from './Remove';
 export { ProtectedFindById } from './ProtectedFindById';
 export { ProtectedRemove } from './ProtectedRemove';
+export { ProtectedRemoveMany } from './ProtectedRemoveMany';
 export { ProtectedUpdate } from './ProtectedUpdate';
+export { ProtectedUpdateMany } from './ProtectedUpdateMany';

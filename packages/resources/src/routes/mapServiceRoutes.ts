@@ -2,7 +2,14 @@ import { NextFunction, Request, Response, Router } from 'express';
 import pick from 'lodash/pick';
 import { EitherAsync } from 'purify-ts';
 import { BaseService } from './BaseService';
-import { Create, Remove, Update } from './operations';
+import {
+  Create,
+  CreateMany,
+  Remove,
+  RemoveMany,
+  Update,
+  UpdateMany,
+} from './operations';
 import { FindAll } from './operations/FindAll';
 import { FindById } from './operations/FindById';
 
@@ -23,6 +30,15 @@ function isFindById<T>(service: BaseService<T>): service is FindById<T> {
 function isCreate<T>(service: BaseService<T>): service is Create<T> {
   return 'create' in service;
 }
+
+function isCreateMany<T>(service: BaseService<T>): service is CreateMany<T> {
+  return 'createMany' in service;
+}
+
+function isUpdateMany<T>(service: BaseService<T>): service is UpdateMany<T> {
+  return 'updateMany' in service;
+}
+
 function isUpdate<T>(service: BaseService<T>): service is Update<T> {
   return 'update' in service;
 }
@@ -31,9 +47,14 @@ function isRemove<T>(service: BaseService<T>): service is Remove<T> {
   return 'remove' in service;
 }
 
+function isRemoveMany<T>(service: BaseService<T>): service is RemoveMany<T> {
+  return 'removeMany' in service;
+}
 function handleResult(res: Response, next: NextFunction) {
   return async <L, R>(result: EitherAsync<L, R>) => {
-    (await result).caseOf({
+    const r = await result;
+    console.log(r);
+    r.caseOf({
       Right: (documents) => res.json(documents),
       Left: next,
     });
@@ -73,6 +94,21 @@ export function mapServiceRoutes<TConstructor>(
       });
     }
 
+    if (isCreateMany(service)) {
+      router.post(rootPath, (req, res, next) => {
+        const userId = getUserId(req.session);
+        const fields: any = [];
+
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < req.body.length; index++) {
+          fields.push(pick(req.body[index], keys) as any);
+        }
+
+        const result = service.createMany(fields, { userId });
+        handleResult(res, next)(result);
+      });
+    }
+
     if (isCreate(service)) {
       router.post(rootPath, (req, res, next) => {
         const userId = getUserId(req.session);
@@ -82,11 +118,45 @@ export function mapServiceRoutes<TConstructor>(
       });
     }
 
+    if (isUpdateMany(service)) {
+      router.patch(rootPath, async (req, res, next) => {
+        const userId = getUserId(req.session);
+        const fields: any = [];
+        const ids: any = [];
+
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < req.body.length; index++) {
+          ids.push((pick(req.body[index], 'id') as any).id);
+          fields.push(pick(req.body[index], keys) as any);
+        }
+        console.log('BODY:', req.body);
+        console.log('IDS:', ids);
+        console.log('FIELDS:', fields);
+        const result = service.updateMany(ids, fields, { userId });
+        handleResult(res, next)(result);
+      });
+    }
+
     if (isUpdate(service)) {
       router.patch(idPath, (req: Request<WithId>, res, next) => {
         const userId = getUserId(req.session);
         const fields = pick(req.body, keys) as any;
         const result = service.update(req.params.id, fields, {
+          userId,
+        });
+        handleResult(res, next)(result);
+      });
+    }
+
+    if (isRemoveMany(service)) {
+      router.delete(rootPath, (req, res, next) => {
+        const userId = getUserId(req.session);
+        const ids = [];
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < req.body.length; index++) {
+          ids.push((pick(req.body[index], 'id') as any).id);
+        }
+        const result = service.removeMany(ids, {
           userId,
         });
         handleResult(res, next)(result);
