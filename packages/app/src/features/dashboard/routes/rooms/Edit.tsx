@@ -1,4 +1,3 @@
-import { QueryContent } from '@/components/QueryContent';
 import { useNotification } from '@/stores/notifications';
 import background from '@/assets/bg.png';
 import HomeIcon from '@material-ui/icons/Home';
@@ -22,14 +21,9 @@ import {
 import { Layout } from '@/components/Layout';
 import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
 import { useQueryParams } from '@/hooks';
-import {
-  getRoomById,
-  updateRoom,
-  getLibraryRoomById,
-  updateLibraryRoom,
-} from '../../api/rooms';
+import { getRoomById, updateRoom } from '../../api/rooms';
 
-import { LibraryFormLayout } from '../../components/LibraryFormLayout';
+// eslint-disable-next-line import/no-named-as-default
 import RoomForm, { RoomFormValue } from '../../components/RoomForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -128,7 +122,7 @@ function EditRoom() {
             <RoomForm
               formControl={control}
               onSubmit={onSubmit}
-              onBack={() => navigate(`/dashboard/libraries/${id}`)}
+              onBack={() => navigate(`/dashboard/libraries/${libraryId}`)}
               buttonText="Add"
             />
           </Box>

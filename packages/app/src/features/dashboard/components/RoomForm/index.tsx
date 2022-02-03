@@ -3,6 +3,7 @@ import { Control, Controller } from 'react-hook-form';
 import { controlledTextField } from '../LibraryForm/controlledTextField';
 
 export interface RoomFormValue {
+  readonly libraryId: string;
   readonly name: string;
   readonly accessibility: boolean;
 }

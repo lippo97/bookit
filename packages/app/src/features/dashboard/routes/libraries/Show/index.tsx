@@ -4,16 +4,20 @@ import { getLibraryById } from '@/features/dashboard/api/libraries';
 import { getRooms } from '@/features/dashboard/api/rooms';
 import { RoomList } from '@/features/dashboard/components/RoomList';
 import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
-import { Box, Breadcrumbs, Container, Typography } from '@material-ui/core';
-import { WithId } from '@asw-project/shared/data/withId';
-import { Room } from '@asw-project/shared/generatedTypes';
+import {
+  Box,
+  Breadcrumbs,
+  Container,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import Link from '@/components/Link';
 
 import HomeIcon from '@material-ui/icons/Home';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: any) => ({
   icon: {
     marginRight: theme.spacing(0.5),
     width: 20,
@@ -31,7 +35,6 @@ export const ShowLibrary = () => {
   const { data, status } = useQuery(['library', id], async () => {
     const library = await getLibraryById(id);
     const rooms = await getRooms(id);
-    console.log(rooms);
     return { library, rooms };
   });
   return (

@@ -5,7 +5,7 @@ import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getLibraryRoomById, updateRoomSeats } from '../../api/rooms';
+import { getRoomById, updateRoomSeats } from '../../api/rooms';
 import { Content } from '../../components/FloorMap/Content';
 import { Sidebar } from '../../components/FloorMap/Sidebar';
 import { Toolbar } from '../../components/FloorMap/Toolbar';
@@ -31,11 +31,11 @@ const useStyles = makeStyles({
 });
 
 export function FloorMap() {
-  const { id, roomId } = useParams();
+  const { roomId } = useParams();
   const classes = useStyles();
-  const initialize = useSeats((s) => s.initialize);
-  const { data, status } = useQuery(['get library', id, roomId], () =>
-    getLibraryRoomById(id, roomId),
+  // const initialize = useSeats((s) => s.initialize);
+  const { data, status } = useQuery(['get room', roomId], () =>
+    getRoomById(roomId),
   );
 
   const [isFABOpen, handleOpen, handleClose] = useOpenClose();
@@ -50,7 +50,7 @@ export function FloorMap() {
 
   useEffect(() => {
     if (status === 'success') {
-      console.log(data?.seats);
+      // console.log(data?.seats);
       // initialize(data?.seats);
     }
   }, [data, status]);

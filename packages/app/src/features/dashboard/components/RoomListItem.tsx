@@ -18,23 +18,21 @@ import RoomIcon from '@material-ui/icons/Room';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link as RouterLink } from 'react-router-dom';
-import { deleteLibraryRoom } from '../api/rooms';
+import { deleteRoom } from '../api/rooms';
 
 interface RoomListItemProps {
   data: WithId<Room>;
   libraryName: string;
-  refetch(): void;
+  // refetch(): void;
 }
 
 export const RoomListItem = ({
   data: { name, capacity, libraryId, _id, accessibility },
   libraryName,
-  refetch,
 }: RoomListItemProps) => {
   const [isOpen, setOpen] = useState(false);
-  const { mutateAsync } = useMutation(() => deleteLibraryRoom(libraryId, _id));
+  const { mutateAsync } = useMutation(() => deleteRoom(_id));
   const pushNotification = useNotification((s) => s.pushNotification);
-  const capacityDescription = capacity?.toString();
 
   return (
     <ListItem button component={RouterLink} to="#">

@@ -6,17 +6,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createRoom } from '../../api/rooms';
-import { LibraryFormLayout } from '../../components/LibraryFormLayout';
-import RoomForm, { RoomFormValue } from '../../components/RoomForm';
 
-function AddRoom() {
-  const { id: libraryId } = useParams();
-import {
-  createRoutesFromChildren,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
 import background from '@/assets/bg.png';
 import {
   Box,
@@ -29,10 +19,11 @@ import {
 } from '@material-ui/core';
 import Link from '@/components/Link';
 import { useQueryParams } from '@/hooks';
-import { createLibraryRoom } from '../../api/rooms';
-import { RoomForm, RoomFormValue } from '../../components/RoomForm';
+// eslint-disable-next-line import/no-named-as-default
+import RoomForm, { RoomFormValue } from '../../components/RoomForm';
+import { createRoom } from '../../api/rooms';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: any) => ({
   icon: {
     marginRight: theme.spacing(0.5),
     width: 20,
@@ -64,7 +55,7 @@ function AddRoom() {
     },
   });
 
-  const onSubmit = handleSubmit(async ({ name, accessibility }) => {
+  const onSubmit = handleSubmit(async ({ name, accessibility, libraryId }) => {
     try {
       await createRoom({ libraryId, name, accessibility });
       console.log(name, accessibility);

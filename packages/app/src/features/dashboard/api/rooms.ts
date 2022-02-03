@@ -42,28 +42,8 @@ export async function createRoom(data: CreateRoomArg): Promise<WithId<Room>> {
   return ky.post('rooms', { json: data }).json<WithId<Room>>();
 }
 
-<<<<<<< HEAD
 export async function getRoomById(roomId: string): Promise<WithId<Room>> {
   return ky.get(`rooms/${roomId}`).json<WithId<Room>>();
-=======
-// TODO
-export async function getLibraryRoomById(
-  id: string,
-  roomid: string,
-): Promise<Room> {
-  return Promise.resolve({
-    name: 'ciao',
-    capacity: 30,
-    libraryId: '10',
-    seats: [
-      {
-        position: { x: 3, y: 3 },
-        services: ['Wi-Fi', 'Printer'],
-      },
-    ],
-    accessibility: true,
-  });
->>>>>>> master
 }
 
 export async function getRooms(libraryId: string): Promise<WithId<Room>[]> {
@@ -82,12 +62,4 @@ export const updateRoom =
 
 export async function deleteRoom(roomId: string): Promise<WithId<Room>> {
   return ky.delete(`rooms/${roomId}`).json<WithId<Room>>();
-}
-
-// TODO
-export async function deleteLibraryRoom(
-  id: string,
-  roomId: string,
-): Promise<void> {
-  Promise.resolve();
 }
