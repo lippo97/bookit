@@ -1,5 +1,8 @@
 import { QueryContent } from '@/components/QueryContent';
 import { useNotification } from '@/stores/notifications';
+import background from '@/assets/bg.png';
+import HomeIcon from '@material-ui/icons/Home';
+import Link from '@/components/Link';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import { useEffect } from 'react';
@@ -7,14 +10,40 @@ import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 
 import { useNavigate, useParams } from 'react-router-dom';
+import {
+  Box,
+  Breadcrumbs,
+  Container,
+  makeStyles,
+  Paper,
+  Link as MuiLink,
+  Typography,
+} from '@material-ui/core';
+import { Layout } from '@/components/Layout';
+import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
+import { useQueryParams } from '@/hooks';
 import { getLibraryRoomById, updateLibraryRoom } from '../../api/rooms';
 import { LibraryFormLayout } from '../../components/LibraryFormLayout';
 import RoomForm, { RoomFormValue } from '../../components/RoomForm';
 
+const useStyles = makeStyles((theme) => ({
+  icon: {
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  },
+  link: {
+    display: 'flex',
+    cursor: 'pointer',
+  },
+}));
+
 function EditRoom() {
   const { id, roomId } = useParams();
   const { pushNotification } = useNotification();
+  const libraryName = useQueryParams('libraryName', '(library)');
   const navigate = useNavigate();
+  const classes = useStyles();
 
   const { data, status } = useQuery(
     ['get room', roomId],
@@ -65,18 +94,41 @@ function EditRoom() {
   });
 
   return (
-    <LibraryFormLayout title="Edit room">
-      <QueryContent status={status} data={data}>
-        {() => (
-          <RoomForm
-            formControl={control}
-            onSubmit={onSubmit}
-            buttonText="Edit"
-            onBack={() => navigate(`/dashboard/libraries/${id}`)}
-          />
-        )}
-      </QueryContent>
-    </LibraryFormLayout>
+    <Layout transparentAppBar>
+      <LibraryHeader src={background} />
+      <Container>
+        <Box mt={2} mb={2}>
+          <Breadcrumbs aria-label="breadcrumb">
+            {/* eslint-disable jsx-a11y/anchor-is-valid */}
+            <Link color="inherit" className={classes.link} to="/dashboard">
+              <HomeIcon className={classes.icon} />
+              Dashboard
+            </Link>
+            <MuiLink
+              color="inherit"
+              className={classes.link}
+              onClick={() => navigate(-1)}
+            >
+              {libraryName}
+            </MuiLink>
+            {/* eslint-enable jsx-a11y/anchor-is-valid */}
+            <Typography color="textPrimary" className={classes.link}>
+              Edit room
+            </Typography>
+          </Breadcrumbs>
+        </Box>
+        <Paper elevation={2}>
+          <Box padding={2}>
+            <RoomForm
+              formControl={control}
+              onSubmit={onSubmit}
+              onBack={() => navigate(`/dashboard/libraries/${id}`)}
+              buttonText="Add"
+            />
+          </Box>
+        </Paper>
+      </Container>
+    </Layout>
   );
 }
 

@@ -1,9 +1,14 @@
 import { Tooltip, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+<<<<<<< HEAD
 import StarIcon from '@material-ui/icons/Star';
 import { getLibraryImageUrlOrFallback } from '@/lib/images';
+=======
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+>>>>>>> c6db64101407e2fea2abf31fe322da9f79e851ea
 import { PageHeader } from '@/components/PageHeader';
-import { getImageUrlOrFallback } from '@/config/images';
+import background from '@/assets/bg.png';
+import { useState } from 'react';
 
 const useStyles = makeStyles(() => ({
   image: {
@@ -50,7 +55,7 @@ export const LibraryHeader = ({
     <PageHeader>
       <img
         className={classes.image}
-        src={getImageUrlOrFallback(src)}
+        src={src ?? background}
         alt="The library"
       />
       {isStarred !== undefined && (

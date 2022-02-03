@@ -1,6 +1,6 @@
 import imagePlaceholder from '@/assets/image_placeholder.png';
 import { useNotification } from '@/stores/notifications';
-import { Box, makeStyles, Paper } from '@material-ui/core';
+import { Box, makeStyles, Paper, Theme } from '@material-ui/core';
 import PhotoIcon from '@material-ui/icons/Photo';
 import clsx from 'clsx';
 import { ChangeEvent } from 'react';
@@ -11,13 +11,15 @@ interface ImageFieldProps {
   readonly initial?: string;
   onChange(file: File): void;
 }
-
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
+    maxHeight: 300,
+    maxWidth: 600,
     '&:hover .hover': {
       opacity: 1,
     },
+    overflow: 'hidden',
   },
   label: {
     height: '100%',
@@ -52,7 +54,6 @@ export const ImageField = ({
   initial,
   onChange,
 }: ImageFieldProps) => {
-  const classes = useStyles();
   const pushNotification = useNotification((s) => s.pushNotification);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ?? [];
@@ -80,6 +81,8 @@ export const ImageField = ({
 
   const imageSrc = switchValue();
 
+  const classes = useStyles();
+
   return (
     <Paper elevation={2} className={classes.root}>
       <label htmlFor="image" className={classes.label}>
@@ -91,7 +94,9 @@ export const ImageField = ({
           <PhotoIcon fontSize="large" />
           Click here to upload a new image
         </Box>
-        <img className={classes.image} src={imageSrc} alt={alt} />
+        <Box display="flex">
+          <img className={classes.image} src={imageSrc} alt={alt} />
+        </Box>
         <input
           id="image"
           accept="image/*"

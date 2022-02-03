@@ -47,7 +47,12 @@ export async function getLibraryRoomById(
     name: 'ciao',
     capacity: 30,
     libraryId: '10',
-    seats: [],
+    seats: [
+      {
+        position: { x: 3, y: 3 },
+        services: ['Wi-Fi', 'Printer'],
+      },
+    ],
     accessibility: true,
   });
 }
@@ -58,6 +63,14 @@ export async function updateLibraryRoom(
   roomId: string,
   name: string,
   accessibility: boolean,
+): Promise<void> {
+  Promise.resolve();
+}
+
+// TODO
+export async function deleteLibraryRoom(
+  id: string,
+  roomId: string,
 ): Promise<void> {
   Promise.resolve();
 }

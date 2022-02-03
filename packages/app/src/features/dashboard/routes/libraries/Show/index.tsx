@@ -5,21 +5,36 @@ import { RoomList } from '@/features/dashboard/components/RoomList';
 import { LibraryHeader } from '@/features/libraries/components/LibraryHeader';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Room } from '@asw-project/shared/generatedTypes';
-import { Container, makeStyles, Typography } from '@material-ui/core';
+import Link from '@/components/Link';
+import {
+  Box,
+  Breadcrumbs,
+  Container,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+import HomeIcon from '@material-ui/icons/Home';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    margin: theme.spacing(2, 0),
-    fontWeight: 'bold',
+  icon: {
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  },
+  link: {
+    display: 'flex',
+    cursor: 'pointer',
   },
 }));
 
 export const ShowLibrary = () => {
   const { id } = useParams();
   const classes = useStyles();
-  const { data, status } = useQuery(['library', id], () => getLibraryById(id));
+  const { data, status, refetch } = useQuery(['library', id], () =>
+    getLibraryById(id),
+  );
   return (
     <Layout transparentAppBar>
       <QueryContent data={data} status={status}>
@@ -27,10 +42,27 @@ export const ShowLibrary = () => {
           <>
             <LibraryHeader src={d.imageFileName} />
             <Container>
-              <Typography variant="h6" className={classes.title}>
-                {d.name}
-              </Typography>
-              <RoomList rooms={d.rooms as any} libraryId={id} />
+              <Box mt={2} mb={2}>
+                <Breadcrumbs aria-label="breadcrumb">
+                  <Link
+                    color="inherit"
+                    className={classes.link}
+                    to="/dashboard"
+                  >
+                    <HomeIcon className={classes.icon} />
+                    Dashboard
+                  </Link>
+                  <Typography color="textPrimary" className={classes.link}>
+                    {d?.name}
+                  </Typography>
+                </Breadcrumbs>
+              </Box>
+              <RoomList
+                rooms={d.rooms as any}
+                libraryName={d.name}
+                libraryId={id}
+                refetch={refetch}
+              />
             </Container>
           </>
         )}
