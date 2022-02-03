@@ -1,21 +1,16 @@
 import { Layout } from '@/components/Layout';
-import { useMobile } from '@/hooks/useMobile';
+import { QueryContent } from '@/components/QueryContent';
 import { useOpenClose } from '@/hooks/useOpenClose';
-import { Backdrop, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { updateRoomSeats } from '../../api/rooms';
-import { SeatMap, useSeats } from '../../stores/seats';
-import { Content } from './Content';
-import { Sidebar } from './Sidebar';
-import { Toolbar } from './Toolbar';
-import { ToolFAB } from './ToolFAB';
-
-interface FloorMapProps {
-  readonly roomId: string;
-  readonly initialSeats?: SeatMap;
-}
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { getLibraryRoomById, updateRoomSeats } from '../../api/rooms';
+import { Content } from '../../components/FloorMap/Content';
+import { Sidebar } from '../../components/FloorMap/Sidebar';
+import { Toolbar } from '../../components/FloorMap/Toolbar';
+import { ToolFAB } from '../../components/FloorMap/ToolFAB';
+import { useSeats } from '../../stores/seats';
 
 const useStyles = makeStyles({
   root: {
@@ -35,18 +30,16 @@ const useStyles = makeStyles({
   },
 });
 
-export const FloorMap = ({ roomId, initialSeats }: FloorMapProps) => {
+export function FloorMap() {
+  const { id, roomId } = useParams();
   const classes = useStyles();
   const initialize = useSeats((s) => s.initialize);
-  const navigate = useNavigate();
+  const { data, status } = useQuery(['get library', id, roomId], () =>
+    getLibraryRoomById(id, roomId),
+  );
+
   const [isFABOpen, handleOpen, handleClose] = useOpenClose();
   const [isSaving, setSaving, stopSaving] = useOpenClose();
-
-  useEffect(() => {
-    if (initialSeats !== undefined) {
-      initialize(initialSeats);
-    }
-  }, [initialSeats]);
 
   const handleSave = async () => {
     const { seatById } = useSeats.getState();
@@ -55,12 +48,21 @@ export const FloorMap = ({ roomId, initialSeats }: FloorMapProps) => {
     stopSaving();
   };
 
+  useEffect(() => {
+    if (status === 'success') {
+      console.log(data?.seats);
+      // initialize(data?.seats);
+    }
+  }, [data, status]);
+
   return (
     <Layout>
       <div className={classes.root}>
+        <QueryContent data={data} status={status}>
+          {() => <Content />}
+        </QueryContent>
         <Toolbar onSave={handleSave} />
         <Sidebar />
-        <Content />
       </div>
       <Backdrop open={isSaving} style={{ zIndex: 1 }}>
         <CircularProgress />
@@ -74,4 +76,4 @@ export const FloorMap = ({ roomId, initialSeats }: FloorMapProps) => {
       />
     </Layout>
   );
-};
+}

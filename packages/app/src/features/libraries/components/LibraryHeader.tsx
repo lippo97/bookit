@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
 import { getLibraryImageUrlOrFallback } from '@/lib/images';
 import { PageHeader } from '@/components/PageHeader';
-import { getImageUrlOrFallback } from '@/config/images';
+import background from '@/assets/bg.png';
+import { useState } from 'react';
 
 const useStyles = makeStyles(() => ({
   image: {
@@ -50,7 +51,7 @@ export const LibraryHeader = ({
     <PageHeader>
       <img
         className={classes.image}
-        src={getImageUrlOrFallback(src)}
+        src={src ?? background}
         alt="The library"
       />
       {isStarred !== undefined && (

@@ -10,6 +10,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import { useNavigate } from 'react-router-dom';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { ButtonSection } from './ButtonSection';
@@ -57,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Toolbar = ({ onSave }: ToolbarProps) => {
+  const navigate = useNavigate();
   const clearSelection = useSeats((s) => s.clearSelection);
   const selectAll = useSeats((s) => s.selectAll);
   const [sizeX, sizeY] = useSeats((s) => s.size);
@@ -71,10 +73,18 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
         <Box display="flex" justifyContent="space-between" alignItems="end">
           <Box display="flex">
             <ButtonSection name="File">
-              <Button variant="outlined" className={classes.actionButton}>
+              <Button
+                variant="outlined"
+                className={classes.actionButton}
+                onClick={() => navigate(-1)}
+              >
                 <BackIcon />
               </Button>
-              <Button variant="outlined" className={classes.actionButton} onClick={onSave}>
+              <Button
+                variant="outlined"
+                className={classes.actionButton}
+                onClick={onSave}
+              >
                 <SaveIcon />
               </Button>
             </ButtonSection>

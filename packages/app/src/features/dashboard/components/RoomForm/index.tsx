@@ -1,12 +1,5 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-} from '@material-ui/core';
+import { Box, Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import { Control, Controller } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { controlledTextField } from '../LibraryForm/controlledTextField';
 
 export interface RoomFormValue {
@@ -20,7 +13,7 @@ interface RoomFormProps {
   onSubmit(): void;
 }
 
-function RoomForm({
+export function RoomForm({
   formControl,
   onBack,
   onSubmit,
@@ -48,11 +41,10 @@ function RoomForm({
       <Controller
         control={formControl}
         name="accessibility"
-        render={({ field }) => (
+        render={({ field: { value, ...rest } }) => (
           <FormControlLabel
             label="Accessibility"
-            // eslint-disable-next-line react/no-this-in-sfc
-            control={<Checkbox color="primary" {...field} />}
+            control={<Checkbox color="primary" {...rest} checked={value} />}
           />
         )}
       />

@@ -16,7 +16,9 @@ import { RoomListItem } from './RoomListItem';
 
 interface RoomListProps {
   readonly libraryId: string;
+  readonly libraryName: string;
   readonly rooms: readonly WithId<Room>[];
+  refetch(): void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -26,19 +28,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const RoomList = ({ rooms, libraryId }: RoomListProps) => {
+export const RoomList = ({
+  rooms,
+  libraryId,
+  libraryName,
+  refetch,
+}: RoomListProps) => {
   const classes = useStyles();
   return (
     <List className={classes.list} component={Paper}>
       <ListSubheader>Rooms</ListSubheader>
-      {rooms.map((d) => (
-        <RoomListItem data={d} />
-      ))}
+
+      {rooms.length > 0 ? (
+        rooms.map((d) => (
+          <RoomListItem data={d} refetch={refetch} libraryName={libraryName} />
+        ))
+      ) : (
+        <ListItem>
+          <ListItemText>(No rooms yet)</ListItemText>
+        </ListItem>
+      )}
+
+      {}
       <ListSubheader>Actions</ListSubheader>
       <ListItem
         button
         component={RouterLink}
-        to={`/dashboard/libraries/${libraryId}/rooms/add`}
+        to={`/dashboard/libraries/${libraryId}/rooms/add?libraryName=${libraryName}`}
       >
         <ListItemIcon>
           <AddIcon />
