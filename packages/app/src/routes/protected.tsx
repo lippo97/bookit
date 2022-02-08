@@ -18,7 +18,6 @@ const switchAccountType = (accountType: AccountType) =>
   accountType === 'manager'
     ? [
         {
-<<<<<<< HEAD
           path: '/libraries/*',
           element: <LibrariesRoutes />,
         },
@@ -28,8 +27,6 @@ const switchAccountType = (accountType: AccountType) =>
           element: <FavoritesRoutes />,
         },
         {
-=======
->>>>>>> 66e8ccaccafa3f5ab9a21061941f803d4c636ebb
           path: '/dashboard/*',
           element: <DashboardRoutes />,
         },
