@@ -1,10 +1,8 @@
 import { Tooltip, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
-import { getLibraryImageUrlOrFallback } from '@/lib/images';
 import { PageHeader } from '@/components/PageHeader';
 import background from '@/assets/bg.png';
-import { useState } from 'react';
 
 const useStyles = makeStyles(() => ({
   image: {
