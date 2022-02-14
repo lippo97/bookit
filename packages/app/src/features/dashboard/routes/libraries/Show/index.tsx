@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme: any) => ({
 export const ShowLibrary = () => {
   const { id } = useParams();
   const classes = useStyles();
-  const { data, status } = useQuery(['library', id], async () => {
+
+  const { data, status, refetch } = useQuery(['library', id], async () => {
     const library = await getLibraryById(id);
     const rooms = await getRooms(id);
     return { library, rooms };

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: any) => ({
 }));
 
 function AddRoom() {
-  const { id } = useParams();
+  const { id: libraryId } = useParams();
   const libraryName = useQueryParams('libraryName', '(library)');
   const { pushNotification } = useNotification();
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ function AddRoom() {
     },
   });
 
-  const onSubmit = handleSubmit(async ({ name, accessibility, libraryId }) => {
+  const onSubmit = handleSubmit(async ({ name, accessibility }) => {
     try {
       await createRoom({ libraryId, name, accessibility });
       console.log(name, accessibility);
@@ -101,7 +101,7 @@ function AddRoom() {
             <RoomForm
               formControl={control}
               onSubmit={onSubmit}
-              onBack={() => navigate(`/dashboard/libraries/${id}`)}
+              onBack={() => navigate(`/dashboard/libraries/${libraryId}`)}
               buttonText="Add"
             />
           </Box>

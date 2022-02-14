@@ -19,7 +19,7 @@ export class ProtectedRemove<T extends HasOwner>
 
     return super.findById(id, options).chain((document) =>
       userId !== undefined && userId === document.ownerId?.toString()
-        ? EitherAsync.fromPromise(() => document.delete().exec())
+        ? EitherAsync.fromPromise(() => document.delete())
         : EitherAsync.liftEither(
             Left({
               kind: 'UnauthorizedError',

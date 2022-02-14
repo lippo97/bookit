@@ -23,12 +23,13 @@ import { deleteRoom } from '../api/rooms';
 interface RoomListItemProps {
   data: WithId<Room>;
   libraryName: string;
-  // refetch(): void;
+  refetch(): void;
 }
 
 export const RoomListItem = ({
   data: { name, capacity, libraryId, _id, accessibility },
   libraryName,
+  refetch,
 }: RoomListItemProps) => {
   const [isOpen, setOpen] = useState(false);
   const { mutateAsync } = useMutation(() => deleteRoom(_id));

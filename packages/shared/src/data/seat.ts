@@ -23,8 +23,16 @@ const ownerId = Joi.string()
 
 const services = Joi.array().items(ServiceSchema).required();
 
+const label = Joi.number().required();
+
 const position = PositionSchema.required();
 
-export const SeatSchema = Joi.object({ roomId, ownerId, services, position }).meta({
+export const SeatSchema = Joi.object({
+  roomId,
+  ownerId,
+  services,
+  position,
+  label,
+}).meta({
   className: 'Seat',
 });

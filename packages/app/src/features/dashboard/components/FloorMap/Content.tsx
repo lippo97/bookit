@@ -88,7 +88,13 @@ export const Content = () => {
     if (selectedTool === 'add') {
       const position = scaleClick(e);
       if (position === undefined) return;
-      if (addSeat(counter.toString(), { position })) {
+      if (
+        addSeat(counter.toString(), {
+          position,
+          previouslyExisting: false,
+          label: counter,
+        })
+      ) {
         setCounter((c) => c + 1);
       }
     }

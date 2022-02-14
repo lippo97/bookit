@@ -20,7 +20,8 @@ interface LibraryListItemProps {
 export const LibraryListItem = ({
   data: { name, city, street, _id },
   refetch,
-}: LibraryListItemProps) => (
+}: // refetch,
+LibraryListItemProps) => (
   <ListItem button component={RouterLink} to={`/dashboard/libraries/${_id}`}>
     <ListItemIcon>
       <BusinessIcon />

@@ -8,13 +8,14 @@ export type CreateSeatArg = Pick<Seat, 'roomId' | 'position' | 'services'>;
 
 export type UpdateSeatArg = Omit<CreateSeatArg, 'roomId'>;
 
-/* export async function createSeat(data: CreateSeatArg): Promise<WithId<Seat>> {
+export async function createSeat(data: CreateSeatArg): Promise<WithId<Seat>> {
   return ky.post(`seats`, { json: data }).json<WithId<Seat>>();
-} */
+}
 
 export async function createSeats(
   data: CreateSeatArg[],
 ): Promise<WithId<Seat>[]> {
+  console.log(data);
   return ky.post(`seats`, { json: data }).json<WithId<Seat>[]>();
 }
 

@@ -16,12 +16,15 @@ import zipWith from 'lodash/zipWith';
 import create, { GetState } from 'zustand';
 import { NamedSet } from 'zustand/middleware';
 import { Service } from '@asw-project/shared/generatedTypes';
+import { WithId } from '@asw-project/shared/data/withId';
 
 type SeatId = string;
 
 type Seat = {
+  _id?: string;
+  label: number;
   position: Vector2;
-  //previouslyExisting: boolean;
+  previouslyExisting: boolean;
   moving: boolean;
   selected: boolean;
   services: {
@@ -157,8 +160,9 @@ const seatState = (
     const { selectedIds, seatById, seatIds } = get();
     const toBeUpdated = actualIds.filter((id) => seatIds.includes(id));
 
-    const [toBeSelected, toBeUnselected] = partition(toBeUpdated, (el) =>
-      !selectedIds.includes(el),
+    const [toBeSelected, toBeUnselected] = partition(
+      toBeUpdated,
+      (el) => !selectedIds.includes(el),
     );
 
     const newSelections = mapValues(

@@ -1,11 +1,16 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
 import { useOpenClose } from '@/hooks/useOpenClose';
+import { Vector2 } from '@asw-project/shared/util/vector';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+import { mapValues } from 'lodash';
+import { always } from 'lodash/fp';
+import keyBy from 'lodash/keyBy';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getRoomById, updateRoomSeats } from '../../api/rooms';
+import { updateRoomSeats } from '../../api/rooms';
+import { getSeats } from '../../api/seats';
 import { Content } from '../../components/FloorMap/Content';
 import { Sidebar } from '../../components/FloorMap/Sidebar';
 import { Toolbar } from '../../components/FloorMap/Toolbar';
@@ -33,9 +38,9 @@ const useStyles = makeStyles({
 export function FloorMap() {
   const { roomId } = useParams();
   const classes = useStyles();
-  // const initialize = useSeats((s) => s.initialize);
+  const initialize = useSeats((s) => s.initialize);
   const { data, status } = useQuery(['get room', roomId], () =>
-    getRoomById(roomId),
+    getSeats(roomId),
   );
 
   const [isFABOpen, handleOpen, handleClose] = useOpenClose();
@@ -49,9 +54,28 @@ export function FloorMap() {
   };
 
   useEffect(() => {
-    if (status === 'success') {
+    if (status === 'success' && data !== undefined) {
       // console.log(data?.seats);
-      // initialize(data?.seats);
+
+      const d = keyBy(
+        data
+          .map((x) => ({
+            ...x,
+            previouslyExisting: true,
+            moving: false,
+            selected: false,
+          }))
+          .map(({ position: { x, y }, ...rest }) => ({
+            ...rest,
+            position: [x, y] as Vector2,
+          }))
+          .map(({ services, ...rest }) => ({
+            ...rest,
+            services: mapValues(keyBy(services), always(true)),
+          })),
+        'label',
+      );
+      initialize(d);
     }
   }, [data, status]);
 

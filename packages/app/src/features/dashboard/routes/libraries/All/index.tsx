@@ -31,7 +31,7 @@ export const AllLibraries = () => {
         {(d) => (
           <Container>
             <Typography variant="h6" className={classes.title}>
-              Librariesaaa
+              Libraries
             </Typography>
             <LibraryList data={d} refetch={refetch} />
           </Container>
