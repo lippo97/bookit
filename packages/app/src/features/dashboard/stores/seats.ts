@@ -294,7 +294,6 @@ const seatState = (
 
 const middlewares = flow(
   IS_DEVELOPMENT ? myDevtools('Seats') : identity,
-  IS_DEVELOPMENT ? log : identity,
 );
 
 export const useSeats = create<SeatState>(middlewares(seatState));

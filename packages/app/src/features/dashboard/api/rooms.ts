@@ -27,10 +27,12 @@ export const updateRoomSeats = (roomId: string, seatMap: SeatMap) => {
       position: V2ToPosition(x.position),
       services: serviceObjectToArray(x.services),
     }));
-  console.log('O:', o);
   const [prev, notprev] = partition(o, 'previouslyExisting');
 
-  return createSeats(prev);
+  console.log('prev', prev)
+  console.log('notprev', notprev)
+
+  return createSeats(notprev);
   /* .map(({ position, services }) => ({
       position: V2ToPosition(position),
       services: serviceObjectToArray(services),

@@ -1,6 +1,8 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
+import { IS_DEVELOPMENT } from '@/config';
 import { useOpenClose } from '@/hooks/useOpenClose';
+import { useNotification } from '@/stores/notifications';
 import { Vector2 } from '@asw-project/shared/util/vector';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { mapValues } from 'lodash';
@@ -42,6 +44,7 @@ export function FloorMap() {
   const { data, status } = useQuery(['get room', roomId], () =>
     getSeats(roomId),
   );
+  const {pushNotification} = useNotification();
 
   const [isFABOpen, handleOpen, handleClose] = useOpenClose();
   const [isSaving, setSaving, stopSaving] = useOpenClose();
@@ -49,8 +52,15 @@ export function FloorMap() {
   const handleSave = async () => {
     const { seatById } = useSeats.getState();
     setSaving();
-    await updateRoomSeats(roomId, seatById);
-    stopSaving();
+    try {
+      await updateRoomSeats(roomId, seatById);
+      pushNotification({ message: "Room saved successfully!", severity: 'success' })
+    } catch (err) {
+      if (IS_DEVELOPMENT) console.error(err);
+      pushNotification({ message: "Something went wrong, retry later.", severity: 'error' })
+    } finally {
+      stopSaving();
+    }
   };
 
   useEffect(() => {
