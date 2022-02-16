@@ -31,13 +31,16 @@ export async function getSeats(roomId: string): Promise<WithId<Seat>[]> {
   return ky.get('seats', { searchParams }).json<WithId<Seat>[]>();
 }
 
-export const updateSeats =
-  (seatId: string) =>
-  async (data: UpdateSeatArg): Promise<WithId<Seat>> => {
-    console.log("update Seats", data)
-    return ky.patch(`seats/`, { json: { ...data, id: seatId } }).json<WithId<Seat>>()
-  }
-
+export const updateSeats = async (
+  data: WithId<UpdateSeatArg>[],
+): Promise<Seat[]> => {
+  const newData = data.map(({ _id, position, services }) => ({
+    position,
+    services,
+    id: _id,
+  }));
+  return ky.patch(`seats/`, { json: newData }).json<Seat[]>();
+};
 
 export async function deleteSeat(seatId: string): Promise<WithId<Seat>> {
   return ky.delete(`seats/${seatId}`).json<WithId<Seat>>();

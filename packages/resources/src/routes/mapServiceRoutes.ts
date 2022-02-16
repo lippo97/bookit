@@ -53,7 +53,6 @@ function isRemoveMany<T>(service: BaseService<T>): service is RemoveMany<T> {
 function handleResult(res: Response, next: NextFunction) {
   return async <L, R>(result: EitherAsync<L, R>) => {
     const r = await result;
-    console.log(r);
     r.caseOf({
       Right: (documents) => res.json(documents),
       Left: next,
