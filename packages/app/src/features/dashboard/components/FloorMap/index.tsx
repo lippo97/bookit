@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const FloorMap = ({ roomId, initialSeats }: FloorMapProps) => {
+/* export const FloorMap = ({ roomId, initialSeats }: FloorMapProps) => {
   const classes = useStyles();
   const initialize = useSeats((s) => s.initialize);
   const navigate = useNavigate();
@@ -74,4 +74,4 @@ export const FloorMap = ({ roomId, initialSeats }: FloorMapProps) => {
       />
     </Layout>
   );
-};
+}; */

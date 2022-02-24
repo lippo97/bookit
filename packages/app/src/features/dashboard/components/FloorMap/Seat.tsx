@@ -115,6 +115,7 @@ export const Seat = ({ id }: SeatProps) => {
         onClick={(e) => {
           e.stopPropagation();
           if (selectedTool === 'remove') {
+            // graphic remove
             removeSeat(id);
           }
         }}

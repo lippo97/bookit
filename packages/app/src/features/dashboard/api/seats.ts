@@ -42,6 +42,15 @@ export const updateSeats = async (
   return ky.patch(`seats/`, { json: newData }).json<Seat[]>();
 };
 
+export async function deleteSeats(
+  seatIds: readonly string[],
+): Promise<WithId<Seat>> {
+  const ids = seatIds.map((idVal) => ({
+    id: idVal,
+  }));
+  return ky.delete(`seats/`, { json: ids }).json<WithId<Seat>>();
+}
+
 export async function deleteSeat(seatId: string): Promise<WithId<Seat>> {
-  return ky.delete(`seats/${seatId}`).json<WithId<Seat>>();
+  return deleteSeats(new Array(seatId));
 }

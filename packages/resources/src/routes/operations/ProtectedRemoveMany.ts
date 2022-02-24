@@ -19,6 +19,8 @@ export class ProtectedRemoveMany<T extends HasOwner>
     const results: EitherAsync<Error<RemoveError>, any>[] = [];
     // eslint-disable-next-line no-plusplus
     for (let index = 0; index < ids.length; index++) {
+      // eslint-disable-next-line no-await-in-loop
+
       const a = super
         .findById(ids[index], options)
         .map((document) => document.delete());

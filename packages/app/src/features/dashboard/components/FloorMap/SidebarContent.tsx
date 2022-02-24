@@ -1,16 +1,6 @@
 import { DialogButton } from '@/components/DialogButton';
 import { Service } from '@asw-project/shared/generatedTypes';
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Hidden,
-  IconButton,
-  Paper,
-  Theme,
-  Typography,
-} from '@material-ui/core';
+import { Box, Button, Chip, Grid, Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
 import { useState } from 'react';
 import { useSeats } from '../../stores/seats';
@@ -81,7 +71,10 @@ ${selectedIds.join(', ')}`}
           setOpen={setDialogOpen}
           id="delete-selected"
           autoClose
-          onConfirm={() => removeSeat(selectedIds)}
+          onConfirm={() => {
+            // graphic remove
+            removeSeat(selectedIds);
+          }}
           as={Button}
           fullWidth
           variant="outlined"

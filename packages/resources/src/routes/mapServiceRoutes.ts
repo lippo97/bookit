@@ -155,9 +155,11 @@ export function mapServiceRoutes<TConstructor>(
         for (let index = 0; index < req.body.length; index++) {
           ids.push((pick(req.body[index], 'id') as any).id);
         }
+
         const result = service.removeMany(ids, {
           userId,
         });
+
         handleResult(res, next)(result);
       });
     }
