@@ -52,5 +52,5 @@ export async function deleteSeats(
 }
 
 export async function deleteSeat(seatId: string): Promise<WithId<Seat>> {
-  return deleteSeats(new Array(seatId));
+  return deleteSeats([seatId]);
 }

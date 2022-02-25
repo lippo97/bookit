@@ -44,20 +44,27 @@ export function FloorMap() {
   const { data, status } = useQuery(['get room', roomId], () =>
     getSeats(roomId),
   );
-  const {pushNotification} = useNotification();
+  const { pushNotification } = useNotification();
 
   const [isFABOpen, handleOpen, handleClose] = useOpenClose();
   const [isSaving, setSaving, stopSaving] = useOpenClose();
 
   const handleSave = async () => {
+    const init = useSeats.getState().initialize;
     const { seatById } = useSeats.getState();
     setSaving();
     try {
       await updateRoomSeats(roomId, seatById);
-      pushNotification({ message: "Room saved successfully!", severity: 'success' })
+      pushNotification({
+        message: 'Room saved successfully!',
+        severity: 'success',
+      });
     } catch (err) {
       if (IS_DEVELOPMENT) console.error(err);
-      pushNotification({ message: "Something went wrong, retry later.", severity: 'error' })
+      pushNotification({
+        message: 'Something went wrong, retry later.',
+        severity: 'error',
+      });
     } finally {
       stopSaving();
     }

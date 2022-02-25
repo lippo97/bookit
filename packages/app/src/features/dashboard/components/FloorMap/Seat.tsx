@@ -3,6 +3,7 @@ import { Service } from '@asw-project/shared/generatedTypes';
 import * as V2 from '@asw-project/shared/util/vector';
 import { Vector2 } from '@asw-project/shared/util/vector';
 import { Box, makeStyles } from '@material-ui/core';
+import { SettingsInputComponentOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { DraggableCore, DraggableEvent } from 'react-draggable';
@@ -78,6 +79,7 @@ export const Seat = ({ id }: SeatProps) => {
       ? {
           onStart: (e: DraggableEvent) => {
             e.stopPropagation();
+            updateSelection(id);
             startMoving();
           },
           onStop: (e: DraggableEvent) => {
@@ -99,10 +101,11 @@ export const Seat = ({ id }: SeatProps) => {
             e.stopPropagation();
             if (!selected) {
               // This prevents a selection bug
+              console.log('select me', id);
               updateSelection(id);
             }
             const delta = V2.div([deltaX, deltaY], boxSize);
-            move(delta);
+            move(delta, id);
             setWasMoved(true);
           },
         }

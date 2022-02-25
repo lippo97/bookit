@@ -17,6 +17,7 @@ import create, { GetState } from 'zustand';
 import { NamedSet } from 'zustand/middleware';
 import { Service } from '@asw-project/shared/generatedTypes';
 import { WithId } from '@asw-project/shared/data/withId';
+import { filter } from 'lodash';
 
 type SeatId = string;
 
@@ -42,6 +43,7 @@ type SeatState = {
   seatById: SeatMap;
   selectedSnapshot: SeatMap;
   size: Vector2;
+  toBeRemoved: readonly SeatId[];
   initialize(initialSeats: SeatMap): void;
   addSeat(
     id: SeatId,
@@ -54,7 +56,8 @@ type SeatState = {
   replaceSelection(id: SeatId | readonly SeatId[]): void;
   setSelectionService(service: Service, value: boolean): void;
   startMoving(): void;
-  move(delta: Vector2): void;
+  // move(delta: Vector2): void;
+  move(delta: Vector2, ensureSelected?: SeatId): void;
   stopMoving(): void;
   setSize(size: Vector2): void;
 };
@@ -104,6 +107,7 @@ const seatState = (
   seatIds: [],
   selectedIds: [],
   seatById: {},
+  toBeRemoved: [],
   initialize: (seats) => {
     set({
       seatById: seats,
@@ -134,13 +138,22 @@ const seatState = (
       seatById,
       seatIds: oldSeatIds,
       selectedIds: oldSelectedIds,
+      toBeRemoved,
     } = get();
     const seatIds = oldSeatIds.filter((id) => !actualIds.includes(id));
     const selectedIds = oldSelectedIds.filter((id) => !actualIds.includes(id));
+    const updatedToBeRemoved = map(
+      filter(
+        pickBy(seatById, (_, k) => actualIds.includes(k)),
+        (x) => x.previouslyExisting,
+      ),
+      (x) => x._id!,
+    );
     set({
       seatIds,
       selectedIds,
       seatById: pickBy(seatById, (_, k) => seatIds.includes(k)),
+      toBeRemoved: [...toBeRemoved, ...updatedToBeRemoved],
     });
   },
   selectAll: () => {
@@ -232,12 +245,14 @@ const seatState = (
       },
     });
   },
-  move: (delta) => {
-    console.log(`move([${delta.toString()}])`);
+  move: (delta, ensureSelected) => {
+    console.log(`move([${delta.toString()}], ${ensureSelected})`);
     const { selectedIds, seatById, size } = get();
 
     const moved = mapValues(
-      pickBy(seatById, (_, k) => selectedIds.includes(k)),
+      pickBy(seatById, (_, k) =>
+        [...selectedIds, ensureSelected ?? 'INVALID'].includes(k),
+      ),
       updatePosition((old) => V2.sum(delta, old)),
     );
 
@@ -253,6 +268,7 @@ const seatState = (
   startMoving: () => {
     console.log('startMoving()');
     const { selectedIds, seatById } = get();
+    console.log('current selected ids', selectedIds);
     const selectedSnapshot = pickBy(seatById, (_, k) =>
       selectedIds.includes(k),
     );
@@ -292,8 +308,6 @@ const seatState = (
   },
 });
 
-const middlewares = flow(
-  IS_DEVELOPMENT ? myDevtools('Seats') : identity,
-);
+const middlewares = flow(IS_DEVELOPMENT ? myDevtools('Seats') : identity);
 
 export const useSeats = create<SeatState>(middlewares(seatState));
