@@ -11,7 +11,7 @@ import keyBy from 'lodash/keyBy';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { updateRoomSeats } from '../../api/rooms';
+import { deleteRoomSeats, updateRoomSeats } from '../../api/rooms';
 import { getSeats } from '../../api/seats';
 import { Content } from '../../components/FloorMap/Content';
 import { Sidebar } from '../../components/FloorMap/Sidebar';
@@ -51,10 +51,11 @@ export function FloorMap() {
 
   const handleSave = async () => {
     const init = useSeats.getState().initialize;
-    const { seatById } = useSeats.getState();
+    const { seatById, toBeRemoved } = useSeats.getState();
     setSaving();
     try {
       await updateRoomSeats(roomId, seatById);
+      await deleteRoomSeats(toBeRemoved);
       pushNotification({
         message: 'Room saved successfully!',
         severity: 'success',

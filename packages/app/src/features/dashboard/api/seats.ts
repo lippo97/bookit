@@ -39,7 +39,7 @@ export const updateSeats = async (
     services,
     id: _id,
   }));
-  return ky.patch(`seats/`, { json: newData }).json<Seat[]>();
+  return ky.patch(`seats`, { json: newData }).json<Seat[]>();
 };
 
 export async function deleteSeats(
@@ -48,9 +48,5 @@ export async function deleteSeats(
   const ids = seatIds.map((idVal) => ({
     id: idVal,
   }));
-  return ky.delete(`seats/`, { json: ids }).json<WithId<Seat>>();
-}
-
-export async function deleteSeat(seatId: string): Promise<WithId<Seat>> {
-  return deleteSeats([seatId]);
+  return ky.delete(`seats`, { json: ids }).json<WithId<Seat>>();
 }
