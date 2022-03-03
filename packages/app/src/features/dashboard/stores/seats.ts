@@ -45,6 +45,7 @@ type SeatState = {
   size: Vector2;
   toBeRemoved: readonly SeatId[];
   initialize(initialSeats: SeatMap): void;
+  getNextNumber(): SeatId;
   addSeat(
     id: SeatId,
     seat: Omit<Seat, 'services' | 'moving' | 'selected'>,
@@ -115,6 +116,7 @@ const seatState = (
       selectedIds: [],
     });
   },
+  getNextNumber: () => '0',
   addSeat: (id, seat) => {
     const { seatIds, seatById } = get();
     if (
