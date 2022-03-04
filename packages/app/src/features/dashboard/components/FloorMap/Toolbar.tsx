@@ -2,7 +2,15 @@ import * as V2 from '@asw-project/shared/util/vector';
 import ClearAllIcon from '@/assets/clear_selection.svg';
 import { useMobile } from '@/hooks/useMobile';
 import { useOpenClose } from '@/hooks/useOpenClose';
-import { Box, Button, Hidden, Paper, Theme } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Hidden,
+  Paper,
+  TextField,
+  Theme,
+  DialogContentText,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -12,7 +20,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
@@ -42,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     height: '40px',
     minWidth: '40px',
-    width: '40px',
     padding: '6px',
     '&:first-child': {
       marginLeft: 0,
@@ -65,6 +72,7 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
   const navigate = useNavigate();
   const clearSelection = useSeats((s) => s.clearSelection);
   const nextSeatId = useSeats((s) => s._nextSeatId);
+  const setNextSeatId = useSeats((s) => s.setNextSeatId);
   const selectAll = useSeats((s) => s.selectAll);
   const [sizeX, sizeY] = useSeats((s) => s.size);
   const setSize = useSeats((s) => s.setSize);
@@ -73,8 +81,24 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
   const selectedTool = useEditor((s) => s.selectedTool);
   const setSelectedTool = useEditor((s) => s.setSelectedTool);
 
-  const [labelOpen, onLabelOpen, onLabelClose] = useOpenClose();
-  const [test, setTest] = useState('hello');
+  const sizeXRef = useRef<HTMLInputElement>(null);
+  const sizeYRef = useRef<HTMLInputElement>(null);
+  const labelRef = useRef<HTMLInputElement>(null);
+
+  const handleSizeChange = () => {
+    if (sizeXRef.current !== null && sizeYRef.current !== null) {
+      const x = parseInt(sizeXRef.current.value, 10);
+      const y = parseInt(sizeYRef.current.value, 10);
+      setSize([x, y]);
+    }
+  };
+
+  const handleLabelChange = () => {
+    if (labelRef.current !== null) {
+      return setNextSeatId(parseInt(labelRef.current.value, 10));
+    }
+    return Promise.reject();
+  };
 
   return (
     <Hidden smDown>
@@ -138,31 +162,62 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
               </Button>
             </ButtonSection>
             <ButtonSection name="Size">
-              <Button
-                variant="outlined"
-                className={classes.button}
-                style={{ fontSize: '18px' }}
-              >
-                {sizeX} × {sizeY}
-              </Button>
-            </ButtonSection>
-            <ButtonSection name="Label">
-              <Button
-                variant="outlined"
-                className={classes.actionButton}
-                onClick={onLabelOpen}
-              >
-                {nextSeatId}
-              </Button>
               <ModalButton
-                onChange={(size: V2.Vector2) => setSize(size)}
+                buttonClassName={classes.actionButton}
+                onChange={handleSizeChange}
+                title="Change size"
                 modalContent={
                   <>
-                    <div>Change size:</div>
+                    <DialogContentText>Change the map size:</DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="number"
+                      label="Length"
+                      type="number"
+                      fullWidth
+                      defaultValue={sizeX}
+                      inputRef={sizeXRef}
+                    />
+                    <TextField
+                      margin="dense"
+                      id="number"
+                      label="Height"
+                      type="number"
+                      fullWidth
+                      defaultValue={sizeY}
+                      inputRef={sizeYRef}
+                    />
                   </>
                 }
               >
                 {sizeX} × {sizeY}
+              </ModalButton>
+            </ButtonSection>
+            <ButtonSection name="Label">
+              <ModalButton
+                buttonClassName={classes.actionButton}
+                onChange={handleLabelChange}
+                title="Change next label"
+                modalContent={
+                  <>
+                    <DialogContentText>
+                      Change the next label:
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="number"
+                      label="Label"
+                      type="number"
+                      fullWidth
+                      defaultValue={nextSeatId}
+                      inputRef={labelRef}
+                    />
+                  </>
+                }
+              >
+                {nextSeatId}
               </ModalButton>
             </ButtonSection>
           </Box>

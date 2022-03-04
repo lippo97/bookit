@@ -1,48 +1,61 @@
 import { useOpenClose } from '@/hooks/useOpenClose';
-import { Box, Button, Fade, Modal, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 
-interface ModalButtonProps<T> {
+interface ModalButtonProps {
+  buttonClassName?: string;
   children: React.ReactNode;
-  onChange: (data: T) => boolean | void;
   modalContent: React.ReactNode;
+  onChange: () => void | Promise<void>;
+  title: string;
 }
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  paper: {
-    padding: theme.spacing(2, 4),
-  },
-}));
-
-export function ModalButton<T>({
+export function ModalButton({
   children,
-  onChange,
   modalContent,
-}: ModalButtonProps<T>) {
+  onChange,
+  title,
+  buttonClassName,
+}: ModalButtonProps) {
   const [isOpen, handleOpen, handleClose] = useOpenClose();
-  const classes = useStyles();
   return (
     <>
-      <Button variant="outlined" onClick={handleOpen}>
+      <Button
+        variant="outlined"
+        onClick={handleOpen}
+        className={buttonClassName}
+      >
         {children}
       </Button>
-      <Modal className={classes.modal} open={isOpen} onClose={handleClose}>
-        <Fade in={isOpen}>
-          <Paper className={classes.paper} elevation={2}>
-            {modalContent}
-            <div>ciaooooooooo</div>
-            <div>ciaooooooooo</div>
-            <div>ciaooooooooo</div>
-            <div>ciaooooooooo</div>
-            <div>ciaooooooooo</div>
-          </Paper>
-        </Fade>
-      </Modal>
+      <Dialog open={isOpen} onClose={handleClose}>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogContent>{modalContent}</DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="default">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              const res = onChange();
+              if (res !== undefined) {
+                res.then(() => {
+                  handleClose();
+                });
+              } else {
+                handleClose();
+              }
+            }}
+            color="primary"
+          >
+            Change
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

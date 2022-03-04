@@ -51,7 +51,6 @@ export function FloorMap() {
   const [isSaving, setSaving, stopSaving] = useOpenClose();
 
   const handleSave = async () => {
-    const init = useSeats.getState().initialize;
     const { seatById, toBeRemoved } = useSeats.getState();
     setSaving();
     try {
@@ -75,7 +74,6 @@ export function FloorMap() {
   useEffect(() => {
     if (status === 'success' && data !== undefined) {
       const { setSelectedTool } = useEditor.getState();
-      // console.log(data?.seats);
 
       const d = keyBy(
         data

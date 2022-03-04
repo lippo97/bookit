@@ -84,16 +84,30 @@ export const Content = () => {
   };
 
   const handleClick: MouseEventHandler<HTMLElement> = (e) => {
-    const { getNextSeatId } = useSeats.getState();
+    // const { getNextSeatId } = useSeats.getState();
+    // if (selectedTool === 'add') {
+    //   const position = scaleClick(e);
+    //   if (position === undefined) return;
+    //   const label = getNextSeatId();
+    //   addSeat(label, {
+    //     position,
+    //     previouslyExisting: false,
+    //     label,
+    //   });
+    // }
+    const { useNextSeatId } = useSeats.getState();
     if (selectedTool === 'add') {
       const position = scaleClick(e);
       if (position === undefined) return;
-      const label = getNextSeatId();
-      addSeat(label, {
-        position,
-        previouslyExisting: false,
-        label,
-      });
+      useNextSeatId((label) =>
+        Promise.resolve(
+          addSeat(label, {
+            position,
+            previouslyExisting: false,
+            label,
+          }),
+        ),
+      );
     }
   };
 

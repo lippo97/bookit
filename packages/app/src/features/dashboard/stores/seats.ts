@@ -45,8 +45,10 @@ type SeatState = {
   size: Vector2;
   toBeRemoved: readonly SeatId[];
   _nextSeatId: number;
-  initialize(initialSeats: SeatMap): void;
+  initialize(initialSeats: SeatMap): Promise<void>;
   getNextSeatId(): SeatId;
+  useNextSeatId(f: (label: SeatId) => Promise<boolean>): void;
+  setNextSeatId(label: number): Promise<void>;
   addSeat(
     id: SeatId,
     seat: Omit<Seat, 'services' | 'moving' | 'selected'>,
@@ -126,6 +128,7 @@ const seatState = (
       toBeRemoved: [],
       _nextSeatId: nextSeatId,
     });
+    return Promise.resolve();
   },
   getNextSeatId: () => {
     const { _nextSeatId: old, seatIds } = get();
@@ -138,10 +141,33 @@ const seatState = (
     set({
       _nextSeatId: newSeatId,
     });
-    console.log('for', seatIds);
-    console.log('giving', old);
-    console.log('updating to', newSeatId);
     return old.toString();
+  },
+  useNextSeatId: (f) => {
+    const { _nextSeatId: old, seatIds } = get();
+
+    f(old.toString()).then((success) => {
+      if (success) {
+        let newSeatId = old + 1;
+        while (seatIds.includes(newSeatId.toString())) {
+          // eslint-disable-next-line no-plusplus
+          newSeatId++;
+        }
+        set({
+          _nextSeatId: newSeatId,
+        });
+      }
+    });
+  },
+  setNextSeatId: (label) => {
+    const { seatIds } = get();
+    if (seatIds.includes(label.toString())) {
+      return Promise.reject();
+    }
+    set({
+      _nextSeatId: label,
+    });
+    return Promise.resolve();
   },
   addSeat: (id, seat) => {
     const { seatIds, seatById } = get();

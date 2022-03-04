@@ -56,10 +56,14 @@ DialogButtonProps<C>) {
           <Button onClick={() => setOpen(false)} color="default">
             Cancel
           </Button>
-      <Button onClick={() => {
-        onConfirm();
-        autoClose && setOpen(false);
-      }} color="primary" autoFocus>
+          <Button
+            onClick={() => {
+              onConfirm();
+              autoClose && setOpen(false);
+            }}
+            color="primary"
+            autoFocus
+          >
             Delete
           </Button>
         </DialogActions>
