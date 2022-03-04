@@ -17,13 +17,13 @@ import create, { GetState } from 'zustand';
 import { NamedSet } from 'zustand/middleware';
 import { Service } from '@asw-project/shared/generatedTypes';
 import { WithId } from '@asw-project/shared/data/withId';
-import { filter } from 'lodash';
+import filter from 'lodash/filter';
 
 type SeatId = string;
 
 type Seat = {
   _id?: string;
-  label: number;
+  label: string;
   position: Vector2;
   previouslyExisting: boolean;
   moving: boolean;
@@ -44,7 +44,9 @@ type SeatState = {
   selectedSnapshot: SeatMap;
   size: Vector2;
   toBeRemoved: readonly SeatId[];
+  _nextSeatId: number;
   initialize(initialSeats: SeatMap): void;
+  getNextSeatId(): SeatId;
   addSeat(
     id: SeatId,
     seat: Omit<Seat, 'services' | 'moving' | 'selected'>,
@@ -108,12 +110,38 @@ const seatState = (
   selectedIds: [],
   seatById: {},
   toBeRemoved: [],
+  _nextSeatId: 0,
   initialize: (seats) => {
+    const seatIds = Object.keys(seats);
+    let nextSeatId = 0;
+    while (seatIds.includes(nextSeatId.toString())) {
+      // eslint-disable-next-line no-plusplus
+      nextSeatId++;
+    }
+
     set({
       seatById: seats,
-      seatIds: Object.keys(seats),
+      seatIds,
       selectedIds: [],
+      toBeRemoved: [],
+      _nextSeatId: nextSeatId,
     });
+  },
+  getNextSeatId: () => {
+    const { _nextSeatId: old, seatIds } = get();
+
+    let newSeatId = old + 1;
+    while (seatIds.includes(newSeatId.toString())) {
+      // eslint-disable-next-line no-plusplus
+      newSeatId++;
+    }
+    set({
+      _nextSeatId: newSeatId,
+    });
+    console.log('for', seatIds);
+    console.log('giving', old);
+    console.log('updating to', newSeatId);
+    return old.toString();
   },
   addSeat: (id, seat) => {
     const { seatIds, seatById } = get();

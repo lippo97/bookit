@@ -90,6 +90,10 @@ export function FloorMap() {
           .map(({ services, ...rest }) => ({
             ...rest,
             services: mapValues(keyBy(services), always(true)),
+          }))
+          .map(({ label, ...rest }) => ({
+            ...rest,
+            label: label.toString(),
           })),
         'label',
       );
