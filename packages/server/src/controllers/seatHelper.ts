@@ -64,13 +64,13 @@ export async function removeOwnerId(
 
   req.body = seats;
 
-  console.log('SEATS BEFORE:', seats);
+  // console.log('SEATS BEFORE:', seats);
   // eslint-disable-next-line no-plusplus
   for (let index = 0; index < req.body.length; index++) {
     delete req.body[index].ownerId;
   }
 
-  console.log('SEATS AFTER:', seats);
+  // console.log('SEATS AFTER:', seats);
 
   return next();
 }

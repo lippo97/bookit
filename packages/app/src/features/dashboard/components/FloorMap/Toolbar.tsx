@@ -1,5 +1,7 @@
+import * as V2 from '@asw-project/shared/util/vector';
 import ClearAllIcon from '@/assets/clear_selection.svg';
 import { useMobile } from '@/hooks/useMobile';
+import { useOpenClose } from '@/hooks/useOpenClose';
 import { Box, Button, Hidden, Paper, Theme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BackIcon from '@material-ui/icons/ArrowBack';
@@ -10,9 +12,11 @@ import SaveIcon from '@material-ui/icons/Save';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
+import { ModalButton } from '../ModalButton';
 import { ButtonSection } from './ButtonSection';
 
 interface ToolbarProps {
@@ -60,12 +64,17 @@ const useStyles = makeStyles((theme) => ({
 export const Toolbar = ({ onSave }: ToolbarProps) => {
   const navigate = useNavigate();
   const clearSelection = useSeats((s) => s.clearSelection);
+  const nextSeatId = useSeats((s) => s._nextSeatId);
   const selectAll = useSeats((s) => s.selectAll);
   const [sizeX, sizeY] = useSeats((s) => s.size);
+  const setSize = useSeats((s) => s.setSize);
   const classes = useStyles();
 
   const selectedTool = useEditor((s) => s.selectedTool);
   const setSelectedTool = useEditor((s) => s.setSelectedTool);
+
+  const [labelOpen, onLabelOpen, onLabelClose] = useOpenClose();
+  const [test, setTest] = useState('hello');
 
   return (
     <Hidden smDown>
@@ -136,6 +145,25 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
               >
                 {sizeX} × {sizeY}
               </Button>
+            </ButtonSection>
+            <ButtonSection name="Label">
+              <Button
+                variant="outlined"
+                className={classes.actionButton}
+                onClick={onLabelOpen}
+              >
+                {nextSeatId}
+              </Button>
+              <ModalButton
+                onChange={(size: V2.Vector2) => setSize(size)}
+                modalContent={
+                  <>
+                    <div>Change size:</div>
+                  </>
+                }
+              >
+                {sizeX} × {sizeY}
+              </ModalButton>
             </ButtonSection>
           </Box>
         </Box>

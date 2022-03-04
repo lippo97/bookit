@@ -11,7 +11,7 @@ import keyBy from 'lodash/keyBy';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { updateRoomSeats } from '../../api/rooms';
+import { deleteRoomSeats, updateRoomSeats } from '../../api/rooms';
 import { getSeats } from '../../api/seats';
 import { Content } from '../../components/FloorMap/Content';
 import { Sidebar } from '../../components/FloorMap/Sidebar';
@@ -51,10 +51,12 @@ export function FloorMap() {
   const [isSaving, setSaving, stopSaving] = useOpenClose();
 
   const handleSave = async () => {
-    const { seatById } = useSeats.getState();
+    const init = useSeats.getState().initialize;
+    const { seatById, toBeRemoved } = useSeats.getState();
     setSaving();
     try {
       await updateRoomSeats(roomId, seatById);
+      await deleteRoomSeats(toBeRemoved);
       pushNotification({
         message: 'Room saved successfully!',
         severity: 'success',
@@ -90,6 +92,10 @@ export function FloorMap() {
           .map(({ services, ...rest }) => ({
             ...rest,
             services: mapValues(keyBy(services), always(true)),
+          }))
+          .map(({ label, ...rest }) => ({
+            ...rest,
+            label: label.toString(),
           })),
         'label',
       );

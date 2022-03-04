@@ -9,7 +9,7 @@ import partition from 'lodash/partition';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import { SeatMap } from '../stores/seats';
-import { createSeats, updateSeats } from './seats';
+import { createSeats, deleteSeats, updateSeats } from './seats';
 
 export type CreateRoomArg = Pick<Room, 'libraryId' | 'name' | 'accessibility'>;
 
@@ -40,11 +40,12 @@ export const updateRoomSeats = async (roomId: string, seatMap: SeatMap) => {
   if (prev.length > 0) {
     await updateSeats(prev as any);
   }
-  /* .map(({ position, services }) => ({
-      position: V2ToPosition(position),
-      services: serviceObjectToArray(services),
-      roomId,
-    }))); */
+};
+
+export const deleteRoomSeats = async (seatIds: readonly string[]) => {
+  if (seatIds.length > 0) {
+    await deleteSeats(seatIds);
+  }
 };
 
 export async function createRoom(data: CreateRoomArg): Promise<WithId<Room>> {

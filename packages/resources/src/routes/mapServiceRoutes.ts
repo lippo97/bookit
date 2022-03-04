@@ -128,9 +128,9 @@ export function mapServiceRoutes<TConstructor>(
           ids.push((pick(req.body[index], 'id') as any).id);
           fields.push(pick(req.body[index], keys) as any);
         }
-        console.log('BODY:', req.body);
-        console.log('IDS:', ids);
-        console.log('FIELDS:', fields);
+        // console.log('BODY:', req.body);
+        // console.log('IDS:', ids);
+        // console.log('FIELDS:', fields);
         const result = service.updateMany(ids, fields, { userId });
         handleResult(res, next)(result);
       });
@@ -155,7 +155,7 @@ export function mapServiceRoutes<TConstructor>(
         for (let index = 0; index < req.body.length; index++) {
           ids.push((pick(req.body[index], 'id') as any).id);
         }
-
+        console.log('IDS TO REMOVE:', ids);
         const result = service.removeMany(ids, {
           userId,
         });
