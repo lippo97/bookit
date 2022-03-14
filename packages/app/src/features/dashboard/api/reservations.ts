@@ -17,12 +17,9 @@ export async function getReservationById(
   return ky.get(`reservations/${reservationId}`).json<WithId<Reservation>>();
 }
 
-export async function getReservations(
-  reservationId: string,
-): Promise<WithId<Reservation>[]> {
+export async function getReservations(): Promise<WithId<Reservation>[]> {
   const authInfo = useAuth.getState().auth;
   const searchParams = {
-    reservationId,
     ownerId: authInfo?.userId,
   };
   return ky.get('reservations', { searchParams }).json<WithId<Reservation>[]>();
