@@ -11,7 +11,7 @@ const libraryId = Joi.string()
     },
   });
 
-  // = library owner
+// = library owner
 const ownerId = Joi.string()
   .required()
   .meta({
@@ -29,7 +29,7 @@ const name = Joi.string()
 //const seats = Joi.array().items(SeatSchema).required();
 
 const capacity = Joi.number() //
-  .min(1);
+  .min(0);
 //.required(); calculated dinamically
 
 const accessibility = Joi.boolean().required();

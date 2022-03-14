@@ -56,8 +56,9 @@ function AddRoom() {
   });
 
   const onSubmit = handleSubmit(async ({ name, accessibility }) => {
+    const capacity: number = 0;
     try {
-      await createRoom({ libraryId, name, accessibility });
+      await createRoom({ libraryId, name, accessibility, capacity });
       console.log(name, accessibility);
       pushNotification({
         message: 'Room created successfully!',

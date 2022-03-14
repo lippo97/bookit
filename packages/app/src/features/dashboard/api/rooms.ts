@@ -6,41 +6,17 @@ import { pick } from '@asw-project/shared/util/objects';
 import { WithId } from '@asw-project/shared/data/withId';
 import { useAuth } from '@/stores/authentication';
 import partition from 'lodash/partition';
-import pickBy from 'lodash/pickBy';
-import identity from 'lodash/identity';
 import { SeatMap } from '../stores/seats';
 import { createSeats, deleteSeats, updateSeats } from './seats';
 
-export type CreateRoomArg = Pick<Room, 'libraryId' | 'name' | 'accessibility'>;
+export type CreateRoomArg = Pick<
+  Room,
+  'libraryId' | 'name' | 'accessibility' | 'capacity'
+>;
 
 export type UpdateRoomArg = Omit<CreateRoomArg, 'libraryId'>;
 
-const serviceObjectToArray = (input: SeatMap[string]['services']): Service[] =>
-  Object.entries(input)
-    .filter(([, value]) => value)
-    .map(fst) as Service[];
-
-export const updateRoomSeats = async (roomId: string, seatMap: SeatMap) => {
-  const o = Object.values(seatMap)
-    .map(pick('position', 'services', 'previouslyExisting', '_id', 'label'))
-    .map((x) => ({
-      ...x,
-      roomId,
-      position: V2ToPosition(x.position),
-      services: serviceObjectToArray(x.services),
-    }));
-  const [prev, notprev] = partition(o, 'previouslyExisting');
-
-  // eslint-disable-next-line no-underscore-dangle
-  if (notprev.length > 0) {
-    await createSeats(notprev);
-  }
-
-  // eslint-disable-next-line no-underscore-dangle
-  if (prev.length > 0) {
-    await updateSeats(prev as any);
-  }
-};
+export type UpdateRoomCapacityArg = Pick<Room, 'capacity'>;
 
 export const deleteRoomSeats = async (seatIds: readonly string[]) => {
   if (seatIds.length > 0) {
@@ -67,9 +43,48 @@ export async function getRooms(libraryId: string): Promise<WithId<Room>[]> {
 
 export const updateRoom =
   (roomId: string) =>
-  async (data: UpdateRoomArg): Promise<WithId<Room>> =>
+  async (data: UpdateRoomArg | UpdateRoomCapacityArg): Promise<WithId<Room>> =>
     ky.patch(`rooms/${roomId}`, { json: data }).json<WithId<Room>>();
 
 export async function deleteRoom(roomId: string): Promise<WithId<Room>> {
   return ky.delete(`rooms/${roomId}`).json<WithId<Room>>();
 }
+
+export const updateRoomCapacity =
+  (roomId: string) =>
+  async (capacity: number): Promise<WithId<Room>> =>
+    updateRoom(roomId)({ capacity });
+
+const serviceObjectToArray = (input: SeatMap[string]['services']): Service[] =>
+  Object.entries(input)
+    .filter(([, value]) => value)
+    .map(fst) as Service[];
+
+export const updateRoomSeats = async (roomId: string, seatMap: SeatMap) => {
+  let capacity = 0;
+  const o = Object.values(seatMap)
+    .map(pick('position', 'services', 'previouslyExisting', '_id', 'label'))
+    .map((x) => ({
+      ...x,
+      roomId,
+      position: V2ToPosition(x.position),
+      services: serviceObjectToArray(x.services),
+    }));
+  const [prev, notprev] = partition(o, 'previouslyExisting');
+
+  // eslint-disable-next-line no-underscore-dangle
+  if (notprev.length > 0) {
+    await createSeats(notprev);
+    capacity += notprev.length;
+  }
+
+  // eslint-disable-next-line no-underscore-dangle
+  if (prev.length > 0) {
+    await updateSeats(prev as any);
+    capacity += prev.length;
+  }
+
+  if (capacity > 0) {
+    await updateRoomCapacity(roomId)(capacity);
+  }
+};
