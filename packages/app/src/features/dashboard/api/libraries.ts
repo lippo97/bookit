@@ -1,22 +1,23 @@
 import { ky } from '@/config/ky';
 import { useAuth } from '@/stores/authentication';
 import { WithId } from '@asw-project/shared/data/withId';
-import { Library } from '@asw-project/shared/generatedTypes';
+import { Library, Seat } from '@asw-project/shared/generatedTypes';
+import { getRooms } from './rooms';
+import { getSeats } from './seats';
 
 type FormDataImageResult = {
   key: string;
 };
 export type CreateLibraryArg = Pick<
   Library,
-  | 'city'
-  | 'imageFileName'
-  | 'name'
-  // | 'rooms'
-  | 'street'
-  | 'timetable'
+  'city' | 'imageFileName' | 'name' | 'street' | 'timetable'
 > & {
   imageFile?: File;
 };
+
+export type UpdateLibraryArg = CreateLibraryArg;
+
+export type UpdateLibraryServicesArg = Pick<Library, 'availableServices'>;
 
 async function updateLibraryImage(
   imageFile: File,
@@ -40,8 +41,6 @@ async function updateLibraryImage(
   }
   return undefined;
 } */
-
-export type UpdateLibraryArg = CreateLibraryArg;
 
 export async function getLibraryById(
   libraryId: string,
@@ -80,10 +79,66 @@ export const updateLibrary =
     }
     return ky
       .patch(`libraries/${libraryId}`, {
-        json: data,
+        json: newData,
       })
       .json<WithId<Library>>();
   };
+
+/*  export const updateLibraryServices = async (
+  libraryId: string,
+): Promise<WithId<Library>> => {
+  const libraryRooms = await getRooms(libraryId);
+  console.log('LIBRARYROOMS:', libraryRooms);
+  let librarySeats: any[] = [];
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < libraryRooms.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    const s = await getSeats(libraryRooms[i]._id);
+    console.log('S:', s);
+    librarySeats = librarySeats.concat(s);
+  }
+
+  
+
+  console.log('LIBRARYSEATS:', librarySeats);
+  return ky
+    .patch(`libraries/${libraryId}/updateServices`, {
+      json: librarySeats,
+    })
+    .json<WithId<Library>>();
+}; */
+export const updateLibraryServices = async (
+  libraryId: string,
+): Promise<WithId<Library>> => {
+  const services = new Set();
+  const libraryRooms = await getRooms(libraryId);
+  // console.log('LIBRARYROOMS:', libraryRooms);
+  let librarySeats: any[] = [];
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < libraryRooms.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    const s = await getSeats(libraryRooms[i]._id);
+    // console.log('S:', s);
+    librarySeats = librarySeats.concat(s);
+  }
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < librarySeats.length; i++) {
+    const seat = librarySeats[i];
+    // eslint-disable-next-line no-plusplus
+    for (let j = 0; j < seat.services.length; j++) {
+      const service = seat.services[j];
+      services.add(service);
+    }
+  }
+  console.log('SERVICES ON LIBRARY:', Array.from(services));
+  return ky
+    .patch(`libraries/${libraryId}`, {
+      json: { availableServices: Array.from(services) },
+    })
+    .json<WithId<Library>>();
+};
 
 export async function deleteLibrary(
   libraryId: string,

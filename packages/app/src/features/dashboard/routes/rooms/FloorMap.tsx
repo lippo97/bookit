@@ -39,7 +39,7 @@ const useStyles = makeStyles({
 });
 
 export function FloorMap() {
-  const { roomId } = useParams();
+  const { roomId, id: libraryId } = useParams();
   const classes = useStyles();
   const initialize = useSeats((s) => s.initialize);
   const { data, status } = useQuery(['get room', roomId], () =>
@@ -54,7 +54,7 @@ export function FloorMap() {
     const { seatById, toBeRemoved } = useSeats.getState();
     setSaving();
     try {
-      await updateRoomSeats(roomId, seatById);
+      await updateRoomSeats(libraryId, roomId, seatById);
       await deleteRoomSeats(toBeRemoved);
       pushNotification({
         message: 'Room saved successfully!',

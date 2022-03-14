@@ -8,6 +8,7 @@ import { useAuth } from '@/stores/authentication';
 import partition from 'lodash/partition';
 import { SeatMap } from '../stores/seats';
 import { createSeats, deleteSeats, updateSeats } from './seats';
+import { updateLibraryServices } from './libraries';
 
 export type CreateRoomArg = Pick<
   Room,
@@ -60,7 +61,11 @@ const serviceObjectToArray = (input: SeatMap[string]['services']): Service[] =>
     .filter(([, value]) => value)
     .map(fst) as Service[];
 
-export const updateRoomSeats = async (roomId: string, seatMap: SeatMap) => {
+export const updateRoomSeats = async (
+  libraryId: string,
+  roomId: string,
+  seatMap: SeatMap,
+) => {
   let capacity = 0;
   const o = Object.values(seatMap)
     .map(pick('position', 'services', 'previouslyExisting', '_id', 'label'))
@@ -82,6 +87,10 @@ export const updateRoomSeats = async (roomId: string, seatMap: SeatMap) => {
   if (prev.length > 0) {
     await updateSeats(prev as any);
     capacity += prev.length;
+  }
+
+  if (notprev.length > 0 || prev.length > 0) {
+    await updateLibraryServices(libraryId);
   }
 
   if (capacity > 0) {
