@@ -109,36 +109,8 @@ export const updateLibrary =
 }; */
 export const updateLibraryServices = async (
   libraryId: string,
-): Promise<WithId<Library>> => {
-  const services = new Set();
-  const libraryRooms = await getRooms(libraryId);
-  // console.log('LIBRARYROOMS:', libraryRooms);
-  let librarySeats: any[] = [];
-
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < libraryRooms.length; i++) {
-    // eslint-disable-next-line no-await-in-loop
-    const s = await getSeats(libraryRooms[i]._id);
-    // console.log('S:', s);
-    librarySeats = librarySeats.concat(s);
-  }
-
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < librarySeats.length; i++) {
-    const seat = librarySeats[i];
-    // eslint-disable-next-line no-plusplus
-    for (let j = 0; j < seat.services.length; j++) {
-      const service = seat.services[j];
-      services.add(service);
-    }
-  }
-  console.log('SERVICES ON LIBRARY:', Array.from(services));
-  return ky
-    .patch(`libraries/${libraryId}`, {
-      json: { availableServices: Array.from(services) },
-    })
-    .json<WithId<Library>>();
-};
+): Promise<WithId<Library>> =>
+  ky.post(`libraries/${libraryId}/updateServices`).json<WithId<Library>>();
 
 export async function deleteLibrary(
   libraryId: string,

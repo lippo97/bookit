@@ -14,7 +14,7 @@ export async function createSeat(data: CreateSeatArg): Promise<WithId<Seat>> {
 export async function createSeats(
   data: CreateSeatArg[],
 ): Promise<WithId<Seat>[]> {
-  console.log(data);
+  // console.log(data);
   return ky.post(`seats`, { json: data }).json<WithId<Seat>[]>();
 }
 
