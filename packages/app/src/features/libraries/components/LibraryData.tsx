@@ -1,105 +1,37 @@
 import { Library } from '@asw-project/shared/generatedTypes';
 import PlaceIcon from '@material-ui/icons/Place';
-import PowerIcon from '@material-ui/icons/Power';
-import WifiIcon from '@material-ui/icons/Wifi';
-import AccessibilityIcon from '@material-ui/icons/Accessibility';
-import { Chip, Container, Typography } from '@material-ui/core';
+import { Button, Chip, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate } from 'react-router-dom';
 import { LibraryTimetable as Timetable } from './LibraryTimetable';
-
-const timetableData = [
-  [
-    {
-      from: 8,
-      to: 12,
-    },
-    {
-      from: 14,
-      to: 19,
-    },
-  ],
-  [
-    {
-      from: 8,
-      to: 12,
-    },
-    {
-      from: 14,
-      to: 19,
-    },
-  ],
-  [
-    {
-      from: 8,
-      to: 12,
-    },
-    {
-      from: 14,
-      to: 19,
-    },
-  ],
-  [
-    {
-      from: 8,
-      to: 12,
-    },
-    {
-      from: 14,
-      to: 19,
-    },
-  ],
-  [
-    null,
-    {
-      from: 14,
-      to: 19,
-    },
-  ],
-  [
-    {
-      from: 8,
-      to: 12,
-    },
-    {
-      from: 14,
-      to: 19,
-    },
-  ],
-  [
-    {
-      from: 8,
-      to: 12,
-    },
-    {
-      from: 14,
-      to: 19,
-    },
-  ],
-] as any;
+import { serviceToIcon } from './serviceToIcon';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    alignItems: 'center',
     flexDirection: 'column',
-  },
-  title: {
-    margin: theme.spacing(2),
-    fontWeight: 'bold',
-    width: '60%',
-  },
-  info: {
-    marginBottom: theme.spacing(2),
+    '& > *': {
+      marginBottom: theme.spacing(2),
+    },
+    '& > *:first-child': {
+      marginTop: theme.spacing(2),
+    },
   },
   placeIcon: {
     fontSize: '18px',
   },
+  spacing: {
+    '& > *': {
+      margin: theme.spacing(1, 0),
+    },
+    '& > *:last-child': {
+      margin: theme.spacing(0, 0),
+    },
+  },
   chips: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(2),
-    maxWidth: '60%',
+    justifyContent: 'flex-start',
     '& > *': {
       margin: theme.spacing(0.5),
     },
@@ -112,44 +44,41 @@ interface LibraryDataProps {
 
 export const LibraryData = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  data: { name, city, street, availableServices, timetable }, // rooms, timetable },
+  data: { name, city, street, availableServices, timetable },
 }: LibraryDataProps) => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  availableServices.push('Power supply', 'Wi-Fi', 'Printer');
 
   return (
     <Container>
       <div className={classes.root}>
-        <Typography align="center" variant="h5" className={classes.title}>
-          {name}
-        </Typography>
-        <Typography align="center" variant="body1" className={classes.info}>
-          <PlaceIcon className={classes.placeIcon} />
-          {` ${street}, ${city}`}
-        </Typography>
-        <div className={classes.chips}>
-          <Chip
-            color="primary"
-            size="small"
-            label="Power source"
-            icon={<PowerIcon />}
-          />
-          <Chip
-            color="primary"
-            size="small"
-            label="Wi-Fi"
-            icon={<WifiIcon />}
-          />
-          <Chip
-            color="primary"
-            size="small"
-            label="Accessibility"
-            icon={<AccessibilityIcon />}
-          />
+        <div className={classes.spacing}>
+          <Typography variant="h5">{name}</Typography>
+          <Typography variant="body1">
+            <PlaceIcon className={classes.placeIcon} />
+            {` ${street}, ${city}`}
+          </Typography>
+          <div className={classes.chips}>
+            {availableServices.map((s) => (
+              <Chip
+                color="primary"
+                size="small"
+                label={s}
+                icon={serviceToIcon(s)}
+              />
+            ))}
+          </div>
         </div>
-        <Typography align="center" variant="h5" className={classes.info}>
-          Timetable
-        </Typography>
-        <Timetable data={timetableData} />
+        <div>
+          <Typography align="center" variant="h5">
+            Timetable
+          </Typography>
+          <Timetable data={timetable} />
+        </div>
+        <Button variant="outlined" onClick={() => navigate('reservation/date')}>
+          Book a seat
+        </Button>
       </div>
     </Container>
   );

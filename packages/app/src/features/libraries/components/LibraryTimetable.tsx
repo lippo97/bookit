@@ -1,27 +1,14 @@
-import { fst, snd } from '@asw-project/shared/util/tuples';
+import { Library } from '@asw-project/shared/generatedTypes';
 import { makeStyles } from '@material-ui/core';
+import dayjs from 'dayjs';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
-type Slot = { from: number; to: number } | null;
-
-type Day = [Slot, Slot];
-
-type ComplexSlot = [Day, Day, Day, Day, Day, Day, Day];
-
-type Timetable = ComplexSlot;
+type Timetable = Library['timetable'];
+type Entry = Timetable[0];
 
 interface LibraryTimetableProps {
-  readonly data: Timetable;
+  readonly data: Library['timetable'];
 }
-
-const renderSlot = (slot: Slot) => (
-  <td>{slot ? `${slot.from} - ${slot.to}` : '-'}</td>
-);
-
-const renderFirstSlot = (timetable: Timetable) =>
-  timetable.map(fst).map(renderSlot);
-
-const renderSecondSlot = (timetable: Timetable) =>
-  timetable.map(snd).map(renderSlot);
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -29,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '600px',
     textAlign: 'center',
     verticalAlign: 'middle',
+    marginTop: theme.spacing(1),
     '& td': {
       paddingTop: theme.spacing(1),
       fontSize: '14px',
@@ -36,12 +24,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const renderEntry = ({ slot: { from, to }, days }: Entry) => {
+  const fFrom = dayjs(from).format('HH:mm');
+  const fTo = dayjs(to).format('HH:mm');
+  const header = (
+    <th>
+      <div>{fFrom}</div>
+      <div>{fTo}</div>
+    </th>
+  );
+
+  const tds = [...Array(7)]
+    .map((_, i) =>
+      days.includes(i) ? <CheckCircleIcon color="primary" /> : '',
+    )
+    .map((html) => <td>{html}</td>);
+
+  return [header, ...tds];
+};
+
 export const LibraryTimetable = ({ data }: LibraryTimetableProps) => {
   const classes = useStyles();
   return (
     <table className={classes.table}>
       <thead>
         <tr>
+          <td />
           <th>Mon</th>
           <th>Tue</th>
           <th>Wed</th>
@@ -51,10 +59,7 @@ export const LibraryTimetable = ({ data }: LibraryTimetableProps) => {
           <th>Sun</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>{renderFirstSlot(data)}</tr>
-        <tr>{renderSecondSlot(data)}</tr>
-      </tbody>
+      <tbody>{data.map(renderEntry)}</tbody>
     </table>
   );
 };

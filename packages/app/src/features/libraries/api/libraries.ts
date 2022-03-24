@@ -1,6 +1,6 @@
 import { ky } from '@/config';
 import { WithId } from '@asw-project/shared/data/withId';
-import { Library } from '@asw-project/shared/generatedTypes';
+import { Library, Room } from '@asw-project/shared/generatedTypes';
 
 export async function getLibraryById(id: string): Promise<WithId<Library>> {
   return ky.get(`libraries/${id}`).json<WithId<Library>>();
@@ -30,4 +30,11 @@ export async function changeFavorite(
     : ky
         .post('favorite', { json: { libraryId } })
         .json<{ favoriteLibraries: string[] }>();
+}
+
+export async function getRooms(libraryId: string): Promise<WithId<Room>[]> {
+  const searchParams = {
+    libraryId,
+  };
+  return ky.get('rooms', { searchParams }).json<WithId<Room>[]>();
 }
