@@ -5,12 +5,13 @@ import PowerIcon from '@material-ui/icons/Power';
 import PrintIcon from '@material-ui/icons/Print';
 import SettingsInputHdmiIcon from '@material-ui/icons/SettingsInputHdmi';
 import WifiIcon from '@material-ui/icons/Wifi';
-import { CSSProperties } from "react";
+import { CSSProperties } from 'react';
 
 export const iconForService = (
   property: Service,
   style?: CSSProperties,
 ): React.ReactNode => {
+  // eslint-disable-next-line default-case
   switch (property) {
     case 'Wi-Fi':
       return <WifiIcon style={style} />;
@@ -23,4 +24,5 @@ export const iconForService = (
     case 'Printer':
       return <PrintIcon style={style} />;
   }
+  throw Error('Illegal state');
 };

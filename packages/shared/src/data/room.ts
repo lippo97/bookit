@@ -28,6 +28,11 @@ const name = Joi.string()
 
 //const seats = Joi.array().items(SeatSchema).required();
 
+const size = Joi.object({
+  x: Joi.number().required(),
+  y: Joi.number().required(),
+}).required();
+
 const capacity = Joi.number() //
   .min(0);
 //.required(); calculated dinamically
@@ -39,6 +44,7 @@ export const RoomSchema = Joi.object({
   ownerId,
   name,
   //seats,
+  size,
   capacity,
   accessibility,
 }).meta({

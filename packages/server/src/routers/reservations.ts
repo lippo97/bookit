@@ -21,7 +21,8 @@ mapServiceRoutes(new ReservationService(), reservationKeys)(router);
 router.get('', async (req, res, next) => {
   const ownerId = getUserId(req.session);
   if (ownerId) {
-    let filter: any = { ownerId };
+    // let filter: any = { ownerId };
+    let filter: any = {};
 
     if (req.query.date) {
       filter = { ...filter, date: new Date(req.query.date as any) };

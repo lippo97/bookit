@@ -22,8 +22,8 @@ const ownerId = Joi.string()
 const imageFileName = Joi.string();
 //
 export const timeRange = Joi.object().keys({
-  from: Joi.number().required(),
-  to: Joi.number().required(),
+  from: Joi.string().required(),
+  to: Joi.string().required(),
 });
 const daytime = Joi.array().items(timeRange);
 

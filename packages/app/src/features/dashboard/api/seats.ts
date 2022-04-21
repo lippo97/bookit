@@ -23,10 +23,8 @@ export async function getSeatById(seatId: string): Promise<WithId<Seat>> {
 }
 
 export async function getSeats(roomId: string): Promise<WithId<Seat>[]> {
-  const authInfo = useAuth.getState().auth;
   const searchParams = {
     roomId,
-    ownerId: authInfo?.userId,
   };
   return ky.get('seats', { searchParams }).json<WithId<Seat>[]>();
 }

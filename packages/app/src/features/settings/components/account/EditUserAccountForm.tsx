@@ -1,6 +1,5 @@
 import { QueryContent } from '@/components/QueryContent';
 import { UserAccountRequestSchema } from '@asw-project/shared/data/requests/accountCreation/request';
-import { UserAccount } from '@asw-project/shared/generatedTypes';
 import { UserAccountRequest } from '@asw-project/shared/generatedTypes/requests/accountCreation/request';
 import { isUserAccount } from '@asw-project/shared/types/account';
 import { joiResolver } from '@hookform/resolvers/joi';

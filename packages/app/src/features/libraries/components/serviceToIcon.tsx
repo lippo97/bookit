@@ -20,4 +20,5 @@ export const serviceToIcon = (service: Service): React.ReactElement => {
     case 'Computer':
       return <ComputerIcon />;
   }
+  throw Error('Illegal state');
 };

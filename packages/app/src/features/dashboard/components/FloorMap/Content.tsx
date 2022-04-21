@@ -84,17 +84,6 @@ export const Content = () => {
   };
 
   const handleClick: MouseEventHandler<HTMLElement> = (e) => {
-    // const { getNextSeatId } = useSeats.getState();
-    // if (selectedTool === 'add') {
-    //   const position = scaleClick(e);
-    //   if (position === undefined) return;
-    //   const label = getNextSeatId();
-    //   addSeat(label, {
-    //     position,
-    //     previouslyExisting: false,
-    //     label,
-    //   });
-    // }
     const { useNextSeatId } = useSeats.getState();
     if (selectedTool === 'add') {
       const position = scaleClick(e);
@@ -149,9 +138,7 @@ export const Content = () => {
     const y = (height - size[1] * boxSize) / 2;
     const ratio = width / (size[0] * boxSize);
     if (isMobile) {
-      // setPan({ x: 100, y: 0 })
       setZoom(ratio / 1.1);
-      // setPan({ x, y });
     } else {
       setPan({ x, y });
     }

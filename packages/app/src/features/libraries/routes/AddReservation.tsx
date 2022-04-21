@@ -1,22 +1,25 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
 import { getLibraryById } from '@/features/dashboard/api/libraries';
+import { getReservations } from '@/features/dashboard/api/reservations';
+import { getSeats } from '@/features/dashboard/api/seats';
 import { useQueryParams } from '@/hooks';
 import {
   Box,
-  Container,
+  Button,
+  Container as MuiContainer,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  styled,
 } from '@material-ui/core';
 import dayjs from 'dayjs';
-import { identity } from 'lodash';
-import { ChangeEvent, MutableRefObject, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getRooms } from '../api/libraries';
-import { Picker } from '../components/Picker';
+import { getReservationsOnRoom, getRoomById } from '../api/reservations';
 
 export const renderSelect = (
   items: any[],
@@ -43,33 +46,57 @@ export const renderSelect = (
   );
 };
 
+const Container = styled(MuiContainer)(() => ({}));
+
+const Form = styled(Box)(({ theme }) => ({
+  margin: theme.spacing(2, 0),
+  '& > *': {
+    marginBottom: theme.spacing(2),
+  },
+  '& > *:last-child': {
+    marginBottom: 0,
+  },
+}));
+
 const formatHour = (date: Date) => dayjs(date).format('HH:mm');
 
 export const AddReservation = () => {
   const { id } = useParams();
   const date = useQueryParams('date', '');
-  const { status, data } = useQuery(['library/reservation', id], () => {
-    const parsedDate = dayjs(parseInt(date, 10));
-    const dayOfWeek = (parsedDate.day() - 1 + 7) % 7;
-    const roomsData = getRooms(id).then((rooms) =>
-      rooms.map(({ _id, name }) => [_id, name]),
-    );
-    const timetableData = getLibraryById(id).then(({ timetable }) =>
-      timetable
-        .filter((y) => y.days.includes(dayOfWeek))
-        .map(({ slot: { from, to } }) => [formatHour(from), formatHour(to)])
-        .map(([from, to]) => [`${from}-${to}`, `${from}-${to}`]),
-    );
-
-    return Promise.all([roomsData, timetableData]);
-  });
-
   const [room, setRoom] = useState('');
   const [time, setTime] = useState('');
+  const { status, data } = useQuery(
+    ['library/reservation', id],
+    () => {
+      const parsedDate = dayjs(parseInt(date, 10));
+      const dayOfWeek = (parsedDate.day() - 1 + 7) % 7;
+      const roomsData = getRooms(id).then((rooms) =>
+        rooms.map(({ _id, name }) => [_id, name]),
+      );
+      const timetableData = getLibraryById(id).then(({ timetable }) =>
+        timetable
+          .filter((y) => y.days.includes(dayOfWeek))
+          .map(({ slot: { from, to } }) => [formatHour(from), formatHour(to)])
+          .map(([from, to]) => [`${from}-${to}`, `${from}-${to}`]),
+      );
+
+      return Promise.all([roomsData, timetableData]);
+    },
+    {
+      onSuccess: ([roomsData, timetableData]) => {
+        setRoom(roomsData[0][0]);
+        setTime(timetableData[0][0]);
+      },
+    },
+  );
 
   const {} = useQuery(
     ['reservation/on', room, time],
-    () => Promise.resolve(1),
+    () =>
+      Promise.all([
+        getRoomById(room).then((x) => [10, 10]),
+        getReservationsOnRoom(room, time),
+      ]),
     {
       enabled: room !== '' && time !== '',
     },
@@ -80,10 +107,13 @@ export const AddReservation = () => {
       <QueryContent status={status} data={data}>
         {([rooms, timetable]) => (
           <Container>
-            <Box mt={2} mb={2}>
+            <Form>
               {renderSelect(rooms, 'Room', room, setRoom)}
               {renderSelect(timetable, 'Time', time, setTime)}
-            </Box>
+              <Button variant="outlined" fullWidth>
+                Send
+              </Button>
+            </Form>
           </Container>
         )}
         {/* {([rooms, { timetable }]) => (
