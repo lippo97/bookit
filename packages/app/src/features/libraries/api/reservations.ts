@@ -2,7 +2,7 @@ import { ky } from '@/config';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Room, Seat } from '@asw-project/shared/generatedTypes';
 
-type SeatWithReservation = WithId<Seat> & {
+export type SeatWithReservation = WithId<Seat> & {
   isReserved: boolean;
 };
 
@@ -30,7 +30,7 @@ export async function getReservationsOnRoom(
       _id: '001',
       ownerId: '0',
       isReserved: false,
-      label: 0,
+      label: 1,
       position: { x: 1, y: 1 },
       roomId: 'df',
       services: ['Computer'],

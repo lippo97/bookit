@@ -1,8 +1,10 @@
 import { Layout } from '@/components/Layout';
+import { Service } from '@asw-project/shared/generatedTypes';
 import { QueryContent } from '@/components/QueryContent';
 import { getLibraryById } from '@/features/dashboard/api/libraries';
 import { getReservations } from '@/features/dashboard/api/reservations';
 import { getSeats } from '@/features/dashboard/api/seats';
+import { iconForServiceCurried } from '@/features/dashboard/components/FloorMap/Seat';
 import { useQueryParams } from '@/hooks';
 import {
   Box,
@@ -19,9 +21,14 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getRooms } from '../api/libraries';
-import { getReservationsOnRoom, getRoomById } from '../api/reservations';
+import {
+  getReservationsOnRoom,
+  getRoomById,
+  SeatWithReservation,
+} from '../api/reservations';
+import { Window } from '../components/Window';
 
-export const renderSelect = (
+const renderSelect = (
   items: any[],
   label: string,
   value: string,
@@ -46,9 +53,52 @@ export const renderSelect = (
   );
 };
 
-const Container = styled(MuiContainer)(() => ({}));
+const renderReservations = (reservations: SeatWithReservation[]) =>
+  reservations.map(({ isReserved, label, position, services }) => (
+    <Box
+      width={51}
+      height={51}
+      bgcolor={isReserved ? '#ccc' : '#fff'}
+      position="absolute"
+      top={position.x * 50}
+      left={position.y * 50 - 1}
+      border="1px solid #aaa"
+    >
+      <Box display="flex" flexDirection="column" height="100%" p="1px">
+        <span style={{ fontWeight: 'bold' }}>{label}</span>
+        <Box
+          display="flex"
+          flexDirection="row"
+          flexWrap="wrap"
+          justifyContent="flex-end"
+          alignItems="flex-end"
+          flex={1}
+        >
+          {services
+            .map((s) => s as Service)
+            .map(
+              iconForServiceCurried({
+                height: 12,
+                width: 12,
+                marginLeft: 2,
+              }),
+            )}
+        </Box>
+      </Box>
+    </Box>
+  ));
+
+const Container = styled(MuiContainer)(({ theme }) => ({
+  position: 'absolute',
+  top: 0,
+  bottom: theme.spacing(4),
+}));
 
 const Form = styled(Box)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
   margin: theme.spacing(2, 0),
   '& > *': {
     marginBottom: theme.spacing(2),
@@ -90,11 +140,11 @@ export const AddReservation = () => {
     },
   );
 
-  const {} = useQuery(
+  const { status: roomStatus, data: roomData } = useQuery(
     ['reservation/on', room, time],
     () =>
       Promise.all([
-        getRoomById(room).then((x) => [10, 10]),
+        getRoomById(room).then((x) => [10, 10] as [number, number]),
         getReservationsOnRoom(room, time),
       ]),
     {
@@ -102,33 +152,64 @@ export const AddReservation = () => {
     },
   );
 
+  const mergedData =
+    data !== undefined && roomData !== undefined
+      ? ([...data, ...roomData] as [
+          string[][],
+          string[][],
+          [number, number],
+          SeatWithReservation[],
+        ])
+      : undefined;
+
+  /* eslint-disable no-nested-ternary */
+  const mergedStatus =
+    status === 'success' && roomStatus === 'success'
+      ? 'success'
+      : status === 'loading' || roomStatus === 'loading'
+      ? 'loading'
+      : 'error';
+
   return (
     <Layout>
-      <QueryContent status={status} data={data}>
-        {([rooms, timetable]) => (
+      <QueryContent status={mergedStatus} data={mergedData}>
+        {([rooms, timetable, size, reservations]) => (
           <Container>
             <Form>
               {renderSelect(rooms, 'Room', room, setRoom)}
               {renderSelect(timetable, 'Time', time, setTime)}
+              <Window>
+                <div
+                  style={{
+                    display: 'flex',
+                  }}
+                >
+                  <Box
+                    position="relative"
+                    width={size[0] * 50}
+                    height={size[1] * 50}
+                    bgcolor="#fff"
+                  >
+                    <div
+                      style={{
+                        height: '100%',
+                        backgroundSize: '50px 50px',
+                        backgroundImage: `linear-gradient(to right, #ddd 1px, transparent 1px),  linear-gradient(to bottom, #ddd 1px, transparent 1px)`,
+                        backgroundRepeat: 'repeat',
+                        margin: '-1px 0 0 -1px',
+                        borderBottom: '1px solid #ddd',
+                      }}
+                    />
+                    {renderReservations(reservations)}
+                  </Box>
+                </div>
+              </Window>
               <Button variant="outlined" fullWidth>
                 Send
               </Button>
             </Form>
           </Container>
         )}
-        {/* {([rooms, { timetable }]) => (
-          <Picker data={rooms} format={(r) => r.name}>
-            {(r) => (
-              <Picker data={['08-12', '13-18']} format={identity}>
-                {(t) => (
-                  <div>
-                    {r.name} at {t}
-                  </div>
-                )}
-              </Picker>
-            )}
-          </Picker>
-        )} */}
       </QueryContent>
     </Layout>
   );

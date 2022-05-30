@@ -24,5 +24,4 @@ export const iconForService = (
     case 'Printer':
       return <PrintIcon style={style} />;
   }
-  throw Error('Illegal state');
 };

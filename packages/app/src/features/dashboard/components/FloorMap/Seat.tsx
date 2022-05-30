@@ -14,7 +14,7 @@ import { boxSize } from './constants';
 
 // eslint-disable-next-line consistent-return
 
-const iconForServiceCurried =
+export const iconForServiceCurried =
   (style: Parameters<typeof iconForService>[1]) =>
   (property: Parameters<typeof iconForService>[0]) =>
     iconForService(property, style);
