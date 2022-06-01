@@ -1,6 +1,7 @@
 import { ky } from '@/config';
 import { WithId } from '@asw-project/shared/data/withId';
-import { Room, Seat } from '@asw-project/shared/generatedTypes';
+import { Reservation, Room, Seat } from '@asw-project/shared/generatedTypes';
+import dayjs from 'dayjs';
 
 export type SeatWithReservation = WithId<Seat> & {
   isReserved: boolean;
@@ -10,30 +11,47 @@ export async function getRoomById(roomId: string): Promise<WithId<Room>> {
   return ky.get(`rooms/${roomId}`).json<WithId<Room>>();
 }
 
+export async function getSeats(roomId: string): Promise<WithId<Seat>[]> {
+  const searchParams = {
+    roomId,
+  };
+  return ky.get('seats', { searchParams }).json<WithId<Seat>[]>();
+}
+
+export async function getReservations(
+  date: Date,
+  roomId: string,
+  timeSlot: Reservation['timeSlot'],
+): Promise<WithId<Reservation>[]> {
+  const searchParams = {
+    date: date.toString(),
+    roomId,
+    timeSlot: timeSlot as any,
+  };
+  return ky.get('reservations', { searchParams }).json<WithId<Reservation>[]>();
+}
+
 export async function getReservationsOnRoom(
+  date: Date,
   roomId: string,
   timeSlot: string,
 ): Promise<SeatWithReservation[]> {
-  const a = await ky.get(`reservations`).json();
-  console.log(a);
-  return [
-    {
-      _id: '000',
-      ownerId: '0',
-      isReserved: true,
-      label: 0,
-      position: { x: 0, y: 0 },
-      roomId: 'df',
-      services: ['Computer'],
-    },
-    {
-      _id: '001',
-      ownerId: '0',
-      isReserved: false,
-      label: 1,
-      position: { x: 1, y: 1 },
-      roomId: 'df',
-      services: ['Computer'],
-    },
-  ];
+  const [from, to] = timeSlot.split('-');
+  const parsedTimeSlot = {
+    from: dayjs(from, 'HH:mm').toDate(),
+    to: dayjs(to, 'HH:mm').toDate(),
+  };
+
+  const reservationSeats = (
+    await getReservations(date, roomId, parsedTimeSlot)
+  ).map((x) => x.seatId);
+  const seats = await getSeats(roomId);
+
+  const updateSeat = (self: WithId<Seat>) => ({
+    ...self,
+    isReserved: reservationSeats.includes(self._id),
+  });
+  const res = seats.map(updateSeat);
+
+  return res;
 }

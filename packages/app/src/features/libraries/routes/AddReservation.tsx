@@ -15,11 +15,14 @@ import {
   MenuItem,
   Select,
   styled,
+  TextField,
 } from '@material-ui/core';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+import { useToggleSelection } from '@/hooks/useToggleSelection';
+import { StepLayout } from '@/components/StepLayout';
 import { getRooms } from '../api/libraries';
 import {
   getReservationsOnRoom,
@@ -38,31 +41,37 @@ const renderSelect = (
 
   return (
     <FormControl fullWidth>
-      <InputLabel id={labelId}>{label}</InputLabel>
-      <Select
-        labelId={labelId}
+      <TextField
+        select
         label={label}
         value={value}
         onChange={(e) => setValue(e.target.value as string)}
       >
         {items.map(([key, value]) => (
-          <MenuItem value={key}>{value}</MenuItem>
+          <MenuItem value={key} key={key}>
+            {value}
+          </MenuItem>
         ))}
-      </Select>
+      </TextField>
     </FormControl>
   );
 };
 
-const renderReservations = (reservations: SeatWithReservation[]) =>
+const renderReservations = (
+  reservations: SeatWithReservation[],
+  selected: number | null,
+  setSelected: (n: number) => void,
+) =>
   reservations.map(({ isReserved, label, position, services }) => (
     <Box
       width={51}
       height={51}
       bgcolor={isReserved ? '#ccc' : '#fff'}
       position="absolute"
-      top={position.x * 50}
-      left={position.y * 50 - 1}
-      border="1px solid #aaa"
+      top={position.y * 50}
+      left={position.x * 50 - 1}
+      border={selected === label ? '2px solid #444' : '1px solid #aaa'}
+      onClick={() => setSelected(label)}
     >
       <Box display="flex" flexDirection="column" height="100%" p="1px">
         <span style={{ fontWeight: 'bold' }}>{label}</span>
@@ -113,12 +122,14 @@ const formatHour = (date: Date) => dayjs(date).format('HH:mm');
 export const AddReservation = () => {
   const { id } = useParams();
   const date = useQueryParams('date', '');
+  const parsedDate = dayjs(parseInt(date, 10));
   const [room, setRoom] = useState('');
   const [time, setTime] = useState('');
+  const [selected, setSelected, resetSelection] =
+    useToggleSelection<number>(null);
   const { status, data } = useQuery(
     ['library/reservation', id],
     () => {
-      const parsedDate = dayjs(parseInt(date, 10));
       const dayOfWeek = (parsedDate.day() - 1 + 7) % 7;
       const roomsData = getRooms(id).then((rooms) =>
         rooms.map(({ _id, name }) => [_id, name]),
@@ -144,11 +155,14 @@ export const AddReservation = () => {
     ['reservation/on', room, time],
     () =>
       Promise.all([
-        getRoomById(room).then((x) => [10, 10] as [number, number]),
-        getReservationsOnRoom(room, time),
+        getRoomById(room).then(
+          ({ size: { x, y } }) => [x, y] as [number, number],
+        ),
+        getReservationsOnRoom(parsedDate.toDate(), room, time),
       ]),
     {
       enabled: room !== '' && time !== '',
+      onSuccess: resetSelection,
     },
   );
 
@@ -171,7 +185,7 @@ export const AddReservation = () => {
       : 'error';
 
   return (
-    <Layout>
+    <StepLayout title="Add reservation" subtitle="Select a seat">
       <QueryContent status={mergedStatus} data={mergedData}>
         {([rooms, timetable, size, reservations]) => (
           <Container>
@@ -200,17 +214,17 @@ export const AddReservation = () => {
                         borderBottom: '1px solid #ddd',
                       }}
                     />
-                    {renderReservations(reservations)}
+                    {renderReservations(reservations, selected, setSelected)}
                   </Box>
                 </div>
               </Window>
-              <Button variant="outlined" fullWidth>
-                Send
+              <Button variant="outlined" fullWidth disabled={selected === null}>
+                Next
               </Button>
             </Form>
           </Container>
         )}
       </QueryContent>
-    </Layout>
+    </StepLayout>
   );
 };

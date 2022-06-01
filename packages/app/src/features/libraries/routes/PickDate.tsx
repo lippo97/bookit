@@ -13,6 +13,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { QueryContent } from '@/components/QueryContent';
+import { StepLayout } from '@/components/StepLayout';
 import { LibraryHeader } from '../components/LibraryHeader';
 import { getLibraryById } from '../api/libraries';
 
@@ -40,8 +41,6 @@ export const PickDate = () => {
   const navigate = useNavigate();
   const [date, setDate] = useState<Dayjs | null>(dayjs());
 
-  const { data, status } = useQuery(['library', id], () => getLibraryById(id));
-
   const handleBack = () => {
     navigate(-1);
   };
@@ -50,65 +49,23 @@ export const PickDate = () => {
   };
 
   return (
-    <Layout transparentAppBar>
-      <QueryContent data={data} status={status}>
-        {(d) => (
-          <>
-            <LibraryHeader src={d.imageFileName} />
-            <Container>
-              <Typography variant="h5">Pick a date</Typography>
-              <DatePicker
-                autoOk
-                label="Reservation date"
-                openTo="date"
-                value={date}
-                onChange={setDate}
-              />
-              <Box display="flex" flexDirection="row" justifyContent="flex-end">
-                <Button
-                  variant="outlined"
-                  style={{ marginRight: 8 }}
-                  onClick={handleBack}
-                >
-                  Cancel
-                </Button>
-                <Button color="primary" variant="outlined" onClick={handleNext}>
-                  Next
-                </Button>
-              </Box>
-            </Container>
-          </>
-        )}
-      </QueryContent>
-    </Layout>
+    <StepLayout title="Add reservation" subtitle="Pick a date">
+      <Container>
+        <DatePicker
+          autoOk
+          disableToolbar
+          label="Reservation date"
+          openTo="date"
+          variant="static"
+          value={date}
+          onChange={setDate}
+        />
+        <Box display="flex" flexDirection="row" justifyContent="flex-end">
+          <Button color="primary" variant="outlined" onClick={handleNext}>
+            Next
+          </Button>
+        </Box>
+      </Container>
+    </StepLayout>
   );
-
-  //   return (
-  //     <Layout extendedAppBar>
-  //       <Container maxWidth="md">
-  //         <Paper elevation={3}>
-  //           <Typography variant="h5">Pick a date</Typography>
-  //           <DatePicker
-  //             autoOk
-  //             label="Reservation date"
-  //             openTo="date"
-  //             value={date}
-  //             onChange={setDate}
-  //           />
-  //           <Box display="flex" flexDirection="row" justifyContent="flex-end">
-  //             <Button
-  //               variant="outlined"
-  //               style={{ marginRight: 8 }}
-  //               onClick={handleBack}
-  //             >
-  //               Cancel
-  //             </Button>
-  //             <Button color="primary" variant="outlined" onClick={handleNext}>
-  //               Next
-  //             </Button>
-  //           </Box>
-  //         </Paper>
-  //       </Container>
-  //     </Layout>
-  //   );
 };

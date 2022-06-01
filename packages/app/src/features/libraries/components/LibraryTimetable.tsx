@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     verticalAlign: 'middle',
     marginTop: theme.spacing(1),
     '& td': {
-      paddingTop: theme.spacing(1),
+      padding: theme.spacing(1.5, 0),
       fontSize: '14px',
     },
   },
@@ -59,7 +59,11 @@ export const LibraryTimetable = ({ data }: LibraryTimetableProps) => {
           <th>Sun</th>
         </tr>
       </thead>
-      <tbody>{data.map(renderEntry)}</tbody>
+      <tbody>
+        {data.map(renderEntry).map((x) => (
+          <tr>{x}</tr>
+        ))}
+      </tbody>
     </table>
   );
 };

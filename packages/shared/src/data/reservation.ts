@@ -1,7 +1,4 @@
 import Joi from 'joi';
-import { timeRange } from './library';
-
-
 
 const seatId = Joi.string()
   .required()
@@ -12,21 +9,34 @@ const seatId = Joi.string()
     },
   });
 
-  // user that reserves
+const roomId = Joi.string()
+  .required()
+  .meta({
+    _mongoose: {
+      type: 'ObjectId',
+      ref: 'Room',
+    },
+  });
+
+// user that reserves
 const ownerId = Joi.string()
-.required()
-.meta({
-  _mongoose: {
-    type: 'ObjectId',
-    ref: 'Authentication',
-  },
-});
-const timeSlot = timeRange.required();
+  .required()
+  .meta({
+    _mongoose: {
+      type: 'ObjectId',
+      ref: 'Authentication',
+    },
+  });
+const timeSlot = Joi.object({
+  from: Joi.date().required(),
+  to: Joi.date().required(),
+}).required();
 
 const date = Joi.date().required();
 
 export const ReservationSchema = Joi.object({
   ownerId,
+  roomId,
   seatId,
   timeSlot,
   date,

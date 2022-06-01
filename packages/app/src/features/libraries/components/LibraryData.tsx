@@ -48,7 +48,6 @@ export const LibraryData = ({
 }: LibraryDataProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  availableServices.push('Power supply', 'Wi-Fi', 'Printer');
 
   return (
     <Container>

@@ -21,17 +21,6 @@ const ownerId = Joi.string()
 
 const imageFileName = Joi.string();
 //
-export const timeRange = Joi.object().keys({
-  from: Joi.string().required(),
-  to: Joi.string().required(),
-});
-const daytime = Joi.array().items(timeRange);
-
-const defaultTimerange = Joi.object().keys({
-  from: Joi.number().default(10).required(),
-  to: Joi.number().default(12).required(),
-});
-
 const DaySchema = Joi.number().min(0).max(6);
 
 const ShiftSchema = Joi.object({
