@@ -55,3 +55,11 @@ export async function getReservationsOnRoom(
 
   return res;
 }
+
+export type CreateReservationArg = Reservation;
+
+export async function createReservation(
+  data: CreateReservationArg,
+): Promise<WithId<Reservation>> {
+  return ky.post(`reservations`, { json: data }).json<WithId<Reservation>>();
+}

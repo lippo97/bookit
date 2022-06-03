@@ -45,7 +45,7 @@ export const AppBar: React.FC<AppBarProps> = ({ subtitle, title, onBack }) => {
           <BackIcon />
         </IconButton>
         <TitleBox>
-          <Typography variant="h6" style={{ fontSize: '1.05rem' }}>
+          <Typography variant="h6" style={{ fontSize: '1.1rem' }}>
             {title}
           </Typography>
           {subtitle && (

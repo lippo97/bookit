@@ -20,9 +20,10 @@ import {
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useToggleSelection } from '@/hooks/useToggleSelection';
 import { StepLayout } from '@/components/StepLayout';
+import { SettingsSystemDaydreamRounded } from '@material-ui/icons';
 import { getRooms } from '../api/libraries';
 import {
   getReservationsOnRoom,
@@ -58,11 +59,11 @@ const renderSelect = (
 };
 
 const renderReservations = (
-  reservations: SeatWithReservation[],
-  selected: number | null,
-  setSelected: (n: number) => void,
+  seats: SeatWithReservation[],
+  selected: [string, number] | null,
+  setSelected: (n: [string, number]) => void,
 ) =>
-  reservations.map(({ isReserved, label, position, services }) => (
+  seats.map(({ isReserved, roomId, label, position, services }) => (
     <Box
       width={51}
       height={51}
@@ -70,8 +71,12 @@ const renderReservations = (
       position="absolute"
       top={position.y * 50}
       left={position.x * 50 - 1}
-      border={selected === label ? '2px solid #444' : '1px solid #aaa'}
-      onClick={() => setSelected(label)}
+      border={
+        selected !== null && selected[1] === label
+          ? '2px solid #444'
+          : '1px solid #aaa'
+      }
+      onClick={() => setSelected([roomId, label])}
     >
       <Box display="flex" flexDirection="column" height="100%" p="1px">
         <span style={{ fontWeight: 'bold' }}>{label}</span>
@@ -121,12 +126,14 @@ const formatHour = (date: Date) => dayjs(date).format('HH:mm');
 
 export const AddReservation = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const date = useQueryParams('date', '');
   const parsedDate = dayjs(parseInt(date, 10));
   const [room, setRoom] = useState('');
   const [time, setTime] = useState('');
+  const [name, setName] = useState('');
   const [selected, setSelected, resetSelection] =
-    useToggleSelection<number>(null);
+    useToggleSelection<[string, number]>(null);
   const { status, data } = useQuery(
     ['library/reservation', id],
     () => {
@@ -134,17 +141,26 @@ export const AddReservation = () => {
       const roomsData = getRooms(id).then((rooms) =>
         rooms.map(({ _id, name }) => [_id, name]),
       );
-      const timetableData = getLibraryById(id).then(({ timetable }) =>
-        timetable
-          .filter((y) => y.days.includes(dayOfWeek))
-          .map(({ slot: { from, to } }) => [formatHour(from), formatHour(to)])
-          .map(([from, to]) => [`${from}-${to}`, `${from}-${to}`]),
+      const libraryData = getLibraryById(id).then(
+        ({ name, timetable }) =>
+          [
+            name,
+            timetable
+              .filter((y) => y.days.includes(dayOfWeek))
+              .map(({ slot: { from, to } }) => [
+                formatHour(from),
+                formatHour(to),
+              ])
+              .map(([from, to]) => [`${from}-${to}`, `${from}-${to}`]),
+          ] as [string, string[][]],
       );
 
-      return Promise.all([roomsData, timetableData]);
+      return Promise.all([roomsData, libraryData]);
     },
     {
-      onSuccess: ([roomsData, timetableData]) => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      onSuccess: ([roomsData, [name, timetableData]]) => {
+        setName(name);
         setRoom(roomsData[0][0]);
         setTime(timetableData[0][0]);
       },
@@ -168,8 +184,9 @@ export const AddReservation = () => {
 
   const mergedData =
     data !== undefined && roomData !== undefined
-      ? ([...data, ...roomData] as [
+      ? ([data[0], ...data[1], ...roomData] as [
           string[][],
+          string,
           string[][],
           [number, number],
           SeatWithReservation[],
@@ -184,10 +201,30 @@ export const AddReservation = () => {
       ? 'loading'
       : 'error';
 
+  const handleNext = () => {
+    const [from, to] = time.split('-');
+    const roomName = data![0].find((x) => x[0] === room)![1];
+    const params = [
+      ['date', parsedDate],
+      ['from', from],
+      ['to', to],
+      ['libraryName', name],
+      ['roomId', room],
+      ['roomName', roomName],
+      ['seatId', selected![0]],
+      ['seatName', selected![1]],
+    ] as [string, any][];
+    const queryParams = params
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+
+    navigate(`confirm?${queryParams}`);
+  };
+
   return (
     <StepLayout title="Add reservation" subtitle="Select a seat">
       <QueryContent status={mergedStatus} data={mergedData}>
-        {([rooms, timetable, size, reservations]) => (
+        {([rooms, , timetable, size, seats]) => (
           <Container>
             <Form>
               {renderSelect(rooms, 'Room', room, setRoom)}
@@ -214,11 +251,16 @@ export const AddReservation = () => {
                         borderBottom: '1px solid #ddd',
                       }}
                     />
-                    {renderReservations(reservations, selected, setSelected)}
+                    {renderReservations(seats, selected, setSelected)}
                   </Box>
                 </div>
               </Window>
-              <Button variant="outlined" fullWidth disabled={selected === null}>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled={selected === null}
+                onClick={handleNext}
+              >
                 Next
               </Button>
             </Form>
