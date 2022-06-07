@@ -63,7 +63,7 @@ const renderReservations = (
   selected: [string, number] | null,
   setSelected: (n: [string, number]) => void,
 ) =>
-  seats.map(({ isReserved, roomId, label, position, services }) => (
+  seats.map(({ isReserved, label, position, services, _id: seatId }) => (
     <Box
       width={51}
       height={51}
@@ -76,7 +76,7 @@ const renderReservations = (
           ? '2px solid #444'
           : '1px solid #aaa'
       }
-      onClick={() => setSelected([roomId, label])}
+      onClick={!isReserved ? () => setSelected([seatId, label]) : undefined}
     >
       <Box display="flex" flexDirection="column" height="100%" p="1px">
         <span style={{ fontWeight: 'bold' }}>{label}</span>

@@ -28,8 +28,8 @@ const ownerId = Joi.string()
     },
   });
 const timeSlot = Joi.object({
-  from: Joi.date().required(),
-  to: Joi.date().required(),
+  from: Joi.string().required(),
+  to: Joi.string().required(),
 }).required();
 
 const date = Joi.date().required();

@@ -23,10 +23,18 @@ export async function getReservations(
   roomId: string,
   timeSlot: Reservation['timeSlot'],
 ): Promise<WithId<Reservation>[]> {
+  const $gte = new Date(date);
+  $gte.setHours(0, 0, 0, 0);
+  const $lt = new Date(date);
+  $lt.setDate($lt.getDate() + 1);
+  $lt.setHours(0, 0, 0, 0);
+
   const searchParams = {
-    date: date.toString(),
+    'date[$gte]': $gte.toISOString(),
+    'date[$lt]': $lt.toISOString(),
     roomId,
-    timeSlot: timeSlot as any,
+    'timeSlot[from]': timeSlot.from,
+    'timeSlot[to]': timeSlot.to,
   };
   return ky.get('reservations', { searchParams }).json<WithId<Reservation>[]>();
 }
@@ -34,17 +42,17 @@ export async function getReservations(
 export async function getReservationsOnRoom(
   date: Date,
   roomId: string,
-  timeSlot: string,
+  stringTimeSlot: string,
 ): Promise<SeatWithReservation[]> {
-  const [from, to] = timeSlot.split('-');
-  const parsedTimeSlot = {
-    from: dayjs(from, 'HH:mm').toDate(),
-    to: dayjs(to, 'HH:mm').toDate(),
+  const [from, to] = stringTimeSlot.split('-');
+  const timeSlot = {
+    from,
+    to,
   };
 
-  const reservationSeats = (
-    await getReservations(date, roomId, parsedTimeSlot)
-  ).map((x) => x.seatId);
+  const reservationSeats = (await getReservations(date, roomId, timeSlot)).map(
+    (x) => x.seatId,
+  );
   const seats = await getSeats(roomId);
 
   const updateSeat = (self: WithId<Seat>) => ({
@@ -56,7 +64,7 @@ export async function getReservationsOnRoom(
   return res;
 }
 
-export type CreateReservationArg = Reservation;
+export type CreateReservationArg = Omit<Reservation, 'ownerId'>;
 
 export async function createReservation(
   data: CreateReservationArg,

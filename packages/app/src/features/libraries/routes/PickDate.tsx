@@ -45,7 +45,7 @@ export const PickDate = () => {
     navigate(-1);
   };
   const handleNext = () => {
-    navigate(`/libraries/${id}/reservation?date=${date}`);
+    navigate(`/libraries/${id}/reservation?date=${date?.startOf('day')}`);
   };
 
   return (

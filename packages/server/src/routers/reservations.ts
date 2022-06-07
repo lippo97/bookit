@@ -41,23 +41,7 @@ mapServiceRoutes(new ReservationService(), reservationKeys)(router);
 router.get('', async (req, res, next) => {
   const ownerId = getUserId(req.session);
   if (ownerId) {
-    // let filter: any = { ownerId };
-    let filter: any = {};
-
-    if (req.query.date) {
-      filter = { ...filter, date: new Date(req.query.date as any) };
-    }
-
-    if (req.query.timefrom && req.query.timeto) {
-      const from: any = req.query.timefrom;
-      const to: any = req.query.timeto;
-      filter = {
-        ...filter,
-        'timeSlot.from': { $gte: from },
-        'timeSlot.to': { $lte: to },
-      };
-    }
-
+    const filter = req.query;
     const result = new FindAll(ReservationModel).findAll(filter);
 
     (await result.map((x) => x.map(pick('seatId', 'date', 'timeSlot')))).caseOf(
