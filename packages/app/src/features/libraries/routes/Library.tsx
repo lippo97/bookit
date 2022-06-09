@@ -21,14 +21,14 @@ export const Library = () => {
 
   const [isStarred, toggleStarred] = useToggle(isFavoriteInitial);
 
+  const { data, status } = useQuery(['library', id], () => getLibraryById(id));
+
   const changeFavorite = () => {
     changeFavoriteAPI(isStarred, id).then(({ favoriteLibraries }) => {
       updateFavorite(favoriteLibraries);
       toggleStarred();
     });
   };
-
-  const { data, status } = useQuery(['library', id], () => getLibraryById(id));
 
   return (
     <Layout transparentAppBar>

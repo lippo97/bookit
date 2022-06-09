@@ -15,10 +15,10 @@ import { DrawerSection } from './DrawerSection';
 const Bookmarks = () => (
   <>
     <ListSubheader>Bookmarks</ListSubheader>
-    <DrawerItem content="Bookmark 1" icon={<BookmarkIcon />} />
-    <DrawerItem content="Bookmark 2" icon={<BookmarkIcon />} />
-    <DrawerItem content="Bookmark 3" icon={<BookmarkIcon />} />
-    <DrawerItem content="Bookmark 4" icon={<BookmarkIcon />} />
+    <DrawerItem content="Bookmark 1" icon={<Star />} />
+    <DrawerItem content="Bookmark 2" icon={<Star />} />
+    <DrawerItem content="Bookmark 3" icon={<Star />} />
+    <DrawerItem content="Bookmark 4" icon={<Star />} />
   </>
 );
 const UserRoutes = () => (
@@ -32,9 +32,9 @@ const UserRoutes = () => (
       />
       <DrawerItem
         link
-        content="My bookings"
+        content="My reservations"
         icon={<LibraryBooks />}
-        to="/bookings"
+        to="/reservations"
       />
       <DrawerItem link content="My favorites" icon={<Star />} to="/favorites" />
     </DrawerSection>
@@ -60,7 +60,6 @@ const ManagerRoutes = () => (
 export const DrawerContent = () => {
   const isLoggedIn = useIsLoggedIn();
   const type = useAuth((s) => s.auth?.account?.type);
-  // const type: 'simple' | 'manager' = 'simple' as 'simple' | 'manager';
   if (isLoggedIn) {
     return (
       <>

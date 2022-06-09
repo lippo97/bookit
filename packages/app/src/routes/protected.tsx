@@ -1,6 +1,7 @@
 import { DashboardRoutes } from '@/features/dashboard/routes';
 import { FavoritesRoutes } from '@/features/favorites/routes';
 import { LibrariesRoutes } from '@/features/libraries/routes';
+import { ReservationsRoutes } from '@/features/reservations/routes';
 import { SettingsRoutes } from '@/features/settings/routes';
 import { accountTypes } from '@asw-project/shared/types/accountTypes';
 import { Navigate } from 'react-router-dom';
@@ -30,6 +31,10 @@ const switchAccountType = (accountType: AccountType) =>
         {
           path: '/libraries/*',
           element: <LibrariesRoutes />,
+        },
+        {
+          path: '/reservations/*',
+          element: <ReservationsRoutes />,
         },
         {
           path: '/favorites/*',

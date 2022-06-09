@@ -6,10 +6,7 @@ import { ReturnedUser } from '@asw-project/shared/src/types/returnedUser';
 import flow from 'lodash/fp/flow';
 import identity from 'lodash/fp/identity';
 import create, { GetState } from 'zustand';
-import {
-  NamedSet,
-  persist as createPersist,
-} from 'zustand/middleware';
+import { NamedSet, persist as createPersist } from 'zustand/middleware';
 import { log } from './_log';
 import { myDevtools } from './_myDevtools';
 
