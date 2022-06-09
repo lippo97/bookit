@@ -1,8 +1,11 @@
-import { Account } from '@asw-project/shared/generatedTypes/authentication';
+import {
+  Account,
+  FavoriteLibrariesInfo,
+} from '@asw-project/shared/generatedTypes/authentication';
 
 export type ReturnedUser = {
   userId: any;
   email: string;
   account?: Account;
-  favoriteLibraries?: string[];
+  favoriteLibraries?: FavoriteLibrariesInfo[];
 };

@@ -18,7 +18,12 @@ export const AccountSchema = Joi.alternatives()
     className: 'Account',
   });
 
-export const FavoriteLibrariesSchema = Joi.array()
+export const FavoriteLibrariesInfo = Joi.object({
+  libraryId: Joi.string().required(),
+  name: Joi.string().required(),
+});
+const FavoriteLibrariesSchema = Joi.array()
+  .items(Joi.string())
 
   .items(Joi.string())
   .meta({

@@ -12,10 +12,15 @@ import {
 import { ObjectId } from 'mongodb';
 import { isTrue } from '@asw-project/shared/util/boolean';
 import { FindByIdError } from '@asw-project/resources/routes/operations/FindById';
-import { Account, Library } from '@asw-project/shared/generatedTypes';
+import {
+  Account,
+  FavoriteLibrariesInfo,
+  Library,
+} from '@asw-project/shared/generatedTypes';
 import { QueryOptions } from 'mongoose';
 import { EditError } from '@asw-project/resources/routes/operations/Update';
 import { isUserAccount } from '@asw-project/shared/types/account';
+import { WithId } from '@asw-project/shared/data/withId';
 import { AuthenticationModel } from '../models/Authentication';
 import { LibraryModel } from '../models/Library';
 
@@ -25,7 +30,7 @@ export function getFavoriteLibraries(
   options?: Pick<QueryOptions, 'skip' | 'limit'>,
 ): EitherAsync<
   Error<FavoriteLibrariesNotAvailableKind | FindByIdError>,
-  Library[]
+  WithId<Library>[]
 > {
   return MaybeAsync(() =>
     Promise.resolve(
@@ -48,9 +53,56 @@ export function getFavoriteLibraries(
       ),
     )
 
-    .chain((libs) => {
+    .chain((libs: any) => {
       if (libs) {
         return EitherAsync.liftEither(Right(libs));
+      }
+
+      return EitherAsync.liftEither(
+        Left({
+          kind: 'InternalError',
+          body: new Error('Unexpected error in getFavoriteLibraries'),
+        } as const),
+      );
+    });
+}
+
+export function getFavoriteLibrariesInfo(
+  userId: string | undefined,
+  account: Account | undefined,
+) {
+  return MaybeAsync(() =>
+    Promise.resolve(
+      userId !== undefined && account !== undefined && isUserAccount(account),
+    ),
+  )
+    .filter(isTrue)
+    .void()
+    .toEitherAsync<ExpectedError<UnauthorizedKind>>({
+      kind: 'UnauthorizedError',
+    })
+    .chain(() =>
+      new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId)),
+    )
+    .chain((res) =>
+      new FindAll(LibraryModel).findAll(
+        { _id: { $in: res.favoriteLibraries } },
+        undefined,
+      ),
+    )
+
+    .chain((libs: any) => {
+      if (libs) {
+        // eslint-disable-next-line no-underscore-dangle
+        return EitherAsync.liftEither(
+          Right(
+            libs.map(
+              (x: any) =>
+                // eslint-disable-next-line no-underscore-dangle
+                ({ libraryId: x._id, name: x.name } as FavoriteLibrariesInfo),
+            ),
+          ),
+        );
       }
 
       return EitherAsync.liftEither(

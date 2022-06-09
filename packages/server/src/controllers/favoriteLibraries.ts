@@ -1,8 +1,13 @@
-import { Account } from '@asw-project/shared/generatedTypes';
+import {
+  Account,
+  FavoriteLibrariesInfo,
+  Library,
+} from '@asw-project/shared/generatedTypes';
 import { NextFunction, Request, Response } from 'express';
 import { isUserAccount } from '@asw-project/shared/types/account';
 import { pick } from 'lodash';
 import { FavoriteLibraryRequest } from '@asw-project/shared/generatedTypes/requests/favoriteLibraries/request';
+import { WithId } from '@asw-project/shared/data/withId';
 import * as favoriteLibrariesService from '../services/favoriteLibraries';
 
 function getUserId(session: any): string | undefined {
@@ -21,7 +26,7 @@ function getAccount(session: any): Account | undefined {
 
 export async function getFavoriteLibraries(
   req: Request<any, any, any>,
-  res: Response,
+  res: Response<WithId<Library>[]>,
   next: NextFunction,
 ): Promise<void> {
   const account = getAccount(req.session);
@@ -39,7 +44,33 @@ export async function getFavoriteLibraries(
       );
       result.caseOf({
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        Right: (favlib: any) => res.json(favlib),
+        Right: (favlib) => res.json(favlib),
+        Left: next,
+      });
+    } else res.sendStatus(405);
+  } else {
+    res.sendStatus(401);
+  }
+}
+
+export async function getFavoriteLibrariesInfo(
+  req: Request<any, any, any>,
+  res: Response<FavoriteLibrariesInfo[]>,
+  next: NextFunction,
+): Promise<void> {
+  const account = getAccount(req.session);
+
+  if (account) {
+    if (isUserAccount(account)) {
+      const result = await favoriteLibrariesService.getFavoriteLibrariesInfo(
+        getUserId(req.session),
+        account,
+      );
+      result.caseOf({
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        Right: (favlib) =>
+          // eslint-disable-next-line no-underscore-dangle
+          res.json(favlib),
         Left: next,
       });
     } else res.sendStatus(405);

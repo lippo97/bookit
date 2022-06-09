@@ -1,19 +1,9 @@
 import { StepLayout } from '@/components/StepLayout';
 import { Error } from '@/features/misc';
-import {
-  every4,
-  every5,
-  every6,
-  map2,
-  safeMap,
-  useQueryParam,
-  useQueryParams,
-} from '@/hooks';
+import { every6, map2, safeMap, useQueryParam } from '@/hooks';
 import { Box, Button, Container, Typography } from '@material-ui/core';
 import dayjs, { Dayjs } from 'dayjs';
-import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { createReservation } from '../api/reservations';
 
 const parseDate = (str: number) => dayjs(str);
 const parseTime = (str: string) => dayjs(str, 'HH:mm');
@@ -31,9 +21,9 @@ export const ConfirmReservation: React.FC = () => {
   const seatId = useQueryParam('seatId');
   const seatName = useQueryParam('seatName');
 
-  const query = useQuery(() => {
+  /* const query = useQuery(() => {
     createReservation(0 as any);
-  });
+  }); 
 
   const timeSlot = map2(
     from,
@@ -76,6 +66,6 @@ export const ConfirmReservation: React.FC = () => {
       </StepLayout>
     );
   }
-
+*/
   return <Error code={400} message="Bad request" />;
 };

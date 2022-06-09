@@ -1,15 +1,15 @@
 import { IS_DEVELOPMENT } from '@/config';
 import { loginWithEmailAndPassword, logout } from '@/features/auth';
-import { Account } from '@asw-project/shared/generatedTypes';
+import {
+  Account,
+  FavoriteLibrariesInfo,
+} from '@asw-project/shared/generatedTypes';
 import { LoginRequest } from '@asw-project/shared/src/generatedTypes/requests/login/request';
 import { ReturnedUser } from '@asw-project/shared/src/types/returnedUser';
 import flow from 'lodash/fp/flow';
 import identity from 'lodash/fp/identity';
 import create, { GetState } from 'zustand';
-import {
-  NamedSet,
-  persist as createPersist,
-} from 'zustand/middleware';
+import { NamedSet, persist as createPersist } from 'zustand/middleware';
 import { log } from './_log';
 import { myDevtools } from './_myDevtools';
 
@@ -20,7 +20,9 @@ type AuthState = {
   loginWithEmailAndPassword: (dto: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
   updateAccount: (account: Account) => Promise<void>;
-  updateFavoriteLibraries: (favoriteLibraries: string[]) => Promise<void>;
+  updateFavoriteLibraries: (
+    favoriteLibraries: FavoriteLibrariesInfo[],
+  ) => Promise<void>;
 };
 
 const authState: (

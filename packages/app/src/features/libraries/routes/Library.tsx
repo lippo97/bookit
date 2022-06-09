@@ -1,5 +1,6 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
+import { getFavoritesInfo } from '@/features/favorites/api/favorites';
 import { useToggle } from '@/hooks/useToggle';
 import { useAuth } from '@/stores/authentication';
 import { Container } from '@material-ui/core';
@@ -17,14 +18,19 @@ export const Library = () => {
   const updateFavorite = useAuth((s) => s.updateFavoriteLibraries);
   const favlib = useAuth((s) => s.auth?.favoriteLibraries);
 
-  const isFavoriteInitial = favlib ? favlib.includes(id) : false;
+  const isFavoriteInitial = favlib
+    ? favlib.map((x) => x.libraryId).includes(id)
+    : false;
 
   const [isStarred, toggleStarred] = useToggle(isFavoriteInitial);
 
   const changeFavorite = () => {
-    changeFavoriteAPI(isStarred, id).then(({ favoriteLibraries }) => {
-      updateFavorite(favoriteLibraries);
-      toggleStarred();
+    changeFavoriteAPI(isStarred, id).then(() => {
+      getFavoritesInfo().then((info) => {
+        updateFavorite(info);
+        console.log(info);
+        toggleStarred();
+      });
     });
   };
 
