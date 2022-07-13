@@ -15,3 +15,7 @@ export async function getReservationById(
 ): Promise<WithId<Reservation>> {
   return ky.get(`reservations/${reservationId}`).json<WithId<Reservation>>();
 }
+
+export async function deleteReservation(reservationId: string): Promise<void> {
+  return ky.delete(`reservations/${reservationId}`).json<void>();
+}

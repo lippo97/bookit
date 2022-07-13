@@ -7,13 +7,17 @@ import {
   styled,
   Typography,
 } from '@material-ui/core';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import QRCode from 'react-qr-code';
 import { StepLayout } from '@/components/StepLayout';
 import { Reservation } from '@asw-project/shared/generatedTypes';
+import { DialogButton } from '@/components/DialogButton';
+import { useState } from 'react';
+import { useNotification } from '@/stores/notifications';
 import {
+  deleteReservation,
   getReservationById,
   getRoomById,
   getSeatById,
@@ -27,6 +31,10 @@ export const Container = styled(MuiContainer)(({ theme }) => ({
 export const ShowReservation: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const { pushNotification } = useNotification();
+
+  const { mutateAsync } = useMutation(() => deleteReservation(id));
 
   const { data: reservationData, status: reservationStatus } = useQuery(
     ['reservation', id],
@@ -43,7 +51,7 @@ export const ShowReservation: React.FC = () => {
 
   const { data: seatData, status: seatStatus } = useQuery(
     ['seat', id],
-    () => getSeatById(reservationData!.roomId),
+    () => getSeatById(reservationData!.seatId),
     {
       enabled: reservationData !== undefined,
     },
@@ -55,6 +63,26 @@ export const ShowReservation: React.FC = () => {
 
   const formatTimeSlot = ({ from, to }: Reservation['timeSlot']) =>
     `${from}-${to}`;
+
+  const onConfirmDelete = () =>
+    mutateAsync()
+      // eslint-disable-next-line no-restricted-globals
+      .then(() => {
+        navigate('/reservations');
+      })
+      .then(() =>
+        pushNotification({
+          message: `Deleted reservation successfully.`,
+          severity: 'info',
+        }),
+      )
+      .catch((err) => {
+        console.error(err);
+        pushNotification({
+          message: `Unable to delete reservation, retry later.`,
+          severity: 'error',
+        });
+      });
 
   return (
     <StepLayout title="View reservation" onBack={onBack}>
@@ -77,11 +105,23 @@ export const ShowReservation: React.FC = () => {
                 <Typography variant="h6">Room</Typography>
                 <Typography variant="body1">{roomData?.name}</Typography>
                 <Typography variant="h6">Seat</Typography>
-                <Typography variant="body1">{seatData}</Typography>
+                <Typography variant="body1">{seatData?.label}</Typography>
               </Box>
-              <Button fullWidth color="secondary" variant="outlined">
+              <DialogButton
+                id={id}
+                title="Delete reservation?"
+                description="Are you sure you want to delete this reservation?"
+                autoClose
+                isOpen={isDialogOpen}
+                setOpen={setDialogOpen}
+                onConfirm={onConfirmDelete}
+                as={Button}
+                fullWidth
+                color="secondary"
+                variant="outlined"
+              >
                 Delete
-              </Button>
+              </DialogButton>
             </Box>
           )}
         </QueryContent>
