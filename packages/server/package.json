@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "serve:dev": "cross-env TS_NODE_FILES=true ts-node-dev src/index.ts",
+    "serve:dev": "cross-env TS_NODE_FILES=true DOTENV_CONFIG_PATH=../../.env.server ts-node-dev -r dotenv/config src/index.ts",
     "build": "cross-env tsc --build tsconfig.prod.json",
     "lint": "cross-env eslint --fix --ext=ts,tsx src",
     "format": "cross-env prettier --write src",

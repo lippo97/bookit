@@ -80,6 +80,21 @@ export const every6 = <A, B, C, D, E, F>(
     ? some(os.map((x) => (x as Some<any>).value) as [A, B, C, D, E, F])
     : none;
 
+export const every7 = <A, B, C, D, E, F, G>(
+  os: [
+    Option<A>,
+    Option<B>,
+    Option<C>,
+    Option<D>,
+    Option<E>,
+    Option<F>,
+    Option<G>,
+  ],
+): Option<[A, B, C, D, E, F, G]> =>
+  os.every((x) => x.success)
+    ? some(os.map((x) => (x as Some<any>).value) as [A, B, C, D, E, F, G])
+    : none;
+
 export const flatMap =
   <A, B>(oa: Option<A>) =>
   (f: (a: A) => Option<B>): Option<B> => {

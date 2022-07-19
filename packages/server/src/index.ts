@@ -13,7 +13,7 @@ import apiV1 from './api/v1';
 
 async function main() {
   console.log(`Application running in ${ENVIRONMENT}.`);
-  dotenv.config(dotenvConfig);
+  // dotenv.config(dotenvConfig);
 
   await configureMongoose(mongoose);
 

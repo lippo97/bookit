@@ -1,14 +1,6 @@
 import { StepLayout } from '@/components/StepLayout';
 import { Error } from '@/features/misc';
-import {
-  every4,
-  every5,
-  every6,
-  map2,
-  safeMap,
-  useQueryParam,
-  useQueryParams,
-} from '@/hooks';
+import { every6, map2, safeMap, useQueryParam } from '@/hooks';
 import { useNotification } from '@/stores/notifications';
 import { Box, Button, Container, Typography } from '@material-ui/core';
 import dayjs, { Dayjs } from 'dayjs';
@@ -57,6 +49,7 @@ export const ConfirmReservation: React.FC = () => {
         },
         roomId,
         seatId,
+        libraryId: id,
       })
         .then(({ _id: id }) => {
           pushNotification({

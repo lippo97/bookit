@@ -16,6 +16,16 @@ export async function getReservationById(
   return ky.get(`reservations/${reservationId}`).json<WithId<Reservation>>();
 }
 
+export async function getReservations(): Promise<WithId<Reservation>[]> {
+  const $gte = new Date();
+  $gte.setHours(0, 0, 0, 0);
+  const searchParams = {
+    mineonly: true,
+    'date[$gte]': $gte.toISOString(),
+  };
+  return ky.get('reservations', { searchParams }).json<WithId<Reservation>[]>();
+}
+
 export async function deleteReservation(reservationId: string): Promise<void> {
   return ky.delete(`reservations/${reservationId}`).json<void>();
 }

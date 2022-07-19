@@ -16,7 +16,7 @@ export const ENVIRONMENT = process.env.NODE_ENV || development;
 
 export const IS_PRODUCTION = ENVIRONMENT === production;
 
-export const IS_DEVELOPMENT = ENVIRONMENT === development;
+export const IS_DEVELOPMENT = !IS_PRODUCTION;
 
 function parse(num: string | null | undefined): number {
   if (num) {
@@ -30,7 +30,7 @@ function keyOrDefault(k: string, default_: string): string {
     return process.env[k] as string;
   }
   if (IS_PRODUCTION) {
-    throw new Error('Undefined environment variable.');
+    throw new Error(`Undefined environment variable: ${k}`);
   }
   return default_;
 }

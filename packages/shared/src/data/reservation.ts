@@ -18,6 +18,15 @@ const roomId = Joi.string()
     },
   });
 
+const libraryId = Joi.string()
+  .required()
+  .meta({
+    _mongoose: {
+      type: 'ObjectId',
+      ref: 'Library',
+    },
+  });
+
 // user that reserves
 const ownerId = Joi.string()
   .required()
@@ -38,6 +47,7 @@ export const ReservationSchema = Joi.object({
   ownerId,
   roomId,
   seatId,
+  libraryId,
   timeSlot,
   date,
 }).meta({
