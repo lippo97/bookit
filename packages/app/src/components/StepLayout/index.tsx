@@ -16,7 +16,7 @@ export const StepLayout: React.FC<StepLayoutProps> = ({
     flexDirection="column"
   >
     <AppBar {...appBarProps} />
-    <Box position="relative" flex="1" paddingBottom={2}>
+    <Box flex="1" paddingBottom={2} display="flex" flexDirection="column">
       {children}
     </Box>
   </Box>

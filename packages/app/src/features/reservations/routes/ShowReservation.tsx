@@ -4,10 +4,11 @@ import {
   Box,
   Button,
   Container as MuiContainer,
+  Paper,
   styled,
   Typography,
 } from '@material-ui/core';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQueries, useQuery } from 'react-query';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import QRCode from 'react-qr-code';
@@ -16,12 +17,18 @@ import { Reservation } from '@asw-project/shared/generatedTypes';
 import { DialogButton } from '@/components/DialogButton';
 import { useState } from 'react';
 import { useNotification } from '@/stores/notifications';
+import { WithId } from '@asw-project/shared/data/withId';
+import { mergeQueryStatus } from '@/lib/queries';
 import {
   deleteReservation,
   getReservationById,
   getRoomById,
   getSeatById,
 } from '../api/reservations';
+import { QR } from '../components/QR';
+import ReservationInfo from '../components/ReservationInfo';
+import { getLibraryById } from '../api/libraries';
+import { DeleteButton } from '../components/DeleteButton';
 
 export const Container = styled(MuiContainer)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -31,10 +38,6 @@ export const Container = styled(MuiContainer)(({ theme }) => ({
 export const ShowReservation: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const { pushNotification } = useNotification();
-
-  const { mutateAsync } = useMutation(() => deleteReservation(id));
 
   const { data: reservationData, status: reservationStatus } = useQuery(
     ['reservation', id],
@@ -57,75 +60,49 @@ export const ShowReservation: React.FC = () => {
     },
   );
 
+  const { data: libraryData, status: libraryStatus } = useQuery(
+    ['library', id],
+    () => getLibraryById(reservationData!.libraryId),
+    {
+      enabled: reservationData !== undefined,
+    },
+  );
+
+  const status = mergeQueryStatus([
+    reservationStatus,
+    roomStatus,
+    seatStatus,
+    libraryStatus,
+  ]);
+
   const onBack = () => {
     navigate('/reservations');
   };
 
-  const formatTimeSlot = ({ from, to }: Reservation['timeSlot']) =>
-    `${from}-${to}`;
-
-  const onConfirmDelete = () =>
-    mutateAsync()
-      // eslint-disable-next-line no-restricted-globals
-      .then(() => {
-        navigate('/reservations');
-      })
-      .then(() =>
-        pushNotification({
-          message: `Deleted reservation successfully.`,
-          severity: 'info',
-        }),
-      )
-      .catch((err) => {
-        console.error(err);
-        pushNotification({
-          message: `Unable to delete reservation, retry later.`,
-          severity: 'error',
-        });
-      });
-
   return (
     <StepLayout title="View reservation" onBack={onBack}>
-      <Container>
-        <Box display="flex" justifyContent="center">
-          <QRCode value={id} />
-        </Box>
-        <QueryContent data={reservationData} status={reservationStatus}>
-          {(d) => (
-            <Box display="flex" flexDirection="column" height="100%">
-              <Box flex={1} mt={1}>
-                <Typography variant="h6">Date</Typography>
-                <Typography variant="body1">
-                  {dayjs(d.date).format('MM-DD-YYYY')}
-                </Typography>
-                <Typography variant="h6">Time</Typography>
-                <Typography variant="body1">
-                  {formatTimeSlot(d.timeSlot)}
-                </Typography>
-                <Typography variant="h6">Room</Typography>
-                <Typography variant="body1">{roomData?.name}</Typography>
-                <Typography variant="h6">Seat</Typography>
-                <Typography variant="body1">{seatData?.label}</Typography>
-              </Box>
-              <DialogButton
-                id={id}
-                title="Delete reservation?"
-                description="Are you sure you want to delete this reservation?"
-                autoClose
-                isOpen={isDialogOpen}
-                setOpen={setDialogOpen}
-                onConfirm={onConfirmDelete}
-                as={Button}
-                fullWidth
-                color="secondary"
-                variant="outlined"
-              >
-                Delete
-              </DialogButton>
-            </Box>
-          )}
-        </QueryContent>
-      </Container>
+      <Box
+        flex={1}
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+      >
+        <Container>
+          <Paper elevation={2} style={{ padding: '24px', paddingTop: '40px' }}>
+            <QR reservation={reservationData} status={status} />
+            <ReservationInfo
+              data={reservationData}
+              roomData={roomData}
+              seatData={seatData}
+              libraryData={libraryData}
+              status={status}
+            />
+          </Paper>
+        </Container>
+        <Container>
+          <DeleteButton status={status} id={id} />
+        </Container>
+      </Box>
     </StepLayout>
   );
 };

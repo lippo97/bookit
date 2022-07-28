@@ -4,13 +4,18 @@ import { WithId } from '@asw-project/shared/data/withId';
 import { Reservation } from '@asw-project/shared/generatedTypes';
 import {
   Box,
+  Button,
   Card as MuiCard,
+  CardActions,
   CardContent,
   CardMedia,
   Container,
   styled,
   Typography,
 } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import TimeIcon from '@material-ui/icons/AccessTime';
+import CalendarIcon from '@material-ui/icons/CalendarToday';
 import dayjs from 'dayjs';
 import { useQuery } from 'react-query';
 import { getLibraryById } from '../api/libraries';
@@ -26,7 +31,7 @@ const Title = styled(Typography)(({ theme }) => ({
 }));
 
 const Secondary = styled(Typography)(({ theme }) => ({
-  fontSize: 16,
+  fontSize: 14,
 }));
 
 const renderReservation = ({
@@ -47,15 +52,35 @@ const renderReservation = ({
             image={data!.imageFileName}
             style={{ width: '100px', height: 'auto' }}
           />
-          <CardContent>
-            <Title variant="h6">{data!.name}</Title>
-            <Box>
-              <Secondary color="textSecondary" gutterBottom>
-                {from} - {to}
-              </Secondary>
-              <Title variant="h6">{date.format('MM/DD')}</Title>
+          <Box flex="1">
+            <CardContent style={{ paddingTop: 0 }}>
+              <Title variant="h5">{data!.name}</Title>
+              <Box>
+                <Box display="flex" flexDirection="row">
+                  <CalendarIcon color="inherit" style={{ fontSize: 18 }} />
+                  <Secondary color="textPrimary" style={{ marginLeft: 3 }}>
+                    {date.format('MM/DD')}
+                  </Secondary>
+                </Box>
+                <Box display="flex" flexDirection="row">
+                  <TimeIcon color="inherit" style={{ fontSize: 18 }} />
+                  <Secondary color="textPrimary" style={{ marginLeft: 3 }}>
+                    {from} - {to}
+                  </Secondary>
+                </Box>
+              </Box>
+            </CardContent>
+            <Box display="flex" flexDirection="row" justifyContent="flex-end">
+              <Button
+                size="small"
+                color="primary"
+                component={RouterLink}
+                to={`/reservations/${_id}`}
+              >
+                View
+              </Button>
             </Box>
-          </CardContent>
+          </Box>
         </Box>
       ) : (
         // <Box display="flex" flexDirection="row">
