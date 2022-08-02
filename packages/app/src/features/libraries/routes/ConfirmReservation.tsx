@@ -2,7 +2,14 @@ import { StepLayout } from '@/components/StepLayout';
 import { Error } from '@/features/misc';
 import { every6, map2, safeMap, useQueryParam } from '@/hooks';
 import { useNotification } from '@/stores/notifications';
-import { Box, Button, Container, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  styled,
+  Typography,
+} from '@material-ui/core';
 import dayjs, { Dayjs } from 'dayjs';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -13,6 +20,10 @@ const parseTime = (str: string) => dayjs(str, 'HH:mm');
 const parseNumber = (str: string) => parseInt(str, 10);
 
 const formatTime = (time: Dayjs) => time.format('HH:mm');
+
+const Label = styled(Typography)({
+  fontSize: '10px',
+});
 
 export const ConfirmReservation: React.FC = () => {
   const { id } = useParams();
@@ -69,28 +80,37 @@ export const ConfirmReservation: React.FC = () => {
 
     return (
       <StepLayout title="Add reservation" subtitle="Confirm your reservation">
-        <Container>
-          <Box display="flex" flexDirection="column" height="100%">
-            <Box flex={1}>
-              <Typography variant="h5">Reservation details</Typography>
-              <Typography variant="h6">Date</Typography>
+        <Box
+          flex={1}
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Container>
+            <Typography variant="h5" style={{ margin: '16px 0' }}>
+              Reservation details
+            </Typography>
+            <Card elevation={2} style={{ padding: '16px' }}>
+              <Label>Date</Label>
               <Typography variant="body1">
                 {date.format('MM-DD-YYYY')}
               </Typography>
-              <Typography variant="h6">Time</Typography>
+              <Label>Time</Label>
               <Typography variant="body1">{`${formatTime(
                 timeSlot.from,
               )}-${formatTime(timeSlot.to)}`}</Typography>
-              <Typography variant="h6">Room</Typography>
+              <Label>Room</Label>
               <Typography variant="body1">{roomName}</Typography>
-              <Typography variant="h6">Seat</Typography>
+              <Label>Seat</Label>
               <Typography variant="body1">{seatName}</Typography>
-            </Box>
+            </Card>
+          </Container>
+          <Container>
             <Button variant="outlined" fullWidth onClick={handleSubmit}>
               Confirm reservation
             </Button>
-          </Box>
-        </Container>
+          </Container>
+        </Box>
       </StepLayout>
     );
   }

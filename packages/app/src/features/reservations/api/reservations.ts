@@ -1,6 +1,7 @@
 import { ky } from '@/config';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Reservation, Room, Seat } from '@asw-project/shared/generatedTypes';
+import { Options } from 'ky';
 
 export async function getRoomById(roomId: string): Promise<WithId<Room>> {
   return ky.get(`rooms/${roomId}`).json<WithId<Room>>();
@@ -16,13 +17,19 @@ export async function getReservationById(
   return ky.get(`reservations/${reservationId}`).json<WithId<Reservation>>();
 }
 
-export async function getReservations(): Promise<WithId<Reservation>[]> {
-  const $gte = new Date();
-  $gte.setHours(0, 0, 0, 0);
-  const searchParams = {
+export async function getReservations(
+  current: boolean = true,
+): Promise<WithId<Reservation>[]> {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const searchParams: Options['searchParams'] = {
     mineonly: true,
-    'date[$gte]': $gte.toISOString(),
   };
+  if (current) {
+    searchParams['date[$gte]'] = today.toISOString();
+  } else {
+    searchParams['date[$lt]'] = today.toISOString();
+  }
   return ky.get('reservations', { searchParams }).json<WithId<Reservation>[]>();
 }
 
