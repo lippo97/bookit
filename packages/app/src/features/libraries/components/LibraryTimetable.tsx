@@ -36,7 +36,7 @@ const renderEntry = ({ slot: { from, to }, days }: Entry) => {
 
   const tds = [...Array(7)]
     .map((_, i) =>
-      days.includes(i) ? <CheckCircleIcon color="primary" /> : '',
+      days.includes(i) ? <CheckCircleIcon key={i} color="primary" /> : <></>,
     )
     .map((html) => <td>{html}</td>);
 
@@ -60,8 +60,9 @@ export const LibraryTimetable = ({ data }: LibraryTimetableProps) => {
         </tr>
       </thead>
       <tbody>
-        {data.map(renderEntry).map((x) => (
-          <tr>{x}</tr>
+        {data.map(renderEntry).map((x, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <tr key={i}>{x}</tr>
         ))}
       </tbody>
     </table>

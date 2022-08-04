@@ -45,7 +45,7 @@ export function LibraryList({ isLoading, places }: LibraryListProps) {
   return (
     <MyGrid>
       {places.map((p) => (
-        <MyItem>
+        <MyItem key={p._id}>
           <LibraryListItem data={p} />
         </MyItem>
       ))}

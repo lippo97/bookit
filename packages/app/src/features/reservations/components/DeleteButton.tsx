@@ -1,6 +1,6 @@
 import { DialogButton } from '@/components/DialogButton';
 import { useNotification } from '@/stores/notifications';
-import { Box, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { FC, useState } from 'react';
 import { useMutation } from 'react-query';
@@ -9,10 +9,15 @@ import { deleteReservation } from '../api/reservations';
 
 interface DeleteButtonProps {
   readonly status: 'success' | 'error' | 'idle' | 'loading';
+  readonly disabled: boolean;
   readonly id: string;
 }
 
-export const DeleteButton: FC<DeleteButtonProps> = ({ status, id }) => {
+export const DeleteButton: FC<DeleteButtonProps> = ({
+  status,
+  id,
+  disabled,
+}) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { pushNotification } = useNotification();
@@ -30,6 +35,7 @@ export const DeleteButton: FC<DeleteButtonProps> = ({ status, id }) => {
         }),
       )
       .catch((err) => {
+        // eslint-disable-next-line no-console
         console.error(err);
         pushNotification({
           message: `Unable to delete reservation, retry later.`,
@@ -57,6 +63,7 @@ export const DeleteButton: FC<DeleteButtonProps> = ({ status, id }) => {
         fullWidth
         color="secondary"
         variant="outlined"
+        disabled={disabled}
       >
         Delete
       </DialogButton>

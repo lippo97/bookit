@@ -1,34 +1,22 @@
-import { Layout } from '@/components/Layout';
-import { QueryContent } from '@/components/QueryContent';
+import { StepLayout } from '@/components/StepLayout';
+import { mergeQueryStatus } from '@/lib/queries';
 import {
   Box,
-  Button,
   Container as MuiContainer,
   Paper,
   styled,
-  Typography,
 } from '@material-ui/core';
-import { useMutation, useQueries, useQuery } from 'react-query';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
-import QRCode from 'react-qr-code';
-import { StepLayout } from '@/components/StepLayout';
-import { Reservation } from '@asw-project/shared/generatedTypes';
-import { DialogButton } from '@/components/DialogButton';
-import { useState } from 'react';
-import { useNotification } from '@/stores/notifications';
-import { WithId } from '@asw-project/shared/data/withId';
-import { mergeQueryStatus } from '@/lib/queries';
+import { useQuery } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getLibraryById } from '../api/libraries';
 import {
-  deleteReservation,
   getReservationById,
   getRoomById,
   getSeatById,
 } from '../api/reservations';
-import { QR } from '../components/QR';
-import ReservationInfo from '../components/ReservationInfo';
-import { getLibraryById } from '../api/libraries';
 import { DeleteButton } from '../components/DeleteButton';
+import { QR } from '../components/QR';
+import { ReservationInfo } from '../components/ReservationInfo';
 
 export const Container = styled(MuiContainer)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -79,6 +67,11 @@ export const ShowReservation: React.FC = () => {
     navigate('/reservations');
   };
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const buttonDisabled =
+    reservationData === undefined || today > new Date(reservationData.date);
+
   return (
     <StepLayout title="View reservation" onBack={onBack}>
       <Box
@@ -100,7 +93,7 @@ export const ShowReservation: React.FC = () => {
           </Paper>
         </Container>
         <Container maxWidth="sm">
-          <DeleteButton status={status} id={id} />
+          <DeleteButton status={status} id={id} disabled={buttonDisabled} />
         </Container>
       </Box>
     </StepLayout>

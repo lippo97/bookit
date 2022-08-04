@@ -1,6 +1,3 @@
-import { Button } from '@/components/Button';
-import { DialogButton } from '@/components/DialogButton';
-import { useNotification } from '@/stores/notifications';
 import { WithId } from '@asw-project/shared/data/withId';
 import {
   Library,
@@ -11,10 +8,6 @@ import {
 import { Box, styled, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import dayjs from 'dayjs';
-import { useState } from 'react';
-import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { deleteReservation } from '../api/reservations';
 
 interface ReservationInfoProps {
   readonly data?: WithId<Reservation>;
@@ -98,5 +91,3 @@ export const ReservationInfo: React.FC<ReservationInfoProps> = ({
     </Box>
   );
 };
-
-export default ReservationInfo;

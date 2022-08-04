@@ -26,13 +26,13 @@ const Card = styled(MuiCard)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-const Title = styled(Typography)(({ theme }) => ({
+const Title = styled(Typography)({
   fontSize: 16,
-}));
+});
 
-const Secondary = styled(Typography)(({ theme }) => ({
+const Secondary = styled(Typography)({
   fontSize: 16,
-}));
+});
 
 export const ReservationListItem: FC<ReservationListItemProps> = ({
   data: {
