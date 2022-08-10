@@ -11,7 +11,7 @@ interface LibraryListProps {
 
 export function LibraryList({ isLoading, places }: LibraryListProps) {
   const MyGrid = ({ children }: { children: React.ReactNode }) => (
-    <Grid container spacing={5}>
+    <Grid container spacing={2}>
       {children}
     </Grid>
   );

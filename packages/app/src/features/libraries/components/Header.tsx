@@ -4,6 +4,7 @@ import Searchbar from '@/components/Searchbar';
 
 interface HeaderProps {
   readonly previousQuery?: string;
+  openFilterDialog(): void;
   onSearch(query: String): void;
 }
 
@@ -17,15 +18,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function LibraryHeader({ onSearch, previousQuery }: HeaderProps) {
+export function LibraryHeader({
+  onSearch,
+  previousQuery,
+  openFilterDialog,
+}: HeaderProps) {
   const classes = useStyles();
   return (
-    <Paper elevation={1} className={classes.paper}>
-      <Searchbar
-        defaultValue={previousQuery || ''}
-        onSearch={onSearch}
-        placeholder="Look for a library"
-      />
-    </Paper>
+    // <Paper elevation={1} className={classes.paper}>
+    <Searchbar
+      defaultValue={previousQuery || ''}
+      onSearch={onSearch}
+      onFilter={openFilterDialog}
+      placeholder="Look for a library"
+    />
+    // </Paper>
   );
 }

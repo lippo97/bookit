@@ -5,9 +5,11 @@ import property from 'lodash/property';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { compose } from '@asw-project/shared/util/functions';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 type SearchbarProps = {
   onSearch(query: string): void;
+  onFilter(): void;
 } & Pick<
   React.InputHTMLAttributes<HTMLInputElement>,
   'defaultValue' | 'placeholder'
@@ -16,19 +18,26 @@ type SearchbarProps = {
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: '2px 4px',
+    marginBottom: 0,
     display: 'flex',
-    height: '40px',
+    alignItems: 'center',
+    height: '56px',
   },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
   },
   iconButton: {
-    width: '36px',
+    width: '48px',
   },
 }));
 
-function Searchbar({ onSearch, defaultValue, placeholder }: SearchbarProps) {
+function Searchbar({
+  onSearch,
+  onFilter,
+  defaultValue,
+  placeholder,
+}: SearchbarProps) {
   const classes = useStyles();
   const { register, handleSubmit } = useForm();
 
@@ -38,6 +47,9 @@ function Searchbar({ onSearch, defaultValue, placeholder }: SearchbarProps) {
       className={classes.root}
       onSubmit={handleSubmit(compose(property('query'), onSearch))}
     >
+      <IconButton type="submit" className={classes.iconButton}>
+        <SearchIcon />
+      </IconButton>
       <InputBase
         autoFocus
         id="query"
@@ -45,9 +57,16 @@ function Searchbar({ onSearch, defaultValue, placeholder }: SearchbarProps) {
         defaultValue={defaultValue}
         {...register('query')}
         className={classes.input}
+        inputProps={{
+          style: { padding: 0 },
+        }}
       />
-      <IconButton type="submit" className={classes.iconButton}>
-        <SearchIcon />
+      <IconButton
+        type="button"
+        className={classes.iconButton}
+        onClick={onFilter}
+      >
+        <FilterListIcon />
       </IconButton>
     </Paper>
   );

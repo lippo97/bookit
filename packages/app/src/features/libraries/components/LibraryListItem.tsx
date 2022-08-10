@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { getLibraryImageUrlOrFallback } from '@/lib/images';
+import missingImage from '@/assets/missing_image.png';
 
 interface LibraryProps {
   readonly data: WithId<TLibrary>;
@@ -25,7 +25,7 @@ export function LibraryListItem({
   data: { _id, name, street, imageFileName },
 }: LibraryProps) {
   const classes = useStyles();
-  const image = getLibraryImageUrlOrFallback(imageFileName);
+  const image = imageFileName ?? missingImage;
 
   return (
     <Card>

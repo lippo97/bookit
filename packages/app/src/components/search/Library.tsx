@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { getLibraryImageUrlOrFallback } from '@/lib/images';
+import fallback from '@/assets/missing_image.png';
 
 interface LibraryProps {
   readonly data: WithId<TLibrary>;
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 
 function Library({ data: { _id, name, street, imageFileName } }: LibraryProps) {
   const classes = useStyles();
-  const image = getLibraryImageUrlOrFallback(imageFileName);
+  const image = imageFileName ?? fallback;
   return (
     <Card>
       <CardActionArea component={RouterLink} to={`${_id}`}>
