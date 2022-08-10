@@ -103,13 +103,13 @@ const renderReservations = (
   ));
 
 const Container = styled(MuiContainer)(({ theme }) => ({
-  position: 'absolute',
-  top: 0,
-  bottom: theme.spacing(4),
+  // position: 'absolute',
+  // top: 0,
+  // bottom: theme.spacing(4),
 }));
 
 const Form = styled(Box)(({ theme }) => ({
-  height: '100%',
+  // height: '100%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -117,9 +117,9 @@ const Form = styled(Box)(({ theme }) => ({
   '& > *': {
     marginBottom: theme.spacing(2),
   },
-  '& > *:last-child': {
-    marginBottom: 0,
-  },
+  // '& > *:last-child': {
+  //   marginBottom: 0,
+  // },
 }));
 
 const formatHour = (date: Date) => dayjs(date).format('HH:mm');
@@ -225,36 +225,42 @@ export const AddReservation = () => {
     <StepLayout title="Add reservation" subtitle="Select a seat">
       <QueryContent status={mergedStatus} data={mergedData}>
         {([rooms, , timetable, size, seats]) => (
-          <Container>
-            <Form>
-              {renderSelect(rooms, 'Room', room, setRoom)}
-              {renderSelect(timetable, 'Time', time, setTime)}
-              <Window>
-                <div
-                  style={{
-                    display: 'flex',
-                  }}
-                >
-                  <Box
-                    position="relative"
-                    width={size[0] * 50}
-                    height={size[1] * 50}
-                    bgcolor="#fff"
-                  >
+          <Box flex={1} display="flex" flexDirection="column">
+            <Box flex={1}>
+              <Container>
+                <Form>
+                  {renderSelect(rooms, 'Room', room, setRoom)}
+                  {renderSelect(timetable, 'Time', time, setTime)}
+                  <Window>
                     <div
                       style={{
-                        height: '100%',
-                        backgroundSize: '50px 50px',
-                        backgroundImage: `linear-gradient(to right, #ddd 1px, transparent 1px),  linear-gradient(to bottom, #ddd 1px, transparent 1px)`,
-                        backgroundRepeat: 'repeat',
-                        margin: '-1px 0 0 -1px',
-                        borderBottom: '1px solid #ddd',
+                        display: 'flex',
                       }}
-                    />
-                    {renderReservations(seats, selected, setSelected)}
-                  </Box>
-                </div>
-              </Window>
+                    >
+                      <Box
+                        position="relative"
+                        width={size[0] * 50}
+                        height={size[1] * 50}
+                        bgcolor="#fff"
+                      >
+                        <div
+                          style={{
+                            height: '100%',
+                            backgroundSize: '50px 50px',
+                            backgroundImage: `linear-gradient(to right, #ddd 1px, transparent 1px),  linear-gradient(to bottom, #ddd 1px, transparent 1px)`,
+                            backgroundRepeat: 'repeat',
+                            margin: '-1px 0 0 -1px',
+                            borderBottom: '1px solid #ddd',
+                          }}
+                        />
+                        {renderReservations(seats, selected, setSelected)}
+                      </Box>
+                    </div>
+                  </Window>
+                </Form>
+              </Container>
+            </Box>
+            <Container>
               <Button
                 variant="outlined"
                 fullWidth
@@ -263,8 +269,8 @@ export const AddReservation = () => {
               >
                 Next
               </Button>
-            </Form>
-          </Container>
+            </Container>
+          </Box>
         )}
       </QueryContent>
     </StepLayout>

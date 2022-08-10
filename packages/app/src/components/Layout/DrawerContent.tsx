@@ -11,15 +11,23 @@ import Star from '@material-ui/icons/Favorite';
 import { DrawerItem } from './DrawerItem';
 import { DrawerSection } from './DrawerSection';
 
-const Bookmarks = () => (
-  <>
-    <ListSubheader>Bookmarks</ListSubheader>
-    <DrawerItem content="Bookmark 1" icon={<Star />} />
-    <DrawerItem content="Bookmark 2" icon={<Star />} />
-    <DrawerItem content="Bookmark 3" icon={<Star />} />
-    <DrawerItem content="Bookmark 4" icon={<Star />} />
-  </>
-);
+const Bookmarks = () => {
+  const favoriteLibraries = useAuth((s) => s.auth!.favoriteLibraries || []);
+  return (
+    <>
+      <ListSubheader>Bookmarks</ListSubheader>
+      {favoriteLibraries.map((b) => (
+        <DrawerItem
+          key={b}
+          link
+          content={b}
+          icon={<Star />}
+          to={`/libraries/${b}`}
+        />
+      ))}
+    </>
+  );
+};
 const UserRoutes = () => (
   <>
     <DrawerSection>

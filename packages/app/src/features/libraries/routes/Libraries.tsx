@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { getLibraries } from '../api/libraries';
-import { LibraryHeader } from '../components/Header';
+import { LibraryHeader, SearchbarForm } from '../components/Header';
 import {
   LibraryFilters,
   LibraryFiltersForm,
@@ -24,6 +24,12 @@ export function Libraries() {
       date: null,
       accessible: false,
       selectedServices: [],
+    },
+  });
+
+  const { control: searchbarControl, handleSubmit } = useForm<SearchbarForm>({
+    defaultValues: {
+      query: searchQueryParam,
     },
   });
   const { data, isLoading } = useQuery(['libraries', searchQueryParam], () => {
@@ -48,21 +54,25 @@ export function Libraries() {
     });
   };
 
+  const onSubmit = handleSubmit(({ query }) => handleSearch(query));
+
   return (
     <Layout>
       <Box my={2}>
         <Container>
-          <Box mb={2}>
+          <Box mb={2} component="form" onSubmit={onSubmit}>
             <LibraryHeader
-              previousQuery={searchQueryParam}
-              onSearch={handleSearch}
-              openFilterDialog={() => setFilterDialogOpen(true)}
+              control={searchbarControl}
+              handleOpenFilter={() => setFilterDialogOpen(true)}
             />
           </Box>
           <LibraryFilters
             formControl={control}
             open={isFilterDialogOpen}
-            setClose={() => setFilterDialogOpen(false)}
+            setClose={() => {
+              setFilterDialogOpen(false);
+              onSubmit();
+            }}
             onReset={() => reset()}
           />
           <LibraryList isLoading={isLoading} places={data || []} />

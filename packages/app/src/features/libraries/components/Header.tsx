@@ -1,37 +1,26 @@
-import { Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import Searchbar from '@/components/Searchbar';
+import { Control, Controller } from 'react-hook-form';
 
-interface HeaderProps {
-  readonly previousQuery?: string;
-  openFilterDialog(): void;
-  onSearch(query: String): void;
+export interface SearchbarForm {
+  readonly query: string;
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: 20,
-    margin: theme.spacing(3, 0),
-  },
-  bar: {
-    padding: 10,
-  },
-}));
+interface LibraryHeaderProps {
+  readonly control: Control<SearchbarForm>;
+  handleOpenFilter(): void;
+}
 
 export function LibraryHeader({
-  onSearch,
-  previousQuery,
-  openFilterDialog,
-}: HeaderProps) {
-  const classes = useStyles();
+  control,
+  handleOpenFilter,
+}: LibraryHeaderProps) {
   return (
-    // <Paper elevation={1} className={classes.paper}>
-    <Searchbar
-      defaultValue={previousQuery || ''}
-      onSearch={onSearch}
-      onFilter={openFilterDialog}
-      placeholder="Look for a library"
+    <Controller
+      control={control}
+      name="query"
+      render={({ field }) => (
+        <Searchbar handleOpenFilter={handleOpenFilter} {...field} />
+      )}
     />
-    // </Paper>
   );
 }
