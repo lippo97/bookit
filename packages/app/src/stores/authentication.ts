@@ -1,6 +1,9 @@
 import { IS_DEVELOPMENT } from '@/config';
 import { loginWithEmailAndPassword, logout } from '@/features/auth';
-import { Account } from '@asw-project/shared/generatedTypes';
+import {
+  Account,
+  FavoriteLibrariesInfo,
+} from '@asw-project/shared/generatedTypes';
 import { LoginRequest } from '@asw-project/shared/src/generatedTypes/requests/login/request';
 import { ReturnedUser } from '@asw-project/shared/src/types/returnedUser';
 import flow from 'lodash/fp/flow';
@@ -17,7 +20,9 @@ type AuthState = {
   loginWithEmailAndPassword: (dto: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
   updateAccount: (account: Account) => Promise<void>;
-  updateFavoriteLibraries: (favoriteLibraries: string[]) => Promise<void>;
+  updateFavoriteLibraries: (
+    favoriteLibraries: FavoriteLibrariesInfo[],
+  ) => Promise<void>;
 };
 
 const authState: (
@@ -48,14 +53,14 @@ const authState: (
       },
     });
   },
-  updateFavoriteLibraries: async (favoriteLibraries) => {
+  updateFavoriteLibraries: async (favoriteLibrariesInfo) => {
     const { auth } = get();
     if (auth === null) return;
 
     set({
       auth: {
         ...auth,
-        favoriteLibraries,
+        favoriteLibrariesInfo,
       },
     });
   },

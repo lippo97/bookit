@@ -6,13 +6,14 @@ import { useQuery } from 'react-query';
 import { getFavorites } from '../api/favorites';
 
 export function Favorites() {
-  const updateFavorites = useAuth((s) => s.updateFavoriteLibraries);
+  // const updateFavorites = useAuth((s) => s.updateFavoriteLibraries);
   const { data, isLoading } = useQuery('favorites', () =>
-    getFavorites().then((libraries) => {
-      // eslint-disable-next-line no-underscore-dangle
-      updateFavorites(libraries.map((l) => l._id));
-      return libraries;
-    }),
+    getFavorites().then(
+      (libraries) =>
+        // eslint-disable-next-line no-underscore-dangle
+        // updateFavorites(libraries.map((l) => l._id));
+        libraries,
+    ),
   );
 
   return (

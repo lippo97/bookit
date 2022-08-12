@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import dayjs, { Dayjs } from 'dayjs';
-import { useMutation, useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createReservation } from '../api/reservations';
 
@@ -62,6 +61,7 @@ export const ConfirmReservation: React.FC = () => {
         seatId,
         libraryId: id,
       })
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         .then(({ _id: id }) => {
           pushNotification({
             message: 'Added reservation successfully.',

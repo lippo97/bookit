@@ -1,6 +1,6 @@
-import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
 import { StepLayout } from '@/components/StepLayout';
+import { getFavoritesInfo } from '@/features/favorites/api/favorites';
 import { useToggle } from '@/hooks/useToggle';
 import { useAuth } from '@/stores/authentication';
 import { Container } from '@material-ui/core';
@@ -16,18 +16,23 @@ import { LibraryHeader } from '../components/LibraryHeader';
 export const Library = () => {
   const { id } = useParams();
   const updateFavorite = useAuth((s) => s.updateFavoriteLibraries);
-  const favlib = useAuth((s) => s.auth?.favoriteLibraries);
+  const favlib = useAuth((s) => s.auth?.favoriteLibrariesInfo);
 
-  const isFavoriteInitial = favlib ? favlib.includes(id) : false;
+  const isFavoriteInitial = favlib
+    ? favlib.map((x) => x.libraryId).includes(id)
+    : false;
 
   const [isStarred, toggleStarred] = useToggle(isFavoriteInitial);
 
   const { data, status } = useQuery(['library', id], () => getLibraryById(id));
 
   const changeFavorite = () => {
-    changeFavoriteAPI(isStarred, id).then(({ favoriteLibraries }) => {
-      updateFavorite(favoriteLibraries);
-      toggleStarred();
+    changeFavoriteAPI(isStarred, id).then(() => {
+      getFavoritesInfo().then((info) => {
+        updateFavorite(info);
+        console.log(info);
+        toggleStarred();
+      });
     });
   };
 

@@ -3,6 +3,7 @@ import { SignupRequest } from '@asw-project/shared/generatedTypes/requests/signu
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as authenticationService from '../services/authentication';
+import * as favoriteLibrariesService from '../services/favoriteLibraries';
 
 export async function login(
   req: Request<any, any, LoginRequest>,
@@ -13,13 +14,21 @@ export async function login(
   const result = await authenticationService.login(email, password);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    Right: ({ userId, email, account, favoriteLibraries }) => {
-      req.session.userId = userId;
-      req.session.email = email;
-      req.session.account = account;
-      req.session.favoriteLibraries = favoriteLibraries;
-
-      return res.json({ userId, email, account, favoriteLibraries });
+    Right: async ({ userId, email, account }) => {
+      const info = await favoriteLibrariesService.getFavoriteLibrariesInfo(
+        userId,
+        account,
+      );
+      info.caseOf({
+        Right: (favoriteLibrariesInfo) => {
+          req.session.userId = userId;
+          req.session.email = email;
+          req.session.account = account;
+          req.session.favoriteLibraries = favoriteLibrariesInfo;
+          return res.json({ userId, email, account, favoriteLibrariesInfo });
+        },
+        Left: next,
+      });
     },
     Left: next,
   });

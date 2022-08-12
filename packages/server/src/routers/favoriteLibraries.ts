@@ -7,6 +7,11 @@ const router = Router();
 
 router.get('/favorite', favoriteLibrariesController.getFavoriteLibraries);
 
+router.get(
+  '/favorite/info',
+  favoriteLibrariesController.getFavoriteLibrariesInfo,
+);
+
 router.post(
   '/favorite',
   validate(FavoriteLibraryRequestSchema),

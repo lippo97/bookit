@@ -12,17 +12,17 @@ import { DrawerItem } from './DrawerItem';
 import { DrawerSection } from './DrawerSection';
 
 const Bookmarks = () => {
-  const favoriteLibraries = useAuth((s) => s.auth!.favoriteLibraries || []);
+  const favoriteLibraries = useAuth((s) => s.auth!.favoriteLibrariesInfo || []);
   return (
     <>
       <ListSubheader>Bookmarks</ListSubheader>
       {favoriteLibraries.map((b) => (
         <DrawerItem
-          key={b}
+          key={b.libraryId}
           link
-          content={b}
+          content={b.name}
           icon={<Star />}
-          to={`/libraries/${b}`}
+          to={`/libraries/${b.libraryId}`}
         />
       ))}
     </>
