@@ -106,7 +106,12 @@ export const ConfirmReservation: React.FC = () => {
             </Card>
           </Container>
           <Container>
-            <Button variant="outlined" fullWidth onClick={handleSubmit}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              onClick={handleSubmit}
+            >
               Confirm reservation
             </Button>
           </Container>

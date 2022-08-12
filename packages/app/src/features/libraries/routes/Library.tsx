@@ -1,5 +1,6 @@
 import { Layout } from '@/components/Layout';
 import { QueryContent } from '@/components/QueryContent';
+import { StepLayout } from '@/components/StepLayout';
 import { useToggle } from '@/hooks/useToggle';
 import { useAuth } from '@/stores/authentication';
 import { Container } from '@material-ui/core';
@@ -31,7 +32,7 @@ export const Library = () => {
   };
 
   return (
-    <Layout transparentAppBar>
+    <StepLayout transparent title={data !== undefined ? data.name : ''}>
       <QueryContent status={status} data={data}>
         {(d) => (
           <>
@@ -46,6 +47,6 @@ export const Library = () => {
           </>
         )}
       </QueryContent>
-    </Layout>
+    </StepLayout>
   );
 };

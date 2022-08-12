@@ -263,6 +263,7 @@ export const AddReservation = () => {
             <Container>
               <Button
                 variant="outlined"
+                color="primary"
                 fullWidth
                 disabled={selected === null}
                 onClick={handleNext}

@@ -28,7 +28,7 @@ const renderEntry = ({ slot: { from, to }, days }: Entry) => {
   const fFrom = dayjs(from).format('HH:mm');
   const fTo = dayjs(to).format('HH:mm');
   const header = (
-    <th>
+    <th key="header">
       <div>{fFrom}</div>
       <div>{fTo}</div>
     </th>
@@ -36,9 +36,9 @@ const renderEntry = ({ slot: { from, to }, days }: Entry) => {
 
   const tds = [...Array(7)]
     .map((_, i) =>
-      days.includes(i) ? <CheckCircleIcon key={i} color="primary" /> : <></>,
+      days.includes(i) ? <CheckCircleIcon color="primary" /> : <></>,
     )
-    .map((html) => <td>{html}</td>);
+    .map((html, i) => <td key={i}>{html}</td>);
 
   return [header, ...tds];
 };

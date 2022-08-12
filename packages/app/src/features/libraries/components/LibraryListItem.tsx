@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import PlaceIcon from '@material-ui/icons/Place';
 import missingImage from '@/assets/missing_image.png';
 
 interface LibraryProps {
@@ -40,6 +41,7 @@ export function LibraryListItem({
             {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
+            <PlaceIcon fontSize="small" style={{ marginBottom: '-4px' }} />
             {street}
           </Typography>
         </CardContent>

@@ -2,7 +2,7 @@ import { Tooltip, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Favorite';
 import { PageHeader } from '@/components/PageHeader';
-import background from '@/assets/bg.png';
+import background from '@/assets/missing_image.png';
 
 const useStyles = makeStyles(() => ({
   image: {

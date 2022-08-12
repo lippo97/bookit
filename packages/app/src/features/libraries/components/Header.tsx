@@ -18,8 +18,8 @@ export function LibraryHeader({
     <Controller
       control={control}
       name="query"
-      render={({ field }) => (
-        <Searchbar handleOpenFilter={handleOpenFilter} {...field} />
+      render={({ field: { ref, ...rest } }) => (
+        <Searchbar handleOpenFilter={handleOpenFilter} {...rest} />
       )}
     />
   );

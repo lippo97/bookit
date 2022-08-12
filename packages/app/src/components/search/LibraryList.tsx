@@ -28,7 +28,7 @@ function LibraryList({ isLoading, places }: LibraryListProps) {
       </Box>
       <Grid container spacing={2}>
         {places.map((p) => (
-          <Grid item xs={12} sm={6} lg={4}>
+          <Grid item key={p._id} xs={12} sm={6} lg={4}>
             <Library data={p} />
           </Grid>
         ))}

@@ -1,11 +1,13 @@
 import {
   AppBar as MuiAppBar,
+  Box,
   IconButton,
   Theme,
   Toolbar,
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link as RouterLink } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/MenuOutlined';
 
 export interface AppBarProps {
@@ -25,7 +27,6 @@ const useStyles = makeStyles<
     marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1,
     fontFamily: "'Oswald', sans-serif",
     fontSize: '24px',
     userSelect: 'none',
@@ -56,9 +57,17 @@ export function AppBar(props: AppBarProps) {
             <MenuIcon />
           </IconButton>
         )}
-        <Typography variant="h6" className={classes.title}>
-          bookit
-        </Typography>
+        <Box flex={1}>
+          <Typography
+            variant="h6"
+            className={classes.title}
+            component={RouterLink}
+            to="/"
+            style={{ textDecoration: 'none', color: 'white' }}
+          >
+            bookit
+          </Typography>
+        </Box>
       </Toolbar>
     </MuiAppBar>
   );

@@ -21,7 +21,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 // >;
 
 type SearchbarProps = InputBaseProps & {
-  handleOpenFilter(): void;
+  handleOpenFilter?(): void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -58,13 +58,15 @@ function Searchbar({ handleOpenFilter, ...rest }: SearchbarProps) {
           style: { padding: 0 },
         }}
       />
-      <IconButton
-        type="button"
-        className={classes.iconButton}
-        onClick={handleOpenFilter}
-      >
-        <FilterListIcon />
-      </IconButton>
+      {handleOpenFilter && (
+        <IconButton
+          type="button"
+          className={classes.iconButton}
+          onClick={handleOpenFilter}
+        >
+          <FilterListIcon />
+        </IconButton>
+      )}
     </Paper>
   );
 }
