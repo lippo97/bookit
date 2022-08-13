@@ -1,19 +1,16 @@
-import { Layout } from '@/components/Layout';
-import { Service } from '@asw-project/shared/generatedTypes';
 import { QueryContent } from '@/components/QueryContent';
+import { StepLayout } from '@/components/StepLayout';
 import { getLibraryById } from '@/features/dashboard/api/libraries';
-import { getReservations } from '@/features/dashboard/api/reservations';
-import { getSeats } from '@/features/dashboard/api/seats';
 import { iconForServiceCurried } from '@/features/dashboard/components/FloorMap/Seat';
 import { useQueryParams } from '@/hooks';
+import { useToggleSelection } from '@/hooks/useToggleSelection';
+import { Service } from '@asw-project/shared/generatedTypes';
 import {
   Box,
   Button,
   Container as MuiContainer,
   FormControl,
-  InputLabel,
   MenuItem,
-  Select,
   styled,
   TextField,
 } from '@material-ui/core';
@@ -21,9 +18,6 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useToggleSelection } from '@/hooks/useToggleSelection';
-import { StepLayout } from '@/components/StepLayout';
-import { SettingsSystemDaydreamRounded } from '@material-ui/icons';
 import { getRooms } from '../api/libraries';
 import {
   getReservationsOnRoom,
