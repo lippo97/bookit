@@ -17,22 +17,22 @@ export const PickDate = () => {
   return (
     <StepLayout title="Add reservation" subtitle="Pick a date">
       <Box flex={1} mt={2}>
-        <Container>
+        <Container style={{ maxWidth: 310 }}>
           <Typography variant="h5" style={{ marginBottom: '16px' }}>
             Pick a date
           </Typography>
           <DatePicker
             autoOk
-            disableToolbar
             label="Reservation date"
             openTo="date"
             variant="static"
+            shouldDisableDate={(d) => !!d && d.isBefore(dayjs())}
             value={date}
             onChange={setDate}
           />
         </Container>
       </Box>
-      <Container>
+      <Container style={{ maxWidth: 310 }}>
         <Button
           fullWidth
           color="primary"
