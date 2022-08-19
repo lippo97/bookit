@@ -46,7 +46,7 @@ export const Library = () => {
               isStarred={isStarred}
               onStar={changeFavorite}
             />
-            <Container>
+            <Container maxWidth="md">
               <LibraryData data={d} />
             </Container>
           </>

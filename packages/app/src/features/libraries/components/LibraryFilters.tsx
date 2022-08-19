@@ -75,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: 0,
     },
   },
-  container: {},
 }));
 
 export const LibraryFilters: FC<LibraryFiltersProps> = ({
@@ -115,7 +114,7 @@ export const LibraryFilters: FC<LibraryFiltersProps> = ({
             </Button>
           </Toolbar>
         </AppBar>
-        <Container className={classes.container}>
+        <Container maxWidth="md">
           <Box className={classes.box}>
             <Controller
               control={formControl}
@@ -198,7 +197,7 @@ export const LibraryFilters: FC<LibraryFiltersProps> = ({
           </Box>
         </Container>
       </Box>
-      <Container>
+      <Container maxWidth="md">
         <Button fullWidth color="inherit" variant="outlined" onClick={onReset}>
           Clear
         </Button>
