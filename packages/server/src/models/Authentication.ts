@@ -60,7 +60,7 @@ AuthenticationSchema.statics.findByEmailAndComparePassword =
   function findByEmailAndComparePassword(
     email: Email,
     password: Password,
-  ): MaybeAsync<ReturnedUser> {
+  ): MaybeAsync<Omit<ReturnedUser, 'favoriteLibrariesInfo'>> {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const comparePasswords = (password: Password, hash: string) =>
       MaybeAsync(() => compare(password, hash));
