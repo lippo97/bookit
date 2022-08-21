@@ -15,14 +15,18 @@ interface GetLibrariesOptions {
 
 export async function getLibraries(
   query: string,
-  options?: Partial<GetLibrariesOptions>,
+  options: Partial<GetLibrariesOptions>,
 ): Promise<WithId<Library>[]> {
   console.log(options);
+
   const searchParams = {
     ...(query === ''
       ? {}
       : {
           '$text[$search]': query,
+          accessibility: options.accessible,
+          availableServices: JSON.stringify({ $all: options.services }),
+          timetable: JSON.stringify({ $in: options.day }),
         }),
   };
   return ky

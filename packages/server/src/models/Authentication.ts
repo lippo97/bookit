@@ -60,7 +60,7 @@ AuthenticationSchema.statics.findByEmailAndComparePassword =
   function findByEmailAndComparePassword(
     email: Email,
     password: Password,
-  ): MaybeAsync<ReturnedUser> {
+  ): MaybeAsync<Omit<ReturnedUser, 'favoriteLibrariesInfo'>> {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const comparePasswords = (password: Password, hash: string) =>
       MaybeAsync(() => compare(password, hash));
@@ -78,7 +78,9 @@ AuthenticationSchema.statics.findByEmailAndComparePassword =
               // TODO: salvare le favoriteLibraries pure su authentication sotto forna di FavoriteLibrariesInfo
               // per ora sono salvate ancora come stringhe semplici.
               // packages/shared/src/generatedTypes/authentication.ts:13
-              favoriteLibrariesInfo: [],
+
+              // viene riempito successivamente con il resto delle info dopo il login, con successiva query
+              favoriteLibrariesInfo: user.favoriteLibraries,
             }),
           ),
       );

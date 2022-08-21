@@ -19,6 +19,8 @@ const ownerId = Joi.string()
     },
   });
 
+const accessibility = Joi.boolean().required();
+
 const imageFileName = Joi.string();
 //
 const DaySchema = Joi.number().min(0).max(6);
@@ -45,6 +47,7 @@ export const LibrarySchema = Joi.object({
   availableServices,
   //rooms,
   imageFileName,
+  accessibility,
 }).meta({
   className: 'Library',
 });
