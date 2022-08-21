@@ -19,6 +19,10 @@ const Error: FC = () => (
   </>
 );
 
+const Empty: FC = () => (
+  <Typography variant="body1">There is no reservation.</Typography>
+);
+
 export const ReservationList: FC<ReservationListProps> = ({ data, status }) => {
   if (status === 'error') {
     return <Error />;
@@ -31,6 +35,9 @@ export const ReservationList: FC<ReservationListProps> = ({ data, status }) => {
         <Skeleton variant="rect" height={132} style={{ marginTop: '16px' }} />
       </>
     );
+  }
+  if (data!.length === 0) {
+    return <Empty />;
   }
   return (
     <>
