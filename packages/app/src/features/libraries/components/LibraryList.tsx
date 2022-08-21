@@ -39,7 +39,7 @@ export function LibraryList({ isLoading, places }: LibraryListProps) {
   }
 
   if (places.length === 0) {
-    return <div>There&apos; nothing to display.</div>;
+    return <div>There&apos;s nothing to display.</div>;
   }
 
   return (
