@@ -16,7 +16,15 @@ export const Row: FC<{
         return <Cell key={i} empty />;
       }
       if (cell.isReserved) {
-        return <Cell reserved label={cell.label} services={cell.services} />;
+        return (
+          <Cell
+            reserved
+            selected={cell._id === selected}
+            label={cell.label}
+            services={cell.services}
+            ref={cell._id === selected ? selectedRef : undefined}
+          />
+        );
       }
       return (
         <Cell

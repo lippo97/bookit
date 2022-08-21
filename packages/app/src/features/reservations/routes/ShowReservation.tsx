@@ -1,11 +1,14 @@
 import { StepLayout } from '@/components/StepLayout';
+import { getReservationsOnRoom } from '@/features/libraries/api/reservations';
 import { mergeQueryStatus } from '@/lib/queries';
 import {
   Box,
+  Button,
   Container as MuiContainer,
   Paper,
   styled,
 } from '@material-ui/core';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getLibraryById } from '../api/libraries';
@@ -17,6 +20,7 @@ import {
 import { DeleteButton } from '../components/DeleteButton';
 import { QR } from '../components/QR';
 import { ReservationInfo } from '../components/ReservationInfo';
+import { ViewDialog } from '../components/ViewDialog';
 
 export const Container = styled(MuiContainer)(({ theme }) => ({
   marginTop: theme.spacing(2),
@@ -26,6 +30,7 @@ export const Container = styled(MuiContainer)(({ theme }) => ({
 export const ShowReservation: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const { data: reservationData, status: reservationStatus } = useQuery(
     ['reservation', id],
@@ -93,9 +98,30 @@ export const ShowReservation: React.FC = () => {
           </Paper>
         </Container>
         <Container maxWidth="xs">
+          <Button
+            fullWidth
+            variant="outlined"
+            style={{ marginBottom: 8 }}
+            onClick={() => setOpen(true)}
+            disabled={reservationData === undefined}
+          >
+            View
+          </Button>
           <DeleteButton status={status} id={id} disabled={buttonDisabled} />
         </Container>
       </Box>
+      {status === 'success' && (
+        <ViewDialog
+          open={open}
+          onClose={() => setOpen(false)}
+          data={reservationData}
+          // date={reservationData?.date}
+          // roomId={reservationData?.roomId}
+          // timeSlot={reservationData?.timeSlot}
+          // // seatGrid={[] as any}
+          // selected={seatData!._id}
+        />
+      )}
     </StepLayout>
   );
 };

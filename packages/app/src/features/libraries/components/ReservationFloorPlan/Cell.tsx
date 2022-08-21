@@ -19,7 +19,7 @@ export const Cell = forwardRef<
       reserved: true;
       label: number;
       id?: never;
-      selected?: never;
+      selected: boolean;
       setSelected?: never;
       services: Service[];
     }
@@ -46,15 +46,25 @@ export const Cell = forwardRef<
       />
     );
   }
+  const ifSelected: CSSProperties = props.selected
+    ? {
+        outline: 'rgb(85, 132, 149) solid 1px',
+        border: 'rgb(85, 132, 149) solid 1px',
+        backgroundColor: 'rgb(186, 227, 240)',
+        zIndex: 10,
+      }
+    : {};
   if (props.reserved) {
     return (
       <div
+        ref={ref}
         style={{
           ...commonProps,
           margin: '-1px 0 0 -1px',
           border: '1px solid #dedede',
           backgroundColor: '#efefef',
           zIndex: 0,
+          ...ifSelected,
         }}
       >
         {props.label}
@@ -67,13 +77,6 @@ export const Cell = forwardRef<
     }
   };
 
-  const ifSelected: CSSProperties = props.selected
-    ? {
-        outline: 'rgb(85, 132, 149) solid 1px',
-        border: 'rgb(85, 132, 149) solid 1px',
-        zIndex: 10,
-      }
-    : {};
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div

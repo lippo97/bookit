@@ -1,10 +1,9 @@
 import { Layout } from '@/components/Layout';
-import { useQueryParam, useQueryParams } from '@/hooks';
+import { useQueryParams } from '@/hooks';
 import { Day } from '@/lib/timetable/types';
 import { Box, Container } from '@material-ui/core';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
