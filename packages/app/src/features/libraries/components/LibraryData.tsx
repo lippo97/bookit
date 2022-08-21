@@ -61,6 +61,7 @@ export const LibraryData = ({
           <div className={classes.chips}>
             {availableServices.map((s) => (
               <Chip
+                key={s}
                 color="primary"
                 size="small"
                 label={s}

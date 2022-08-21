@@ -17,18 +17,22 @@ export async function getLibraries(
   query: string,
   options: Partial<GetLibrariesOptions>,
 ): Promise<WithId<Library>[]> {
-  console.log(options);
-
-  const searchParams = {
-    ...(query === ''
-      ? {}
-      : {
-          '$text[$search]': query,
-          accessibility: options.accessible,
-          availableServices: JSON.stringify({ $all: options.services }),
-          timetable: JSON.stringify({ $in: options.day }),
-        }),
-  };
+  const searchParams = new URLSearchParams();
+  if (query !== '') {
+    searchParams.set('$text[$search]', query);
+  }
+  if (options.services) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const s of options.services) {
+      searchParams.append('availableServices[$all]', s);
+    }
+  }
+  if (options.accessible) {
+    searchParams.set('accessibility', JSON.stringify(true));
+  }
+  if (options.day) {
+    searchParams.set('timetable[$elemMatch][days]', options.day.toString());
+  }
   return ky
     .get('libraries', {
       searchParams,

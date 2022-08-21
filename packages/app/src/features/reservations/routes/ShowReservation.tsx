@@ -80,7 +80,7 @@ export const ShowReservation: React.FC = () => {
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Container maxWidth="sm">
+        <Container maxWidth="xs">
           <Paper elevation={2} style={{ padding: '24px', paddingTop: '40px' }}>
             <QR reservation={reservationData} status={status} />
             <ReservationInfo
@@ -92,7 +92,7 @@ export const ShowReservation: React.FC = () => {
             />
           </Paper>
         </Container>
-        <Container maxWidth="sm">
+        <Container maxWidth="xs">
           <DeleteButton status={status} id={id} disabled={buttonDisabled} />
         </Container>
       </Box>
