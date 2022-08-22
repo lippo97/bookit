@@ -41,6 +41,8 @@ const timeSlot = Joi.object({
   to: Joi.string().required(),
 }).required();
 
+const confirmed = Joi.boolean();
+
 const date = Joi.date().required();
 
 export const ReservationSchema = Joi.object({
@@ -50,6 +52,7 @@ export const ReservationSchema = Joi.object({
   libraryId,
   timeSlot,
   date,
+  confirmed,
 }).meta({
   className: 'Reservation',
 });

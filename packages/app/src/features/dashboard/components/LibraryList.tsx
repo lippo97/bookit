@@ -41,7 +41,11 @@ export const LibraryList = ({ data, refetch }: LibraryListProps) => {
         </ListItemIcon>
         <ListItemText>Add new library</ListItemText>
       </ListItem>
-      <ListItem button>
+      <ListItem
+        button
+        component={RouterLink}
+        to="/dashboard/reservations/confirm"
+      >
         <ListItemIcon>
           <CropFreeIcon />
         </ListItemIcon>

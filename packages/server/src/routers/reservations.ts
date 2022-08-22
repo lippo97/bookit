@@ -1,11 +1,16 @@
-import { FindAll, mapServiceRoutes } from '@asw-project/resources/routes';
+import {
+  FindAll,
+  mapServiceRoutes,
+  SimpleFindById,
+} from '@asw-project/resources/routes';
 import { pick } from '@asw-project/shared/util/objects';
 import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import omit from 'lodash/omit';
+import * as reservationHelper from '../controllers/reservationHelper';
+import { attemptConfirmReservation } from '../controllers/reservationHelper';
 import { reservationKeys, ReservationModel } from '../models/Reservation';
 import { ReservationService } from '../services/reservation';
-import * as reservationHelper from '../controllers/reservationHelper';
 
 function getUserId(session: any): string | undefined {
   if (session.userId !== undefined) {
@@ -35,6 +40,22 @@ router.get('', async (req, res, next) => {
     ).caseOf({
       Right: (reservations) => res.json(reservations),
       Left: next,
+    });
+  } else {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+  }
+});
+
+router.post('/:id/confirm', async (req, res, next) => {
+  const { id } = req.params;
+  const ownerId = getUserId(req.session);
+  if (ownerId) {
+    const result = new SimpleFindById(ReservationModel)
+      .findById(id)
+      .chain(attemptConfirmReservation(ownerId));
+    (await result).caseOf({
+      Left: next,
+      Right: (reservation) => res.json(reservation),
     });
   } else {
     res.sendStatus(StatusCodes.UNAUTHORIZED);

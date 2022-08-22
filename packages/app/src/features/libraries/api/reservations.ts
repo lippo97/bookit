@@ -1,11 +1,22 @@
 import { ky } from '@/config';
 import { WithId } from '@asw-project/shared/data/withId';
 import { Reservation, Room, Seat } from '@asw-project/shared/generatedTypes';
-import dayjs from 'dayjs';
+import omit from 'lodash/omit';
 
 export type SeatWithReservation = WithId<Seat> & {
   isReserved: boolean;
 };
+
+type SeatReservation = Pick<
+  WithId<Seat>,
+  '_id' | 'label' | 'ownerId' | 'services' | 'position'
+> & {
+  isReserved: boolean;
+};
+
+type Cell = SeatReservation | undefined;
+
+export type SeatGrid = Cell[][];
 
 export async function getRoomById(roomId: string): Promise<WithId<Room>> {
   return ky.get(`rooms/${roomId}`).json<WithId<Room>>();
@@ -43,25 +54,35 @@ export async function getReservationsOnRoom(
   date: Date,
   roomId: string,
   stringTimeSlot: string,
-): Promise<SeatWithReservation[]> {
+): Promise<SeatGrid> {
   const [from, to] = stringTimeSlot.split('-');
   const timeSlot = {
     from,
     to,
   };
 
+  const roomSize = (await getRoomById(roomId)).size;
+
   const reservationSeats = (await getReservations(date, roomId, timeSlot)).map(
     (x) => x.seatId,
   );
   const seats = await getSeats(roomId);
 
-  const updateSeat = (self: WithId<Seat>) => ({
-    ...self,
-    isReserved: reservationSeats.includes(self._id),
-  });
-  const res = seats.map(updateSeat);
+  const grid: SeatGrid = new Array(roomSize.y);
 
-  return res;
+  for (let i = 0; i < grid.length; i += 1) {
+    grid[i] = new Array(roomSize.x).fill(undefined);
+  }
+
+  seats.forEach((s) => {
+    const { x, y } = s.position;
+    grid[y][x] = {
+      ...s,
+      isReserved: reservationSeats.includes(s._id),
+    };
+  });
+
+  return grid;
 }
 
 export type CreateReservationArg = Omit<Reservation, 'ownerId'>;

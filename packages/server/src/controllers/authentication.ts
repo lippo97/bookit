@@ -13,6 +13,8 @@ export async function login(
   const result = await authenticationService.login(email, password);
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     Right: async ({ userId, email, account, favoriteLibrariesInfo }) => {
       req.session.userId = userId;
       req.session.email = email;
@@ -20,6 +22,7 @@ export async function login(
       req.session.favoriteLibraries = favoriteLibrariesInfo;
       return res.json({ userId, email, account, favoriteLibrariesInfo });
     },
+
     Left: next,
   });
 }

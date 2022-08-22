@@ -7,10 +7,12 @@ import { FloorMap } from './rooms/FloorMap';
 import { AllLibraries } from './libraries/All';
 import AddRoom from './rooms/Add';
 import EditRoom from './rooms/Edit';
+import { ConfirmReservation } from './ConfirmReservation';
 
 export const DashboardRoutes = () => (
   <Routes>
     <Route path="/" element={<Dashboard />} />
+    <Route path="/reservations/confirm" element={<ConfirmReservation />} />
     <Route path="/libraries">
       <Route path="/" element={<AllLibraries />} />
       <Route path="add" element={<AddLibrary />} />
