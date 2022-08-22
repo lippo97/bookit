@@ -30,3 +30,7 @@ export async function deleteReservation(
 ): Promise<WithId<Reservation>> {
   return ky.delete(`reservations/${reservationId}`).json<WithId<Reservation>>();
 }
+
+export async function confirmReservation(reservationId: string): Promise<void> {
+  return ky.post(`reservations/${reservationId}/confirm`).json();
+}

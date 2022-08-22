@@ -2,45 +2,48 @@ import { StepLayout } from '@/components/StepLayout';
 import { Box, Container, Typography } from '@material-ui/core';
 import { FC, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
+import { useMutation } from 'react-query';
+import { confirmReservation } from '../api/reservations';
 
-type Result =
-  | {
-      data?: never;
-      error?: never;
-      idle: boolean;
-    }
-  | {
-      data: string;
-      error?: never;
-    }
-  | {
-      data?: never;
-      error: string;
-    };
+type State = 'bad_device' | 'idle' | 'loading' | 'confirmed' | 'rejected';
 
 const Error: FC<{ message: string }> = ({ message }) => (
   <Typography variant="body1">{message}</Typography>
 );
 
 export const ConfirmReservation: FC = () => {
-  const [data, setData] = useState<Result>({
-    idle: true,
-  });
+  const [result, setResult] = useState<State>('idle');
+  const [error, setError] = useState<string>();
+  const { mutateAsync } = useMutation<void, string, string>(
+    'reservation/confirm',
+    confirmReservation,
+  );
+
   const onResult = (
     readData: { getText(): string } | undefined | null,
-    error: Error | undefined | null,
+    err: Error | undefined | null,
   ) => {
-    if (!error && !!readData?.getText()) {
-      setData({ data: readData.getText() });
+    setError(undefined);
+    if (!err && !!readData?.getText()) {
+      mutateAsync(readData?.getText())
+        .then(() => setResult('confirmed'))
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log(err);
+          setResult('rejected');
+        });
     }
-    setData({ error: error!.message });
+    setResult('bad_device');
+    setError(err?.message);
   };
+
   return (
     <StepLayout title="Confirm reservation">
       <Box flex={1} my={2}>
         <Container maxWidth="md">
-          {data.error ? (
-            <Error message={data.error} />
+          {result === 'bad_device' ? (
+            <Error message={error!} />
           ) : (
             <QrReader
               constraints={{ facingMode: 'user' }}
