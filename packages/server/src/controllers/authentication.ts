@@ -15,21 +15,32 @@ export async function login(
   result.caseOf({
     // eslint-disable-next-line @typescript-eslint/no-shadow
     Right: async ({ userId, email, account }) => {
-      const info = await favoriteLibrariesService.getFavoriteLibrariesInfo(
-        userId,
-        account,
-      );
-      info.caseOf({
-        Right: (favoriteLibrariesInfo) => {
-          req.session.userId = userId;
-          req.session.email = email;
-          req.session.account = account;
-          req.session.favoriteLibraries = favoriteLibrariesInfo;
-          return res.json({ userId, email, account, favoriteLibrariesInfo });
-        },
-        Left: next,
+      req.session.userId = userId; // TO DELETE
+      req.session.email = email; // TO DELETE
+      req.session.account = account; // TO DELETE
+      req.session.favoriteLibraries = []; // TO DELETE
+      return res.json({
+        // TO DELETE
+        userId, // TO DELETE
+        email, // TO DELETE
+        account, // TO DELETE
+        favoriteLibrariesInfo: [], // TO DELETE
       });
     },
+    // const info = await favoriteLibrariesService.getFavoriteLibrariesInfo(
+    //   userId,
+    //   account,
+    // );
+    // info.caseOf({
+    //   Right: (favoriteLibrariesInfo) => {
+    //     req.session.userId = userId;
+    //     req.session.email = email;
+    //     req.session.account = account;
+    //     req.session.favoriteLibraries = favoriteLibrariesInfo;
+    //     return res.json({ userId, email, account, favoriteLibrariesInfo });
+    //   },
+    //   Left: next,
+    // });
     Left: next,
   });
 }
