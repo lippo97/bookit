@@ -1,7 +1,12 @@
 import { ky } from '@/config';
 import { Day } from '@/lib/timetable/types';
 import { WithId } from '@asw-project/shared/data/withId';
-import { Library, Room, Service } from '@asw-project/shared/generatedTypes';
+import {
+  FavoriteLibrariesInfo,
+  Library,
+  Room,
+  Service,
+} from '@asw-project/shared/generatedTypes';
 
 export async function getLibraryById(id: string): Promise<WithId<Library>> {
   return ky.get(`libraries/${id}`).json<WithId<Library>>();
@@ -39,12 +44,13 @@ export async function getLibraries(
 export async function changeFavorite(
   isNowFavorite: boolean,
   libraryId: string,
+  libraryName: string,
 ) {
   return isNowFavorite
-    ? ky.delete(`favorite/${libraryId}`).json<{ favoriteLibraries: string[] }>()
+    ? ky.delete(`favorite/${libraryId}`).json<FavoriteLibrariesInfo[]>()
     : ky
-        .post('favorite', { json: { libraryId } })
-        .json<{ favoriteLibraries: string[] }>();
+        .post('favorite', { json: { libraryId, name: libraryName } })
+        .json<FavoriteLibrariesInfo[]>();
 }
 
 export async function getRooms(libraryId: string): Promise<WithId<Room>[]> {

@@ -8,12 +8,7 @@ import { getFavorites } from '../api/favorites';
 export function Favorites() {
   // const updateFavorites = useAuth((s) => s.updateFavoriteLibraries);
   const { data, isLoading } = useQuery('favorites', () =>
-    getFavorites().then(
-      (libraries) =>
-        // eslint-disable-next-line no-underscore-dangle
-        // updateFavorites(libraries.map((l) => l._id));
-        libraries,
-    ),
+    getFavorites().then((libraries) => libraries),
   );
 
   return (

@@ -7,5 +7,5 @@ export type ReturnedUser = {
   userId: any;
   email: string;
   account?: Account;
-  favoriteLibrariesInfo: FavoriteLibrariesInfo[];
+  favoriteLibrariesInfo?: FavoriteLibrariesInfo[];
 };

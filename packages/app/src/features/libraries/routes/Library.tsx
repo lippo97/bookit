@@ -1,6 +1,5 @@
 import { QueryContent } from '@/components/QueryContent';
 import { StepLayout } from '@/components/StepLayout';
-import { getFavoritesInfo } from '@/features/favorites/api/favorites';
 import { useToggle } from '@/hooks/useToggle';
 import { useAuth } from '@/stores/authentication';
 import { Container } from '@material-ui/core';
@@ -15,6 +14,7 @@ import { LibraryHeader } from '../components/LibraryHeader';
 
 export const Library = () => {
   const { id } = useParams();
+
   const updateFavorite = useAuth((s) => s.updateFavoriteLibraries);
   const favlib = useAuth((s) => s.auth?.favoriteLibrariesInfo);
 
@@ -24,15 +24,14 @@ export const Library = () => {
 
   const [isStarred, toggleStarred] = useToggle(isFavoriteInitial);
 
-  const { data, status } = useQuery(['library', id], () => getLibraryById(id));
+  const { data, status } = useQuery(['library', id], () =>
+    getLibraryById(id).then((l) => l),
+  );
 
-  const changeFavorite = () => {
-    changeFavoriteAPI(isStarred, id).then(() => {
-      getFavoritesInfo().then((info) => {
-        updateFavorite(info);
-        console.log(info);
-        toggleStarred();
-      });
+  const changeFavorite = (name: string) => {
+    changeFavoriteAPI(isStarred, id, name).then((libs) => {
+      updateFavorite(libs);
+      toggleStarred();
     });
   };
 
@@ -44,7 +43,7 @@ export const Library = () => {
             <LibraryHeader
               src={d.imageFileName}
               isStarred={isStarred}
-              onStar={changeFavorite}
+              onStar={() => changeFavorite(d.name)}
             />
             <Container maxWidth="md">
               <LibraryData data={d} />
