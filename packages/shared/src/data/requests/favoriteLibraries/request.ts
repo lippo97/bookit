@@ -1,9 +1,5 @@
-import Joi from 'joi';
+import { FavoriteLibrariesInfo } from '../../authentication';
 
-const fields = {
-  libraryId: Joi.string().required(),
-};
-
-export const FavoriteLibraryRequestSchema = Joi.object(fields).meta({
+export const FavoriteLibraryRequestSchema = FavoriteLibrariesInfo.meta({
   className: 'FavoriteLibraryRequest',
 });

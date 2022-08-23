@@ -47,7 +47,7 @@ export function getFavoriteLibraries(
     )
     .chain((res) =>
       new FindAll(LibraryModel).findAll(
-        { _id: { $in: res.favoriteLibraries } },
+        { _id: { $in: res.favoriteLibrariesInfo!.map((l) => l.libraryId) } }, // user account check done above
         undefined,
         options,
       ),
@@ -86,7 +86,7 @@ export function getFavoriteLibrariesInfo(
     )
     .chain((res) =>
       new FindAll(LibraryModel).findAll(
-        { _id: { $in: res.favoriteLibraries } },
+        { _id: { $in: res.favoriteLibrariesInfo!.map((l) => l.libraryId) } },
         undefined,
       ),
     )
@@ -117,10 +117,9 @@ export function getFavoriteLibrariesInfo(
 function operationOnFavoriteLibrary(
   userId: string | undefined,
   account: Account | undefined,
-  libraryId: string,
-  op: (array: string[]) => string[],
-): EitherAsync<Error<EditError>, string[]> {
-  let updatedFavoriteLibraries: any = {};
+  op: (array: FavoriteLibrariesInfo[]) => FavoriteLibrariesInfo[],
+): EitherAsync<Error<EditError>, FavoriteLibrariesInfo[]> {
+  let favoriteLibrariesInfo: FavoriteLibrariesInfo[] = [];
   return MaybeAsync(() =>
     Promise.resolve(
       userId !== undefined && account !== undefined && isUserAccount(account),
@@ -135,25 +134,20 @@ function operationOnFavoriteLibrary(
       new SimpleFindById(AuthenticationModel).findById(new ObjectId(userId)),
     )
     .chain((info) => {
-      let favoriteLibraries: string[] = [];
-      if (info && info.favoriteLibraries) {
-        favoriteLibraries = info.favoriteLibraries;
+      if (info && info.favoriteLibrariesInfo) {
+        favoriteLibrariesInfo = info.favoriteLibrariesInfo;
       }
-      favoriteLibraries = op(favoriteLibraries);
-
-      updatedFavoriteLibraries = {
-        favoriteLibraries,
-      };
+      favoriteLibrariesInfo = op(favoriteLibrariesInfo);
 
       return new SimpleUpdate(AuthenticationModel).update(
         new ObjectId(userId),
 
-        [{ $set: updatedFavoriteLibraries }],
+        [{ $set: { favoriteLibrariesInfo } }],
       );
     })
     .chain((res) => {
       if (res) {
-        return EitherAsync.liftEither(Right(updatedFavoriteLibraries));
+        return EitherAsync.liftEither(Right(favoriteLibrariesInfo));
       }
       return EitherAsync.liftEither(
         Left({
@@ -168,9 +162,12 @@ export function addFavoriteLibrary(
   userId: string | undefined,
   account: Account | undefined,
   libraryId: string,
-): EitherAsync<Error<EditError>, string[]> {
-  return operationOnFavoriteLibrary(userId, account, libraryId, (array) =>
-    array.find((e) => e === libraryId) ? array : [...array, libraryId],
+  name: string,
+): EitherAsync<Error<EditError>, FavoriteLibrariesInfo[]> {
+  return operationOnFavoriteLibrary(userId, account, (array) =>
+    array.find((lib) => lib.libraryId === libraryId)
+      ? array
+      : [...array, { libraryId, name }],
   );
 }
 
@@ -178,8 +175,8 @@ export function deleteFavoriteLibrary(
   userId: string | undefined,
   account: Account | undefined,
   libraryId: string,
-): EitherAsync<Error<EditError>, string[]> {
-  return operationOnFavoriteLibrary(userId, account, libraryId, (array) =>
-    array.filter((lib) => lib !== libraryId),
+): EitherAsync<Error<EditError>, FavoriteLibrariesInfo[]> {
+  return operationOnFavoriteLibrary(userId, account, (array) =>
+    array.filter((lib) => lib.libraryId !== libraryId),
   );
 }

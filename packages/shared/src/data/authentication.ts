@@ -23,7 +23,7 @@ export const FavoriteLibrariesInfo = Joi.object({
   name: Joi.string().required(),
 });
 const FavoriteLibrariesSchema = Joi.array()
-  .items(Joi.string())
+  .items(FavoriteLibrariesInfo)
 
   .items(Joi.string())
   .meta({
@@ -36,7 +36,7 @@ const schema = {
   email,
   password,
   account: AccountSchema,
-  favoriteLibraries: FavoriteLibrariesSchema,
+  favoriteLibrariesInfo: FavoriteLibrariesSchema,
 };
 
 export const AuthenticationSchema = Joi.object(schema).meta({

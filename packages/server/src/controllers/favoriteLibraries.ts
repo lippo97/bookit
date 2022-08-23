@@ -85,7 +85,7 @@ export async function addFavoriteLibrary(
   next: NextFunction,
 ): Promise<void> {
   const account = getAccount(req.session);
-  const { libraryId } = pick(req.body, 'libraryId') as any;
+  const { libraryId, name } = pick(req.body, 'libraryId', 'name') as any;
 
   if (account) {
     if (isUserAccount(account)) {
@@ -93,10 +93,11 @@ export async function addFavoriteLibrary(
         getUserId(req.session),
         account,
         libraryId,
+        name,
       );
       result.caseOf({
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        Right: (favlib: any) => {
+        Right: (favlib) => {
           req.session.favoriteLibraries = favlib;
           res.json(favlib);
         },
@@ -125,7 +126,7 @@ export async function deleteFavoriteLibrary(
       );
       result.caseOf({
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        Right: (favlib: any) => {
+        Right: (favlib) => {
           req.session.favoriteLibraries = favlib;
           res.json(favlib);
         },
