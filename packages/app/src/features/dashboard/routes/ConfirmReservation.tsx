@@ -1,55 +1,70 @@
 import { StepLayout } from '@/components/StepLayout';
-import { Box, Container, Typography } from '@material-ui/core';
-import { FC, useState } from 'react';
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Paper,
+  Typography,
+} from '@material-ui/core';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import { useMutation } from 'react-query';
 import { confirmReservation } from '../api/reservations';
 
-type State = 'bad_device' | 'idle' | 'loading' | 'confirmed' | 'rejected';
+type State = 'bad_device' | 'scanning' | 'fetching' | 'confirmed' | 'rejected';
 
 const Error: FC<{ message: string }> = ({ message }) => (
   <Typography variant="body1">{message}</Typography>
 );
 
+const throttleTime = 5 * 1000;
+
 export const ConfirmReservation: FC = () => {
-  const [result, setResult] = useState<State>('idle');
+  const state = useRef<State>('scanning');
+  const [stateStr, setStateStr] = useState<State>(state.current);
   const [error, setError] = useState<string>();
-  const { mutateAsync } = useMutation<void, string, string>(
+  const { mutateAsync, status } = useMutation<void, string, string>(
     'reservation/confirm',
     confirmReservation,
   );
 
-  const onResult = (
+  const sleep = (timer: number) =>
+    new Promise((resolve) => setTimeout(resolve, timer));
+
+  const onResult = async (
     readData: { getText(): string } | undefined | null,
-    err: Error | undefined | null,
   ) => {
-    setError(undefined);
-    if (!err && !!readData?.getText()) {
-      mutateAsync(readData?.getText())
-        .then(() => setResult('confirmed'))
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        .catch((err) => {
-          // eslint-disable-next-line no-console
-          console.log(err);
-          setResult('rejected');
-        });
+    if (state.current === 'scanning') {
+      const data = readData?.getText();
+      if (data) {
+        state.current = 'fetching';
+        setStateStr('fetching');
+        await Promise.all([sleep(2000), Promise.resolve()]);
+        console.log('confirmed!');
+        state.current = 'confirmed';
+        setStateStr('confirmed');
+        setTimeout(() => {
+          state.current = 'scanning';
+          setStateStr('scanning');
+          console.log('back to scanning');
+        }, 2000);
+      }
     }
-    setResult('bad_device');
-    setError(err?.message);
   };
 
   return (
     <StepLayout title="Confirm reservation">
       <Box flex={1} my={2}>
-        <Container maxWidth="md">
-          {result === 'bad_device' ? (
-            <Error message={error!} />
-          ) : (
-            <QrReader
-              constraints={{ facingMode: 'user' }}
-              onResult={onResult}
-            />
-          )}
+        <Container maxWidth="xs" component={Paper} elevation={2}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Box width={250}>
+              <QrReader
+                constraints={{ facingMode: 'user' }}
+                onResult={onResult}
+              />
+              {stateStr}
+            </Box>
+          </Box>
         </Container>
       </Box>
     </StepLayout>
