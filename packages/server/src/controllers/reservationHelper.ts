@@ -56,20 +56,19 @@ export async function isAlreadyReserved(
     Left: (_error) => res.sendStatus(StatusCodes.BAD_REQUEST),
   });
 }
+
+type AttemptConfirmReservationError = Error<
+  | ValidationErrorKind
+  | UnauthorizedKind
+  | NotFoundKind
+  | CastErrorKind
+  | DuplicateIdentifierKind
+>;
 export const attemptConfirmReservation =
   (myUserId: string) =>
   (
     reservation: Reservation,
-  ): EitherAsync<
-    Error<
-      | ValidationErrorKind
-      | UnauthorizedKind
-      | NotFoundKind
-      | CastErrorKind
-      | DuplicateIdentifierKind
-    >,
-    Reservation
-  > => {
+  ): EitherAsync<AttemptConfirmReservationError, Reservation> => {
     if (reservation.confirmed) {
       return EitherAsync.liftEither(
         Left({
