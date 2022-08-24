@@ -1,6 +1,8 @@
 import { StepLayout } from '@/components/StepLayout';
 import { useNotification } from '@/stores/notifications';
-import { Box, Container, Paper, Typography } from '@material-ui/core';
+import { WithId } from '@asw-project/shared/data/withId';
+import { Reservation } from '@asw-project/shared/generatedTypes';
+import { Box, Button, Container, Paper, Typography } from '@material-ui/core';
 import CameraIcon from '@material-ui/icons/Camera';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 import { HTTPError } from 'ky';
@@ -8,6 +10,7 @@ import { FC, useRef, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import { useMutation } from 'react-query';
 import { confirmReservation } from '../api/reservations';
+import { ReservationInfo } from '../components/ReservationInfo';
 
 type State =
   | 'initial'
@@ -90,10 +93,11 @@ export const ConfirmReservation: FC = () => {
     setStateStr(updated);
   };
   const { pushNotification } = useNotification();
-  const { mutateAsync } = useMutation<void, string, string>(
-    'reservation/confirm',
-    confirmReservation,
-  );
+  const { mutateAsync, data } = useMutation<
+    WithId<Reservation>,
+    string,
+    string
+  >('reservation/confirm', confirmReservation);
 
   const sleep = (timer: number) =>
     new Promise((resolve) => setTimeout(resolve, timer));
@@ -110,7 +114,7 @@ export const ConfirmReservation: FC = () => {
         });
         return setState('bad_device');
       }
-      return setState('scanning');
+      setState('scanning');
     }
   };
 
@@ -155,21 +159,32 @@ export const ConfirmReservation: FC = () => {
   return (
     <StepLayout title="Confirm reservation">
       <Box flex={1} my={2}>
-        <Container maxWidth="xs" component={Paper} elevation={2}>
-          <Box display="flex" flexDirection="column" alignItems="center" py={2}>
-            <Box width={250} position="relative">
-              {stateStr === 'bad_device' ? (
-                <ScannerPlaceholder />
-              ) : (
-                <QrReader
-                  constraints={{ facingMode: 'user' }}
-                  onResult={onResult}
-                />
-              )}
-              <ScanOverlay state={stateStr} />
+        <Container maxWidth="xs">
+          <Paper elevation={2}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              py={4}
+              px={4}
+            >
+              <Box width={250} position="relative" mb={2}>
+                {stateStr === 'bad_device' ? (
+                  <ScannerPlaceholder />
+                ) : (
+                  <QrReader
+                    constraints={{ facingMode: 'user' }}
+                    onResult={onResult}
+                  />
+                )}
+                <ScanOverlay state={stateStr} />
+              </Box>
+              <Box width={250}>
+                <Message state={stateStr} />
+              </Box>
             </Box>
-            <Message state={stateStr} />
-          </Box>
+          </Paper>
+          <ReservationInfo data={data} />
         </Container>
       </Box>
     </StepLayout>
