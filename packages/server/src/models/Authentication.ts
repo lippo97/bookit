@@ -75,9 +75,7 @@ AuthenticationSchema.statics.findByEmailAndComparePassword =
               userId: user._id,
               email: user.email,
               account: user.account,
-              // salvare le favoriteLibraries pure su authentication sotto forna di FavoriteLibrariesInfo
-              // per ora sono salvate ancora come stringhe semplici.
-              // packages/shared/src/generatedTypes/authentication.ts:13
+         
               favoriteLibrariesInfo: user.favoriteLibrariesInfo,
             }),
           ),

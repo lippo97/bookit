@@ -19,7 +19,7 @@ const ownerId = Joi.string()
     },
   });
 
-const accessibility = Joi.boolean().required();
+const accessibility = Joi.boolean();
 
 const imageFileName = Joi.string();
 //

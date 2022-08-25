@@ -1,4 +1,4 @@
-const Joi = require('joi-oid');
+const Joi = require('joi');
 
 import { UserAccountSchema } from './userAccount';
 import { ManagerAccountSchema } from './managerAccount';

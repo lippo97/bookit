@@ -112,7 +112,7 @@ export function mapServiceRoutes<TConstructor>(
       router.post(rootPath, (req, res, next) => {
         const userId = getUserId(req.session);
         const fields = pick(req.body, keys) as any;
-        console.log('CREATE FIELDS:', fields);
+        // console.log('CREATE FIELDS:', fields);
         const result = service.create(fields, { userId });
         handleResult(res, next)(result);
       });

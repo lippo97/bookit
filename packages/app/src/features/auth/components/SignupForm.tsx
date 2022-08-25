@@ -104,7 +104,7 @@ export const SignupForm = ({
           }}
           {...register('password')}
         />
-        <Button isLoading={isLoading}>Sign in</Button>
+        <Button isLoading={isLoading}>Sign up</Button>
       </form>
       <Typography
         component="p"

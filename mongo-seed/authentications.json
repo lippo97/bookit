@@ -1,0 +1,31 @@
+[
+    {
+        "_id": {
+            "$oid": "63072f9c42a1ba0d0852ef76"
+        },
+        "email": "manager@pesaro.it",
+        "password": "$2b$10$aVBDRl2ExPmXmrqsAWf1He4kK.mct4Ye7LDFtcnAPd3JODE43laPC",
+        "__v": 0,
+        "account": {
+            "email": "manager@pesaro.it",
+            "businessName": "Manager Pesaro",
+            "type": "manager"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "63073efc7242b71fbc84ea04"
+        },
+        "email": "utente@pesaro.it",
+        "password": "$2b$10$e8X/RDoTqrHK4cxL3paP4O9y6DfvUjXxt0lCsC224C.wUxsRiRU9K",
+        "__v": 0,
+        "account": {
+            "email": "utente@pesaro.it",
+            "firstName": "Utente",
+            "secondName": "Pesaro",
+            "birthDate": "2022-08-25T09:21:00.800Z",
+            "maleFemale": "male",
+            "type": "user"
+        }
+    }
+]

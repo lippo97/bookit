@@ -1,0 +1,43 @@
+[
+    {
+        "_id": {
+            "$oid": "6307400b7242b71fbc84ea21"
+        },
+        "services": [
+            "Computer",
+            "Power supply"
+        ],
+        "roomId": {
+            "$oid": "63073ff77242b71fbc84ea1a"
+        },
+        "position": {
+            "x": 2,
+            "y": 2
+        },
+        "label": 1,
+        "ownerId": {
+            "$oid": "63072f9c42a1ba0d0852ef76"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6307400b7242b71fbc84ea20"
+        },
+        "services": [
+            "Power supply"
+        ],
+        "roomId": {
+            "$oid": "63073ff77242b71fbc84ea1a"
+        },
+        "position": {
+            "x": 2,
+            "y": 0
+        },
+        "label": 0,
+        "ownerId": {
+            "$oid": "63072f9c42a1ba0d0852ef76"
+        },
+        "__v": 0
+    }
+]

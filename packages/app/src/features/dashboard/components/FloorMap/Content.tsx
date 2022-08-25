@@ -55,6 +55,7 @@ export const Content = () => {
   const clearSelection = useSeats((s) => s.clearSelection);
   const setSize = useSeats((s) => s.setSize);
   const size = useSeats((s) => s.size);
+  
   const boxRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMobile();
 

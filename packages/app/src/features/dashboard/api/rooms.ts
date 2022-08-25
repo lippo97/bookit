@@ -12,10 +12,10 @@ import { updateLibraryServices } from './libraries';
 
 export type CreateRoomArg = Pick<
   Room,
-  'libraryId' | 'name' | 'accessibility' | 'capacity'
+  'libraryId' | 'name' | 'accessibility' | 'capacity' | 'size'
 >;
 
-export type UpdateRoomArg = Omit<CreateRoomArg, 'libraryId'>;
+export type UpdateRoomArg = Omit<CreateRoomArg, 'libraryId' | 'size'>;
 
 export type UpdateRoomCapacityArg = Pick<Room, 'capacity'>;
 
