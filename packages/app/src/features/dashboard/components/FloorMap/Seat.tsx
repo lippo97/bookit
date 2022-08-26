@@ -59,6 +59,7 @@ export const Seat = ({ id }: SeatProps) => {
   );
   const replaceSelection = useSeats((s) => s.replaceSelection);
   const updateSelection = useSeats((s) => s.updateSelection);
+  const appendSelection = useSeats((s) => s.appendSelection);
   const removeSeat = useSeats((s) => s.removeSeat);
   const startMoving = useSeats((s) => s.startMoving);
   const stopMoving = useSeats((s) => s.stopMoving);
@@ -78,16 +79,23 @@ export const Seat = ({ id }: SeatProps) => {
       ? {
           onStart: (e: DraggableEvent) => {
             e.stopPropagation();
-            updateSelection(id);
+            if (isMobile) {
+              updateSelection(id);
+            } else if (e.ctrlKey) {
+              appendSelection(id);
+            } else {
+              replaceSelection(id);
+            }
             startMoving();
           },
           onStop: (e: DraggableEvent) => {
             e.stopPropagation();
             if (!wasMoved) {
               if (e.ctrlKey || isMobile) {
-                updateSelection(id);
+                // updateSelection(id);
               } else {
-                replaceSelection(id);
+                // console.log('replaceSelection(id)');
+                // replaceSelection(id);
               }
             }
             setWasMoved(false);

@@ -17,7 +17,7 @@ export const accountImagesUpload = multer({
   }),
 }); */
 
-const libraryImagesBucketName = 'library-images';
+export const libraryImagesBucketName = 'library-images';
 
 export const libraryImageUpload = multer({
   storage: multers3({

@@ -7,11 +7,11 @@ import { publicRoutes } from './public';
 
 export const AppRoutes = () => {
   const isLoggedIn = useIsLoggedIn();
-  const accountType = useAuth(s => s.auth?.account?.type)
+  const accountType = useAuth((s) => s.auth?.account?.type);
   const routes = useRoutes([
+    ...protectedRoutes(isLoggedIn, accountType),
     ...commonRoutes,
     ...publicRoutes(isLoggedIn),
-    ...protectedRoutes(isLoggedIn, accountType),
     {
       path: '*',
       element: (

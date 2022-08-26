@@ -26,6 +26,7 @@ import { useEditor } from '../../stores/editor';
 import { useSeats } from '../../stores/seats';
 import { ModalButton } from '../ModalButton';
 import { ButtonSection } from './ButtonSection';
+import { ControllableModalButton } from '../ControllableModalButton';
 
 interface ToolbarProps {
   onSave(): void;
@@ -80,6 +81,8 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
 
   const selectedTool = useEditor((s) => s.selectedTool);
   const setSelectedTool = useEditor((s) => s.setSelectedTool);
+  const isSizeModalOpen = useEditor((s) => s.isSizeModalOpen);
+  const setSizeModalOpen = useEditor((s) => s.setSizeModalOpen);
 
   const sizeXRef = useRef<HTMLInputElement>(null);
   const sizeYRef = useRef<HTMLInputElement>(null);
@@ -162,10 +165,13 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
               </Button>
             </ButtonSection>
             <ButtonSection name="Size">
-              <ModalButton
+              <ControllableModalButton
                 buttonClassName={classes.actionButton}
                 onChange={handleSizeChange}
                 title="Change size"
+                open={isSizeModalOpen}
+                onOpen={() => setSizeModalOpen(true)}
+                onClose={() => setSizeModalOpen(false)}
                 modalContent={
                   <>
                     <DialogContentText>Change the map size:</DialogContentText>
@@ -192,7 +198,7 @@ export const Toolbar = ({ onSave }: ToolbarProps) => {
                 }
               >
                 {sizeX} × {sizeY}
-              </ModalButton>
+              </ControllableModalButton>
             </ButtonSection>
             <ButtonSection name="Label">
               <ModalButton
