@@ -1,38 +1,32 @@
 [
-    {
+  {
+    "_id": {
+      "$oid": "63073fcd7242b71fbc84ea0c"
+    },
+    "availableServices": [],
+    "imageFileName": "http://localhost:9000/library-images/biblioteca.jpg",
+    "name": "Biblioteca 5 Torri",
+    "street": "Via Donatori del Sangue",
+    "city": "Pesaro",
+    "timetable": [
+      {
+        "days": [0, 1, 2, 3, 4, 5],
         "_id": {
-            "$oid": "63073fcd7242b71fbc84ea0c"
+          "$oid": "63073fcd7242b71fbc84ea0d"
         },
-        "availableServices": [],
-        "name": "Biblioteca 5 Torri",
-        "street": "Via Donatori del Sangue",
-        "city": "Pesaro",
-        "timetable": [
-            {
-                "days": [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5
-                ],
-                "_id": {
-                    "$oid": "63073fcd7242b71fbc84ea0d"
-                },
-                "slot": {
-                    "from": {
-                        "$date": "2022-08-25T06:00:00Z"
-                    },
-                    "to": {
-                        "$date": "2022-08-25T17:30:00Z"
-                    }
-                }
-            }
-        ],
-        "ownerId": {
-            "$oid": "63072f9c42a1ba0d0852ef76"
-        },
-        "__v": 0
-    }
+        "slot": {
+          "from": {
+            "$date": "2022-08-25T06:00:00Z"
+          },
+          "to": {
+            "$date": "2022-08-25T17:30:00Z"
+          }
+        }
+      }
+    ],
+    "ownerId": {
+      "$oid": "63072f9c42a1ba0d0852ef76"
+    },
+    "__v": 0
+  }
 ]
