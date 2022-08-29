@@ -22,9 +22,7 @@ const ownerId = Joi.string()
     },
   });
 
-const name = Joi.string()
-  .regex(/Room [0-9]+/)
-  .required();
+const name = Joi.string().required();
 
 //const seats = Joi.array().items(SeatSchema).required();
 

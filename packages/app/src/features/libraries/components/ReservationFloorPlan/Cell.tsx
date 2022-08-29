@@ -1,15 +1,38 @@
+import { iconForServiceCurried } from '@/features/dashboard/components/FloorMap/Seat';
 import { Service } from '@asw-project/shared/generatedTypes';
-import { CSSProperties, forwardRef } from 'react';
+import { Box } from '@material-ui/core';
+import { CSSProperties, FC, forwardRef } from 'react';
 
 const cellSize = 50;
 const commonProps: CSSProperties = {
-  padding: 2,
+  padding: 1,
   minWidth: cellSize,
   width: cellSize,
   minHeight: cellSize,
   height: cellSize,
   fontWeight: 'bold',
+  display: 'flex',
+  flexDirection: 'column',
 };
+
+const Services: FC<{ data: Service[] }> = ({ data }) => (
+  <Box
+    display="flex"
+    flexDirection="row"
+    flexWrap="wrap"
+    justifyContent="flex-end"
+    alignItems="flex-end"
+    flex={1}
+  >
+    {data.map(
+      iconForServiceCurried({
+        height: 12,
+        width: 12,
+        marginLeft: 2,
+      }),
+    )}
+  </Box>
+);
 
 export const Cell = forwardRef<
   HTMLDivElement,
@@ -68,6 +91,7 @@ export const Cell = forwardRef<
         }}
       >
         {props.label}
+        <Services data={props.services} />
       </div>
     );
   }
@@ -92,6 +116,7 @@ export const Cell = forwardRef<
       onClick={onClick}
     >
       {props.label}
+      <Services data={props.services} />
     </div>
   );
 });
