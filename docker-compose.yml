@@ -3,8 +3,6 @@ version: '3.1'
 services:
   mongo:
     image: mongo
-    ports:
-      - 27017:27017
     volumes:
       - mongo-data:/data/db
 
@@ -15,6 +13,8 @@ services:
 
   mongo-express:
     image: mongo-express
+    depends_on:
+      - mongo
     ports:
       - 8081:8081
     depends_on:
@@ -61,19 +61,38 @@ services:
       exit 0;
       "
 
+  server:
+    build:
+      context: '.'
+      dockerfile: 'Dockerfile.server'
+    depends_on:
+      - redis
+      - s3-storage
+      - mongo
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production
+      COOKIE_SECRET: s3kr3t
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      S3_HOST: s3-storage
+      S3_PORT: 9000
+      S3_ACCESS_KEY_ID: development
+      S3_SECRET_ACCESS_KEY: development
+
   app:
     build:
       context: '.'
       dockerfile: 'Dockerfile.app'
       args:
-        REACT_APP_BACKEND_SERVER: 'http://backend:3000'
-    volumes:
-      - ./packages/app:/app
-      - ./packages/resources:/resources
-      - ./packages/shared:/shared
-    container_name: docker-compose-web-ui
+        REACT_APP_BACKEND_URL: 'http://localhost:3000'
+    depends_on:
+      - server
     ports:
-      - 8080:8080
+      - 8080:80
 
 volumes:
   mongo-data:
