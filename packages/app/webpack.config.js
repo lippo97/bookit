@@ -8,7 +8,7 @@ const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const tsImportPluginFactory = require('ts-import-plugin');
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = process.env.ENV !== 'production';
 
 const startsWith = (start) => (str) => str.startsWith(start);
 const environmentVariables = Object.keys(process.env).filter(
