@@ -1,5 +1,5 @@
 # First install lerna
-FROM node:alpine
+FROM node:16-alpine3.12
 WORKDIR /build
 # We want to install these exact versions (yarn.lock)
 COPY package.json lerna.json yarn.lock /build/
@@ -10,7 +10,7 @@ COPY packages/app /build/packages/app
 RUN npx lerna bootstrap
 COPY tsconfig.base.json /build/
 # https://stackoverflow.com/questions/69719601/getting-error-digital-envelope-routines-reason-unsupported-code-err-oss
-ENV NODE_OPTIONS=--openssl-legacy-provider
+# ENV NODE_OPTIONS=--openssl-legacy-provider
 
 ARG REACT_APP_BACKEND_URL
 ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
