@@ -1,5 +1,5 @@
-import { LoginFail } from '@asw-project/shared/data/authentication/login/response';
-import { SignupFail } from '@asw-project/shared/data/authentication/signup/response';
+import { LoginFail } from '@asw-project/shared/data/requests/login/response';
+import { SignupFail } from '@asw-project/shared/data/requests/signup/response';
 import { Request, NextFunction, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { Left, Right } from 'purify-ts';
@@ -58,7 +58,7 @@ describe('Authentication controller', () => {
       expect(next).toBeCalledWith(fail);
     });
   });
-  describe('signin', () => {
+  describe('signup', () => {
     beforeEach(() => {
       mockedService.signup.mockRestore();
     });
