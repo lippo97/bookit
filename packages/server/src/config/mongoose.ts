@@ -7,7 +7,7 @@ const options: mongoose.ConnectionOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  dbName: 'test',
+  dbName: 'asw-project',
 };
 
 export default function configure(mongoose_: typeof mongoose) {

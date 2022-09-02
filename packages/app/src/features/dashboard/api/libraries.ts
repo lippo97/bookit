@@ -84,29 +84,6 @@ export const updateLibrary =
       .json<WithId<Library>>();
   };
 
-/*  export const updateLibraryServices = async (
-  libraryId: string,
-): Promise<WithId<Library>> => {
-  const libraryRooms = await getRooms(libraryId);
-  console.log('LIBRARYROOMS:', libraryRooms);
-  let librarySeats: any[] = [];
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < libraryRooms.length; i++) {
-    // eslint-disable-next-line no-await-in-loop
-    const s = await getSeats(libraryRooms[i]._id);
-    console.log('S:', s);
-    librarySeats = librarySeats.concat(s);
-  }
-
-  
-
-  console.log('LIBRARYSEATS:', librarySeats);
-  return ky
-    .patch(`libraries/${libraryId}/updateServices`, {
-      json: librarySeats,
-    })
-    .json<WithId<Library>>();
-}; */
 export const updateLibraryServices = async (
   libraryId: string,
 ): Promise<WithId<Library>> =>

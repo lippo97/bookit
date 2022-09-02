@@ -1,4 +1,4 @@
-import { Landing } from '@/features/misc/';
+import { Landing } from '@/features/misc';
 
 export const commonRoutes = [
   {

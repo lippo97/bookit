@@ -15,7 +15,7 @@ export type CreateRoomArg = Pick<
   'libraryId' | 'name' | 'accessibility' | 'capacity' | 'size'
 >;
 
-export type UpdateRoomArg = Omit<CreateRoomArg, 'libraryId' | 'size'>;
+export type UpdateRoomArg = Partial<Omit<CreateRoomArg, 'libraryId'>>;
 
 export type UpdateRoomCapacityArg = Pick<Room, 'capacity'>;
 

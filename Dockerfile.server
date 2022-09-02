@@ -1,0 +1,28 @@
+FROM node:alpine
+
+WORKDIR /build
+COPY package.json lerna.json yarn.lock /build/
+RUN mkdir -p /build/packages
+RUN yarn install --frozen-lockfile
+COPY packages/shared /build/packages/shared
+COPY packages/resources /build/packages/resources
+COPY packages/server /build/packages/server
+RUN npx lerna bootstrap
+COPY tsconfig.base.json /build/
+
+RUN npx lerna run build --scope=@asw-project/{shared,resources,app}
+
+FROM node:alpine
+WORKDIR /usr/src
+COPY package.json lerna.json yarn.lock /usr/src/
+RUN yarn install --frozen-lockfile
+COPY --from=0 /build/packages/shared/dist /usr/src/packages/shared/dist
+COPY --from=0 /build/packages/shared/package.json /usr/src/packages/shared/package.json
+COPY --from=0 /build/packages/resources/dist /usr/src/packages/resources/dist
+COPY --from=0 /build/packages/resources/package.json /usr/src/packages/resources/package.json
+COPY --from=0 /build/packages/server/dist /usr/src/packages/server/dist
+COPY --from=0 /build/packages/server/package.json /usr/src/packages/server/package.json
+RUN npx lerna bootstrap -- --production --frozen-lockfile
+WORKDIR /usr/src/packages/server
+
+CMD ["yarn", "start"]

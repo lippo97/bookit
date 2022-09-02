@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { convertFromDirectory } from 'joi-to-typescript';
-import _ from 'lodash';
 import path from 'path';
 import { find } from '../src/find/find';
 

@@ -5,11 +5,16 @@ import {
   SimpleUpdate,
 } from '@asw-project/resources/routes';
 import { ObjectId } from 'mongodb';
-import { libraryImageUpload } from '../middleware/multer';
+import { ReplicationRuleFilter, RestoreRequest } from '@aws-sdk/client-s3';
+import {
+  libraryImagesBucketName,
+  libraryImageUpload,
+} from '../middleware/multer';
 import { libraryKeys, LibraryModel } from '../models/Library';
 import { LibraryService } from '../services/libraries';
 import { RoomModel } from '../models/Room';
 import { SeatModel } from '../models/Seat';
+import { S3_HOST, S3_PORT } from '../config/constants';
 
 function getUserId(session: any): string | undefined {
   if (session.userId !== undefined) {
@@ -19,6 +24,15 @@ function getUserId(session: any): string | undefined {
 }
 
 const router = Router();
+
+router.use('/', (req, res, next) => {
+  if (req.method === 'POST' || req.method === 'PATCH') {
+    if (req.body && req.body.imageFileName !== undefined) {
+      req.body.imageFileName = `http://${S3_HOST}:${S3_PORT}/${libraryImagesBucketName}/${req.body.imageFileName}`;
+    }
+  }
+  next();
+});
 
 mapServiceRoutes(new LibraryService(), libraryKeys)(router);
 

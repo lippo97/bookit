@@ -61,12 +61,6 @@ export const RoomList = ({
         </ListItemIcon>
         <ListItemText>Add new room</ListItemText>
       </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <CropFreeIcon />
-        </ListItemIcon>
-        <ListItemText>Check-in</ListItemText>
-      </ListItem>
     </List>
   );
 };

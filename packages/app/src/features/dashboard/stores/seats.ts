@@ -56,6 +56,7 @@ type SeatState = {
   removeSeat(id: SeatId | readonly SeatId[]): void;
   selectAll(): void;
   clearSelection(): void;
+  appendSelection(id: SeatId): void;
   updateSelection(id: SeatId | readonly SeatId[]): void;
   replaceSelection(id: SeatId | readonly SeatId[]): void;
   setSelectionService(service: Service, value: boolean): void;
@@ -115,7 +116,7 @@ const seatState = (
   _nextSeatId: 0,
   initialize: (seats) => {
     const seatIds = Object.keys(seats);
-    let nextSeatId = 0;
+    let nextSeatId = 1;
     while (seatIds.includes(nextSeatId.toString())) {
       // eslint-disable-next-line no-plusplus
       nextSeatId++;
@@ -220,6 +221,22 @@ const seatState = (
     set({
       selectedIds: [],
       seatById: mapValues(get().seatById, setAt<Seat>()('selected', false)),
+    });
+  },
+  appendSelection: (id) => {
+    const { selectedIds, seatById, seatIds } = get();
+    if (!seatIds.includes(id) || selectedIds.includes(id)) {
+      return;
+    }
+    set({
+      selectedIds: [...selectedIds, id],
+      seatById: {
+        ...seatById,
+        [id]: {
+          ...seatById[id],
+          selected: true,
+        },
+      },
     });
   },
   updateSelection: (ids) => {

@@ -50,20 +50,18 @@ export const Content = () => {
   const scale = useEditor((s) => s.scale);
   const setScale = useEditor((s) => s.setScale);
   const selectedTool = useEditor((s) => s.selectedTool);
+  const roomName = useEditor((s) => s.roomName);
+  const setSizeModalOpen = useEditor((s) => s.setSizeModalOpen);
   const seatIds = useSeats((s) => s.seatIds);
   const addSeat = useSeats((s) => s.addSeat);
   const clearSelection = useSeats((s) => s.clearSelection);
   const setSize = useSeats((s) => s.setSize);
   const size = useSeats((s) => s.size);
-  
+
   const boxRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMobile();
 
   const [hover, setHover] = useState<V2.Vector2 | null>(null);
-
-  useEffect(() => {
-    setSize([10, 5]);
-  }, [setSize]);
 
   const scaleClick = ({
     clientX,
@@ -167,9 +165,10 @@ export const Content = () => {
             userSelect: 'none',
           }}
         >
-          Room name ({size[0]} × {size[1]}){' - '}
+          {roomName} ({size[0]} × {size[1]}){' - '}
           <a
-            onClick={() => console.log('click')}
+            role="button"
+            onClick={() => setSizeModalOpen(true)}
             style={{
               color: 'rgb(34, 88, 106)',
               cursor: 'pointer',

@@ -11,7 +11,12 @@ import keyBy from 'lodash/keyBy';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { deleteRoomSeats, updateRoomSeats } from '../../api/rooms';
+import {
+  deleteRoomSeats,
+  getRoomById,
+  updateRoom,
+  updateRoomSeats,
+} from '../../api/rooms';
 import { getSeats } from '../../api/seats';
 import { Content } from '../../components/FloorMap/Content';
 import { Sidebar } from '../../components/FloorMap/Sidebar';
@@ -42,8 +47,46 @@ export function FloorMap() {
   const { roomId, id: libraryId } = useParams();
   const classes = useStyles();
   const initialize = useSeats((s) => s.initialize);
-  const { data, status } = useQuery(['get room', roomId], () =>
-    getSeats(roomId),
+  const setRoomName = useEditor((s) => s.setRoomName);
+  const size = useSeats((s) => s.size);
+  const setSize = useSeats((s) => s.setSize);
+  const { data, status } = useQuery(
+    ['get room', roomId],
+    () => Promise.all([getSeats(roomId), getRoomById(roomId)]),
+    {
+      onSuccess: ([seats, room]) => {
+        const { setSelectedTool } = useEditor.getState();
+
+        const d = keyBy(
+          seats
+            .map((x) => ({
+              ...x,
+              previouslyExisting: true,
+              moving: false,
+              selected: false,
+            }))
+            .map(({ position: { x, y }, ...rest }) => ({
+              ...rest,
+              position: [x, y] as Vector2,
+            }))
+            .map(({ services, ...rest }) => ({
+              ...rest,
+              services: mapValues(keyBy(services), always(true)),
+            }))
+            .map(({ label, ...rest }) => ({
+              ...rest,
+              label: label.toString(),
+            })),
+          'label',
+        );
+
+        const { x, y } = room.size;
+        setSize([x, y]);
+        setRoomName(room.name);
+        setSelectedTool('select');
+        initialize(d);
+      },
+    },
   );
   const { pushNotification } = useNotification();
 
@@ -54,8 +97,13 @@ export function FloorMap() {
     const { seatById, toBeRemoved } = useSeats.getState();
     setSaving();
     try {
-      await updateRoomSeats(libraryId, roomId, seatById);
-      await deleteRoomSeats(toBeRemoved);
+      await Promise.all([
+        updateRoom(roomId)({
+          size: { x: size[0], y: size[1] },
+        }),
+        updateRoomSeats(libraryId, roomId, seatById),
+        deleteRoomSeats(toBeRemoved),
+      ]);
       pushNotification({
         message: 'Room saved successfully!',
         severity: 'success',
@@ -70,38 +118,6 @@ export function FloorMap() {
       stopSaving();
     }
   };
-
-  useEffect(() => {
-    if (status === 'success' && data !== undefined) {
-      const { setSelectedTool } = useEditor.getState();
-
-      const d = keyBy(
-        data
-          .map((x) => ({
-            ...x,
-            previouslyExisting: true,
-            moving: false,
-            selected: false,
-          }))
-          .map(({ position: { x, y }, ...rest }) => ({
-            ...rest,
-            position: [x, y] as Vector2,
-          }))
-          .map(({ services, ...rest }) => ({
-            ...rest,
-            services: mapValues(keyBy(services), always(true)),
-          }))
-          .map(({ label, ...rest }) => ({
-            ...rest,
-            label: label.toString(),
-          })),
-        'label',
-      );
-
-      setSelectedTool('select');
-      initialize(d);
-    }
-  }, [data, status]);
 
   return (
     <Layout>

@@ -1,10 +1,11 @@
 import { DashboardRoutes } from '@/features/dashboard/routes';
 import { FavoritesRoutes } from '@/features/favorites/routes';
 import { LibrariesRoutes } from '@/features/libraries/routes';
+import { Landing } from '@/features/misc';
 import { ReservationsRoutes } from '@/features/reservations/routes';
 import { SettingsRoutes } from '@/features/settings/routes';
 import { accountTypes } from '@asw-project/shared/types/accountTypes';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 type AccountType = keyof typeof accountTypes;
 
@@ -15,12 +16,13 @@ const commonLoggedInRoutes = [
   },
 ];
 
+/* <Navigate to="/dashboard" replace /> */
 const switchAccountType = (accountType: AccountType) =>
   accountType === 'manager'
     ? [
         {
-          path: '/libraries/*',
-          element: <LibrariesRoutes />,
+          path: '/',
+          element: <Navigate replace to="/dashboard" />,
         },
         {
           path: '/dashboard/*',
