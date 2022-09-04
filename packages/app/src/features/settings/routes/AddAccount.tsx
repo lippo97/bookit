@@ -11,6 +11,8 @@ import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 import { useState } from 'react';
 import { accountTypes } from '@asw-project/shared/types/accountTypes';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/stores/authentication';
 import { AddUserAccountForm } from '../components/account/AddUserAccountForm';
 import { ManagerForm } from '../components/account/ManagerForm';
 
@@ -33,11 +35,11 @@ type AccountType = typeof accountTypes.manager | typeof accountTypes.user;
 
 export const AddAccount = () => {
   // eslint-disable-next-line no-underscore-dangle
-  //   const id = useAuth((x) => x.auth?._id);
-  const id = undefined;
+  const id = useAuth((x) => x.auth?.account);
+  // const id = undefined;
 
   const [value, setValue] = useState<AccountType>(accountTypes.user);
-  //   if (id !== undefined) return <Navigate to="/" />;
+  if (id !== undefined) return <Navigate to="/" />;
 
   const handleTabChange = (_: any, newValue: AccountType) => setValue(newValue);
 

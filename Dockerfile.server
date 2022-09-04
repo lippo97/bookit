@@ -10,7 +10,7 @@ COPY packages/server /build/packages/server
 RUN npx lerna bootstrap
 COPY tsconfig.base.json /build/
 
-RUN npx lerna run build --scope=@asw-project/{shared,resources,app}
+RUN npx lerna run build --scope=@asw-project/{shared,resources,server}
 
 FROM node:alpine
 WORKDIR /usr/src
