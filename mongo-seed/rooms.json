@@ -1,21 +1,21 @@
 [
-    {
-        "_id": {
-            "$oid": "63073ff77242b71fbc84ea1a"
-        },
-        "libraryId": {
-            "$oid": "63073fcd7242b71fbc84ea0c"
-        },
-        "name": "Room 1",
-        "size": {
-            "x": 0,
-            "y": 0
-        },
-        "capacity": 2,
-        "accessibility": true,
-        "ownerId": {
-            "$oid": "63072f9c42a1ba0d0852ef76"
-        },
-        "__v": 0
-    }
+  {
+    "_id": {
+      "$oid": "63073ff77242b71fbc84ea1a"
+    },
+    "libraryId": {
+      "$oid": "63073fcd7242b71fbc84ea0c"
+    },
+    "name": "Room 1",
+    "size": {
+      "x": 5,
+      "y": 5
+    },
+    "capacity": 2,
+    "accessibility": true,
+    "ownerId": {
+      "$oid": "63072f9c42a1ba0d0852ef76"
+    },
+    "__v": 0
+  }
 ]
