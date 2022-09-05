@@ -57,7 +57,7 @@ services:
       mc admin policy set minio readwrite user=development;
       mc mb minio/library-images;
       mc policy set public minio/library-images;
-      mc cp /img/biblioteca.jpg minio/library-images;
+      mc cp /img/*.jpg minio/library-images;
       exit 0;
       "
 
