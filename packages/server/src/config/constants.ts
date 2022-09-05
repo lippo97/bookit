@@ -59,6 +59,10 @@ export const S3_HOST = str('S3_HOST', localhost);
 
 export const S3_PORT = num('S3_PORT', s3Port);
 
+export const S3_PUBLIC_HOST = str('S3_PUBLIC_HOST', localhost);
+
+export const S3_PUBLIC_PORT = num('S3_PUBLIC_PORT', s3Port);
+
 export const S3_ACCESS_KEY_ID = str('S3_ACCESS_KEY_ID', 'development');
 
 export const S3_SECRET_ACCESS_KEY = str('S3_SECRET_ACCESS_KEY', 'development');

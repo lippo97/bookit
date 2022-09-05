@@ -14,14 +14,14 @@ export const iconForService = (
   // eslint-disable-next-line default-case
   switch (property) {
     case 'Wi-Fi':
-      return <WifiIcon style={style} />;
+      return <WifiIcon key={property} style={style} />;
     case 'Computer':
-      return <ComputerIcon style={style} />;
+      return <ComputerIcon key={property} style={style} />;
     case 'Power supply':
-      return <PowerIcon style={style} />;
+      return <PowerIcon key={property} style={style} />;
     case 'Ethernet':
-      return <SettingsInputHdmiIcon style={style} />;
+      return <SettingsInputHdmiIcon key={property} style={style} />;
     case 'Printer':
-      return <PrintIcon style={style} />;
+      return <PrintIcon key={property} style={style} />;
   }
 };

@@ -7,6 +7,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SearchIcon from '@material-ui/icons/Search';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import CropFreeIcon from '@material-ui/icons/CropFree';
 import Star from '@material-ui/icons/Favorite';
 import { DrawerItem } from './DrawerItem';
 import { DrawerSection } from './DrawerSection';
@@ -60,6 +61,12 @@ const ManagerRoutes = () => (
         icon={<DashboardIcon />}
         to="/dashboard"
       />
+      <DrawerItem
+        link
+        content="Check-in"
+        icon={<CropFreeIcon />}
+        to="/dashboard/reservations/confirm"
+      />
     </DrawerSection>
   </>
 );
@@ -74,12 +81,6 @@ export const DrawerContent = () => {
         {type === 'manager' && <ManagerRoutes />}
         <DrawerSection>
           <ListSubheader>Account</ListSubheader>
-          <DrawerItem
-            link
-            content="Settings"
-            icon={<SettingsIcon />}
-            to="/settings"
-          />
           <DrawerItem
             link
             content="Log out"

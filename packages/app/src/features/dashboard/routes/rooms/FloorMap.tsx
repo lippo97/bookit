@@ -50,7 +50,7 @@ export function FloorMap() {
   const setRoomName = useEditor((s) => s.setRoomName);
   const size = useSeats((s) => s.size);
   const setSize = useSeats((s) => s.setSize);
-  const { data, status } = useQuery(
+  const { status } = useQuery(
     ['get room', roomId],
     () => Promise.all([getSeats(roomId), getRoomById(roomId)]),
     {
@@ -81,10 +81,10 @@ export function FloorMap() {
         );
 
         const { x, y } = room.size;
-        setSize([x, y]);
-        setRoomName(room.name);
-        setSelectedTool('select');
         initialize(d);
+        setRoomName(room.name);
+        setSize([x, y]);
+        setSelectedTool('select');
       },
     },
   );
@@ -122,9 +122,7 @@ export function FloorMap() {
   return (
     <Layout>
       <div className={classes.root}>
-        <QueryContent data={data} status={status}>
-          {() => <Content />}
-        </QueryContent>
+        {status === 'success' && <Content />}
         <Toolbar onSave={handleSave} />
         <Sidebar />
       </div>

@@ -13,32 +13,27 @@ import { SidebarContent } from './SidebarContent';
 const sidebarWidth = 256;
 
 const useMobileStyles = makeStyles((theme) => ({
-  container: {
-    position: 'fixed',
-    inset: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end'
-  },
   containerOpen: {
     zIndex: 1200,
     overflowY: 'scroll',
   },
   mobile: {
-    transition: 'translate 0.3s, opacity 0.3s, height 0.3s',
+    transition:
+      'translate 0.3s, opacity 0.3s, height 0.3s, top 0.3s, bottom 0.3s',
     padding: theme.spacing(1.5),
     '& > *': {
       marginBottom: theme.spacing(2),
     },
     height: '560px',
-    translate: `0 ${560 - 40 - theme.spacing(1.5)}px`,
-    transformOrigin: 'top left',
+    width: '100%',
+    position: 'absolute',
+    bottom: -520,
     borderRadius: theme.spacing(1),
     opacity: 0.3,
     zIndex: 200,
   },
   mobileOpen: {
-    translate: '0 0',
+    bottom: '0',
     opacity: 1,
     height: 'auto',
   },
@@ -78,35 +73,29 @@ const Mobile = () => {
   }, [open, selectedIds]);
 
   return (
-    <div className={clsx(classes.container, {[classes.containerOpen]: open})}>
-        <Box flex={1} />
-      <Paper
-        square
-        elevation={3}
-        className={clsx(classes.mobile, { [classes.mobileOpen]: open })}
+    <Paper
+      square
+      elevation={3}
+      className={clsx(classes.mobile, { [classes.mobileOpen]: open })}
+    >
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height={40}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          height={40}
-        >
-          {open ? (
-            <IconButton onClick={handleClose}>
-              <ExpandLessIcon />
-            </IconButton>
-          ) : (
-            <IconButton
-              onClick={handleOpen}
-              disabled={selectedIds.length === 0}
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          )}
-        </Box>
-        <SidebarContent />
-      </Paper>
-    </div>
+        {open ? (
+          <IconButton onClick={handleClose}>
+            <ExpandLessIcon />
+          </IconButton>
+        ) : (
+          <IconButton onClick={handleOpen} disabled={selectedIds.length === 0}>
+            <ExpandMoreIcon />
+          </IconButton>
+        )}
+      </Box>
+      <SidebarContent />
+    </Paper>
   );
 };
 

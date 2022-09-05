@@ -14,7 +14,7 @@ import { libraryKeys, LibraryModel } from '../models/Library';
 import { LibraryService } from '../services/libraries';
 import { RoomModel } from '../models/Room';
 import { SeatModel } from '../models/Seat';
-import { S3_HOST, S3_PORT } from '../config/constants';
+import { S3_PUBLIC_HOST, S3_PUBLIC_PORT } from '../config/constants';
 
 function getUserId(session: any): string | undefined {
   if (session.userId !== undefined) {
@@ -28,7 +28,7 @@ const router = Router();
 router.use('/', (req, res, next) => {
   if (req.method === 'POST' || req.method === 'PATCH') {
     if (req.body && req.body.imageFileName !== undefined) {
-      req.body.imageFileName = `http://${S3_HOST}:${S3_PORT}/${libraryImagesBucketName}/${req.body.imageFileName}`;
+      req.body.imageFileName = `http://${S3_PUBLIC_HOST}:${S3_PUBLIC_PORT}/${libraryImagesBucketName}/${req.body.imageFileName}`;
     }
   }
   next();

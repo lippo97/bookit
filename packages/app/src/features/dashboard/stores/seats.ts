@@ -64,7 +64,7 @@ type SeatState = {
   // move(delta: Vector2): void;
   move(delta: Vector2, ensureSelected?: SeatId): void;
   stopMoving(): void;
-  setSize(size: Vector2): void;
+  setSize(size: Vector2): boolean;
 };
 
 const updateAt =
@@ -369,13 +369,15 @@ const seatState = (
     const { seatById } = get();
     const [x, y] = size;
 
-    // Prevent inconsistent state
-    if (values(seatById).some(({ position: [sX, sY] }) => sX >= x || sY >= y))
-      return;
+    if (values(seatById).some(({ position: [sX, sY] }) => sX >= x || sY >= y)) {
+      console.error('inconsistent state');
+      return false;
+    }
 
     set({
       size,
     });
+    return true;
   },
 });
 

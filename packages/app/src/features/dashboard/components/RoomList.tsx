@@ -41,7 +41,12 @@ export const RoomList = ({
 
       {rooms.length > 0 ? (
         rooms.map((d) => (
-          <RoomListItem data={d} refetch={refetch} libraryName={libraryName} />
+          <RoomListItem
+            key={d._id}
+            data={d}
+            refetch={refetch}
+            libraryName={libraryName}
+          />
         ))
       ) : (
         <ListItem>
